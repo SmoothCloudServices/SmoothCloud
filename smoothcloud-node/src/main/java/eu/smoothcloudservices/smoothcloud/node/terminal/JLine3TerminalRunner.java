@@ -1,6 +1,6 @@
 package eu.smoothcloudservices.smoothcloud.node.terminal;
 
-import eu.smoothcloudservices.smoothcloud.node.SmoothSmoothCloudNode;
+import eu.smoothcloudservices.smoothcloud.node.SmoothCloudNode;
 
 public final class JLine3TerminalRunner extends Thread {
     private final JLine3Terminal terminal;
@@ -18,7 +18,7 @@ public final class JLine3TerminalRunner extends Thread {
     public void run() {
         String line;
         while ((line = terminal.getLineReader().readLine(Color.translate("&0CloudSystem &2» &1"))) != null) {
-            ((SmoothSmoothCloudNode) SmoothSmoothCloudNode.getInstance()).getCommandProvider().call(line.split(" "));
+            ((SmoothCloudNode) SmoothCloudNode.getInstance()).getCommandProvider().call(line.split(" "));
         }
     }
 }

@@ -2,7 +2,7 @@ package eu.smoothcloudservices.smoothcloud.node.command.impl.group;
 
 import eu.smoothcloudservices.smoothcloud.api.SmoothCloudAPI;
 import eu.smoothcloudservices.smoothcloud.api.group.GroupType;
-import eu.smoothcloudservices.smoothcloud.node.SmoothSmoothCloudNode;
+import eu.smoothcloudservices.smoothcloud.node.SmoothCloudNode;
 import eu.smoothcloudservices.smoothcloud.node.command.Command;
 import eu.smoothcloudservices.smoothcloud.node.group.CloudGroupImpl;
 import eu.smoothcloudservices.smoothcloud.node.terminal.Color;
@@ -11,7 +11,7 @@ public final class CreateGroupCommand implements Command {
 
     @Override
     public void execute(String[] args) {
-        var terminal = ((SmoothSmoothCloudNode) SmoothSmoothCloudNode.getInstance()).getTerminal();
+        var terminal = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminal();
 
         if (args.length == 3 && args[0].equalsIgnoreCase("creategroup")) {
             var name = args[1];

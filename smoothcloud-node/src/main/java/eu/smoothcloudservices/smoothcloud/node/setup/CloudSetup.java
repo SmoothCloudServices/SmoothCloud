@@ -1,6 +1,6 @@
 package eu.smoothcloudservices.smoothcloud.node.setup;
 
-import eu.smoothcloudservices.smoothcloud.node.SmoothSmoothCloudNode;
+import eu.smoothcloudservices.smoothcloud.node.SmoothCloudNode;
 import eu.smoothcloudservices.smoothcloud.node.config.CloudConfig;
 import com.github.lalyos.jfiglet.FigletFont;
 import eu.smoothcloudservices.smoothcloud.node.terminal.Color;
@@ -17,7 +17,7 @@ public class CloudSetup {
     private final JLine3Terminal terminal;
 
     public CloudSetup() {
-        this.terminal = ((SmoothSmoothCloudNode) SmoothSmoothCloudNode.getInstance()).getTerminal();
+        this.terminal = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminal();
     }
 
 

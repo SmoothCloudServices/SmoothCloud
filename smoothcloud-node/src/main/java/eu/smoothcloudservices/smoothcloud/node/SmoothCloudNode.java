@@ -8,12 +8,11 @@ import eu.smoothcloudservices.smoothcloud.node.config.CloudConfig;
 import eu.smoothcloudservices.smoothcloud.node.group.CloudGroupProviderImpl;
 import eu.smoothcloudservices.smoothcloud.node.server.NettyServer;
 import eu.smoothcloudservices.smoothcloud.node.service.CloudServiceProviderImpl;
-import eu.smoothcloudservices.smoothcloud.node.setup.CloudSetup;
 import eu.smoothcloudservices.smoothcloud.node.terminal.JLine3Terminal;
 import lombok.Getter;
 
 @Getter
-public final class SmoothSmoothCloudNode extends SmoothCloudAPI {
+public final class SmoothCloudNode extends SmoothCloudAPI {
     private final JLine3Terminal terminal;
     private final CloudConfig config;
     private final CommandProvider commandProvider;
@@ -23,7 +22,7 @@ public final class SmoothSmoothCloudNode extends SmoothCloudAPI {
 
     private final NettyServer nettyServer;
 
-    public SmoothSmoothCloudNode() {
+    public SmoothCloudNode() {
         this.terminal = new JLine3Terminal();
 
         this.config = new CloudConfig();

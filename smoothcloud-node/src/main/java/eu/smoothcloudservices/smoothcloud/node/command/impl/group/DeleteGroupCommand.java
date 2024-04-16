@@ -1,7 +1,7 @@
 package eu.smoothcloudservices.smoothcloud.node.command.impl.group;
 
 import eu.smoothcloudservices.smoothcloud.api.SmoothCloudAPI;
-import eu.smoothcloudservices.smoothcloud.node.SmoothSmoothCloudNode;
+import eu.smoothcloudservices.smoothcloud.node.SmoothCloudNode;
 import eu.smoothcloudservices.smoothcloud.node.command.Command;
 import eu.smoothcloudservices.smoothcloud.node.terminal.Color;
 
@@ -9,7 +9,7 @@ public final class DeleteGroupCommand implements Command {
 
     @Override
     public void execute(String[] args) {
-        var terminal = ((SmoothSmoothCloudNode) SmoothSmoothCloudNode.getInstance()).getTerminal();
+        var terminal = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminal();
 
         if (args.length == 2 && args[0].equalsIgnoreCase("deletegroup")) {
             var name = args[1];
