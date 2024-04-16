@@ -7,6 +7,8 @@ import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.handler.codec.ByteToMessageDecoder;
 import lombok.val;
 
+import static java.lang.StringTemplate.STR;
+
 public final class PacketDecoder extends ByteToMessageDecoder {
 
     @Override
