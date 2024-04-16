@@ -6,7 +6,8 @@ public enum Color {
 
     HIGHLIGHTER(28, 119, 255),
     DEFAULT(181, 181, 181),
-    DARK(60, 60, 60);
+    DARK(60, 60, 60),
+    RED(255, 50, 50);
 
     String ansi;
 
@@ -18,7 +19,7 @@ public enum Color {
 
     public static String translate(String output) {
         for (Color color : VALUES) {
-            output = output.replace("&" + color.ordinal(), color.ansi);
+            output = output.replace(STR."&\{color.ordinal()}", color.ansi);
         }
         return output;
     }

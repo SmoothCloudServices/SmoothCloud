@@ -6,7 +6,7 @@ public final class ShutdownCommand implements Command {
 
     @Override
     public void execute(String[] args) {
-        System.out.println("CloudSystem » Systems are shut down");
+        System.out.println("Systems are shut down");
         System.exit(0);
     }
 }

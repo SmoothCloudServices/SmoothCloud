@@ -27,7 +27,6 @@ public final class SmoothSmoothCloudNode extends SmoothCloudAPI {
         this.terminal = new JLine3Terminal();
 
         this.config = new CloudConfig();
-        new CloudSetup(config);
 
         this.commandProvider = new CommandProvider();
 

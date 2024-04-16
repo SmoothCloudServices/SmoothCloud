@@ -1,123 +1,200 @@
 package eu.smoothcloudservices.smoothcloud.node.setup;
 
+import eu.smoothcloudservices.smoothcloud.node.SmoothSmoothCloudNode;
 import eu.smoothcloudservices.smoothcloud.node.config.CloudConfig;
 import com.github.lalyos.jfiglet.FigletFont;
+import eu.smoothcloudservices.smoothcloud.node.terminal.Color;
+import eu.smoothcloudservices.smoothcloud.node.terminal.JLine3Terminal;
 
 import java.io.IOException;
-import java.util.Scanner;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.*;
 
 public class CloudSetup {
+    private final JLine3Terminal terminal;
 
-    public CloudSetup() {}
+    public CloudSetup() {
+        this.terminal = ((SmoothSmoothCloudNode) SmoothSmoothCloudNode.getInstance()).getTerminal();
+    }
 
 
     public boolean setup(CloudConfig config) {
 
         Scanner scanner = new Scanner(System.in);
+
+        boolean eulaAccepted = false;
+
+
         try {
-            System.out.println(FigletFont.convertOneLine("SmoothCloud setup"));
+            System.out.println(FigletFont.convertOneLine("SmoothCloud  Setup"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        boolean eulaAccepted = false;
+        String eulaURL = "https://www.minecraft.net/en-us/eula";
+        presentEula(eulaURL);
+        eulaAccepted = getEulaAgreement(scanner, config);
+        if (!eulaAccepted) {
+            terminal.write(Color.translate("&0CloudSystem &2» &3EULA not accepted. Aborting setup!"));
+            return false;
+        }
 
-        switch (config.get("cloud.language").toLowerCase()) {
-            case "de" -> {
-                presentEula("https://www.minecraft.net/de-de/eula");
-                eulaAccepted = getEULAagreement(scanner);
+        if (!chooseNodeIP(scanner, config)) {
+            return false;
+        }
+        chooseNodePort(scanner, config);
+
+        if (!chooseWrapperIP(scanner, config)) {
+            return false;
+        }
+        chooseWrapperPort(scanner, config);
+
+        return true;
+    }
+
+
+    private void presentEula(String eulaUrl) {
+        terminal.write(Color.translate("&0CloudSystem &2» &0Do you agree to the Mojang EULA (https://www.minecraft.net/en-us/eula)? Possible answers: yes, no"));
+    }
+
+    private boolean getEulaAgreement(Scanner scanner, CloudConfig config) {
+        while (true) {
+            String answer = scanner.nextLine().toLowerCase();
+            if(answer.equals("yes") || answer.equals("y")) {
+                config.set("cloud.eula", true);
+                return true;
             }
-            case "en" -> {
-                presentEula("https://www.minecraft.net/en-us/eula");
-                eulaAccepted = getEULAagreement(scanner);
+            if(answer.equals("no") || answer.equals("n")) {
+                return false;
             }
+            terminal.write(Color.translate("&0CloudSystem &2» &3Please answer with yes or no!"));
         }
     }
 
-    private boolean selectLanguage(Scanner scanner, CloudConfig config) {
+    private void chooseNodePort(Scanner scanner, CloudConfig config) {
+        while (true) {
+            terminal.write(Color.translate("&0CloudSystem &2» &0Which port should we use for the node?"));
+            int answer = Integer.parseInt(scanner.nextLine().toLowerCase());
+            boolean portAvailable = checkPortAvailability(answer);
+            if (portAvailable) {
+                config.set("cloud.nodeport", scanner.nextLine());
+                return;
+            }
+            terminal.write(Color.translate("&0CloudSystem &2» &3Port not available. Please choose an other Port!"));
+        }
+    }
 
-        boolean languageSelected = false;
+    private void chooseWrapperPort(Scanner scanner, CloudConfig config) {
+        while (true) {
+            terminal.write(Color.translate("&0CloudSystem &2» &0Which port should we use for the wrapper?"));
+            int answer = Integer.parseInt(scanner.nextLine().toLowerCase());
+            boolean portAvailable = checkPortAvailability(answer);
+            if (portAvailable) {
+                config.set("cloud.wrapperport", scanner.nextLine());
+                return;
+            }
+            terminal.write(Color.translate("&0CloudSystem &2» &3Port not available. Please choose an other Port!"));
+        }
+    }
 
-        while(!languageSelected) {
-            System.out.println("Select your language / Wähle deine Sprache (EN/DE):");
+    private boolean chooseNodeIP(Scanner scanner, CloudConfig config) {
+        while (true) {
+            List<InetAddress> inetAddresses = getAllIPAddresses();
+            if (inetAddresses.isEmpty()) {
+                terminal.write(Color.translate("&0CloudSystem &2» &3No IP addresses available. Aborting setup!"));
+                return false;
+            }
 
-            String languageCode = scanner.nextLine().toLowerCase();
-
-            switch (languageCode) {
-                case "en" -> {
-                    languageSelected = true;
-                    config.set("cloud.language", "en");
+            String allIps;
+            allIps = null;
+            for (InetAddress inetAddress : Collections.unmodifiableList(inetAddresses)) {
+                if (allIps == null) {
+                    allIps = String.valueOf(inetAddress);
                 }
-                case "de" -> {
-                    languageSelected = true;
-                    config.set("cloud.language", "de");
+                if (!(allIps == null)) {
+                    allIps = STR."\{allIps}, \{inetAddress}";
                 }
-                default -> {
-                    System.out.println("Invalid language code. Please select EN or DE");
+            }
+
+            terminal.write(Color.translate("&0CloudSystem &2» &0Which IP should we use for the node?"));
+            terminal.write(Color.translate(STR."&0CloudSystem &2» &0Available IPs: \{allIps}"));
+
+            if (inetAddresses.contains(scanner.nextLine())) {
+                config.set("cloud.nodeip", scanner.nextLine());
+                return true;
+            }
+            terminal.write(Color.translate("&0CloudSystem &2» &3Please choose an IP address from above!"));
+        }
+    }
+
+    private boolean chooseWrapperIP(Scanner scanner, CloudConfig config) {
+        while (true) {
+            List<InetAddress> inetAddresses = getAllIPAddresses();
+            if (inetAddresses.isEmpty()) {
+                terminal.write(Color.translate("&0CloudSystem &2» &3No IP addresses available. Aborting setup!"));
+                return false;
+            }
+
+            String allIps;
+            allIps = null;
+            for (InetAddress inetAddress : Collections.unmodifiableList(inetAddresses)) {
+                if (allIps == null) {
+                    allIps = String.valueOf(inetAddress);
+                }
+                if (!(allIps == null)) {
+                    allIps = STR."\{allIps}, \{inetAddress}";
+                }
+            }
+
+            terminal.write(Color.translate("&0CloudSystem &2» &0Which IP should we use for the wrapper?"));
+            terminal.write(Color.translate(STR."&0CloudSystem &2» &0Available IPs: \{allIps}"));
+
+            if (inetAddresses.contains(scanner.nextLine())) {
+                config.set("cloud.wrapperip", scanner.nextLine());
+                return true;
+            }
+            terminal.write(Color.translate("&0CloudSystem &2» &3Please choose an IP address from above!"));
+        }
+    }
+
+    private boolean checkPortAvailability(int port) {
+        Socket s = null;
+        try {
+            s = new Socket("localhost", port);
+
+            // Port is not available
+            return false;
+        } catch (IOException e) {
+            // Port is available
+            return true;
+        } finally {
+            if( s != null){
+                try {
+                    s.close();
+                } catch (IOException e) {
                     return false;
                 }
             }
         }
-        return true;
     }
 
-    private void presentEula(String eulaUrl) {
-        System.out.println("Do you agree to the Mojang EULA (" + eulaUrl + ")? Possible answers: yes/no");
-    }
-
-    private boolean getEULAagreement(Scanner scanner) {
-        while (true) {
-            String answer = scanner.nextLine().toLowerCase();
-            if(answer.equals("yes") || answer.equals("y") || answer.equals("ja") || answer.equals("j")) {
-                return true;
-            }
-            if(answer.equals("no") || answer.equals("n") || answer.equals("nein")) {
-                return false;
-            }
-            System.out.println("Please answer yes or no!");
-        }
-    }
-
-    /*public boolean setup(CloudConfig config) {
-
-        if(config.isEmpty()) {
-            Scanner scanner = new Scanner(System.in);
-
-            String lang = config.get("cloud.language");
-            config.contains("cloud.language");
-
-            System.out.println("Choose the language for the cloud. Possible answers: EN, DE");
-            while (scanner.hasNextLine()) {
-                if(!config.contains("cloud.language")) {
-                    if (scanner.nextLine().equals("EN") || scanner.nextLine().equals("en")) {
-                        System.out.println("Do you agree to the Mojang EULA (https://www.minecraft.net/en-us/eula)? Possible answers: yes, no");
-                        if (scanner.nextLine().equals("yes") || scanner.nextLine().equals("YES") || scanner.nextLine().equals("Yes") || scanner.nextLine().equals("Y") || scanner.nextLine().equals("y")) {
-
-                        } else if (scanner.nextLine().equals("no") || scanner.nextLine().equals("NO") || scanner.nextLine().equals("No") || scanner.nextLine().equals("N") || scanner.nextLine().equals("n")) {
-                            System.out.println("Not accepting EULA. Aborting process!");
-                            return false;
-                        } else  {
-                            System.out.println("Please answer yes or no!");
-                            // Möglichkeit zum wiederholen der frage?
-                        }
-                    } else if (scanner.nextLine().equals("DE") || scanner.nextLine().equals("de")) {
-                        System.out.println("Akzeptierst du die Minecraft EULA (https://www.minecraft.net/de-de/eula)? Mögliche antworten: ja, nein");
-                        if (scanner.nextLine().equals("ja") || scanner.nextLine().equals("JA") || scanner.nextLine().equals("Ja") || scanner.nextLine().equals("J") || scanner.nextLine().equals("j")) {
-
-                        } else if (scanner.nextLine().equals("nein") || scanner.nextLine().equals("NEIN") || scanner.nextLine().equals("Nein") || scanner.nextLine().equals("N") || scanner.nextLine().equals("n")){
-                            System.out.println("EULA nicht angenommen. Prozess wird abgebrochen!");
-                            return false;
-                        } else {
-                            System.out.println("Bitte antworte mit ja oder nein");
-                            // Möglichkeit zum wiederholen der frage?
-                        }
-                    } else {
-                        System.out.println("Please answer yes or no!");
-                        // Möglichkeit zum wiederholen der frage?
+    private List<InetAddress> getAllIPAddresses () {
+        List<InetAddress> addrList = new ArrayList<>();
+        try {
+            for(Enumeration<NetworkInterface> eni = NetworkInterface.getNetworkInterfaces(); eni.hasMoreElements(); ) {
+                final NetworkInterface ifc = eni.nextElement();
+                if(ifc.isUp()) {
+                    for(Enumeration<InetAddress> ena = ifc.getInetAddresses(); ena.hasMoreElements(); ) {
+                        addrList.add(ena.nextElement());
                     }
                 }
             }
+        } catch (SocketException e) {
+            throw new RuntimeException(e);
         }
-        return true;
-    }*/
+        return addrList;
+    }
 }
