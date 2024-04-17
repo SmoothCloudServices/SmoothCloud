@@ -1,4 +1,6 @@
 package eu.smoothcloudservices.smoothcloud.node.config.entity;
 
-public class Language {
+import java.io.Serializable;
+
+public class Language implements Serializable {
 }

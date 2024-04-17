@@ -12,10 +12,17 @@
     <artifactId>smoothcloud-node</artifactId>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>22</maven.compiler.source>
+        <maven.compiler.target>22</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>syntaxjason</id>
+            <url>https://www.syntaxjason.de/maven/release</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -24,10 +31,20 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>smoothcloud-wrapper</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty5-all</artifactId>
             <version>5.0.0.Alpha5</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>me.syntaxjason</groupId>
+            <artifactId>syntconf</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.fusesource.jansi</groupId>

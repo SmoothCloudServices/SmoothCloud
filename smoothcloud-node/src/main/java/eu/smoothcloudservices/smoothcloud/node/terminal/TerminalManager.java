@@ -29,7 +29,7 @@ public class TerminalManager {
         if(input) {
             closeInput();
         }
-        terminal.getWriter().append(JavaColor.apply("&0CloudSystem &2» &1")).append(JavaColor.apply(text));
+        terminal.getWriter().append(JavaColor.apply(text));
         terminal.getWriter().flush();
     }
 
@@ -37,16 +37,16 @@ public class TerminalManager {
         if(!input) {
             startInput();
         }
-        terminal.getWriter().append(JavaColor.apply("&0CloudSystem &2» &1")).append(JavaColor.apply(text));
+        terminal.getWriter().append(JavaColor.apply(text));
         terminal.getWriter().flush();
     }
 
     public void append(String text) {
-        terminal.getWriter().append(JavaColor.apply("&0CloudSystem &2» &1")).append(JavaColor.apply(text));
+        terminal.getWriter().append(JavaColor.apply(text));
         terminal.getWriter().flush();
         if(input) {
             terminal.getWriter().append("\n");
-            terminal.getWriter().append(JavaColor.apply("&0CloudSystem &2» &1"));
+            terminal.getWriter().append(JavaColor.apply("&9Smooth&bCloud &8» &7"));
         }
     }
 
@@ -55,6 +55,14 @@ public class TerminalManager {
             closeInput();
         }
         terminal.getWriter().append(JavaColor.apply(prefix)).append(JavaColor.apply(text)).append("\n");
+        terminal.getWriter().flush();
+    }
+
+    public void userAppend(String prefix) {
+        if(!input) {
+            startInput();
+        }
+        terminal.getWriter().append(JavaColor.apply(prefix));
         terminal.getWriter().flush();
     }
 

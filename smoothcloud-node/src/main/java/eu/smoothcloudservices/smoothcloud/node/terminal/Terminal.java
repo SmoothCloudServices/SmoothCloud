@@ -30,16 +30,19 @@ public class Terminal {
             try {
                 while(true) {
 
-                    if(new File("config.cfg").length() == 0) {
-                        writer.append(JavaColor.apply(STR."&0SmoothCloud-Setup &2» &0\{SetupMessages.EULA_ACCEPT}"));
+                    if(new File("E:/Desktop/SCS - Testing", "config.cfg").length() == 0) {
+                        if(SmoothCloudNode.isSettingUp) {
+                            continue;
+                        }
+                        writer.append(JavaColor.apply(STR."&9Smooth&bCloud&8-&2Setup &8» &7\{SetupMessages.EULA_ACCEPT}"));
                         writer.flush();
-                        writer.append("\n").append(JavaColor.apply("&0SmoothCloud-Setup &2» &1"));
+                        writer.append("\n").append(JavaColor.apply("&9Smooth&bCloud&8-&2Setup &8» &7"));
                         writer.flush();
                         new CloudSetup().setup();
                         continue;
                     }
 
-                    writer.append(JavaColor.apply("&0SmoothCloud &2» &1"));
+                    writer.append(JavaColor.apply("&9Smooth&bCloud &8» &7"));
                     writer.flush();
                     String input = reader.readLine().trim();
 

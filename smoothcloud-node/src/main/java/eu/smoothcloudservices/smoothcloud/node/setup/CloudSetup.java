@@ -2,6 +2,8 @@ package eu.smoothcloudservices.smoothcloud.node.setup;
 
 import eu.smoothcloudservices.smoothcloud.node.SmoothCloudNode;
 import eu.smoothcloudservices.smoothcloud.node.config.CloudConfig;
+import eu.smoothcloudservices.smoothcloud.node.config.entity.HostAddress;
+import eu.smoothcloudservices.smoothcloud.node.config.parse.ConfigWriter;
 import eu.smoothcloudservices.smoothcloud.node.terminal.TerminalManager;
 import lombok.SneakyThrows;
 
@@ -12,20 +14,25 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
+import static eu.smoothcloudservices.smoothcloud.node.setup.SetupMessages.*;
+
 public class CloudSetup {
 
-    private final TerminalManager manager;
+    private final TerminalManager terminalManager;
     private final CloudConfig config;
     private int step = 0;
 
+    private String host;
+
     public CloudSetup() {
         this.config = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig();
-        this.manager = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminal();
+        this.terminalManager = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminal();
     }
 
     @SneakyThrows
     public void setup() {
-        var input = manager.read();
+        SmoothCloudNode.isSettingUp = true;
+        var input = terminalManager.read();
         switch (step) {
             case 0 -> {
                 if (step0(input)) return;
@@ -34,17 +41,12 @@ public class CloudSetup {
                 if (step1(input)) return;
             }
             case 2 -> {
-            }
-            case 3 -> {
-                chooseNodePort(input);
-            }
-            case 4 -> {
-                chooseWrapperPort(input);
+                if (step2(input)) return;
                 completed();
             }
             default -> {
-                manager.closeAppend("&0SmoothCloud-Setup &2» &0", "&3Setup error. Please reinstall your cloud!");
-                Thread.sleep(2500);
+                terminalManager.closeAppend(PREFIX, ERROR);
+                Thread.sleep(2000);
                 System.exit(0);
             }
         }
@@ -54,83 +56,72 @@ public class CloudSetup {
         }
     }
 
+    private void completed() {
+        terminalManager.closeAppend(PREFIX, COMPLETED);
+
+        ((SmoothCloudNode) SmoothCloudNode.getInstance()).startCloud();
+    }
+
     private boolean step0(String input) {
         boolean eulaAccepted = getEulaAgreement(input);
         if (!eulaAccepted) {
-            manager.openAppend("&0SmoothCloud-Setup &2» &0", SetupMessages.EULA_NOT_ACCEPTED);
+            terminalManager.openAppend(PREFIX, EULA_NOT_ACCEPTED);
             System.exit(0);
             return true;
         }
-        manager.closeAppend("&0SmoothCloud-Setup &2» &0", SetupMessages.EULA_ACCEPTED);
+        terminalManager.closeAppend(PREFIX, EULA_ACCEPTED);
         List<String> inet4Addresses = getAllIPAddresses();
         if (inet4Addresses.isEmpty()) {
-            manager.closeAppend("&0SmoothCloud-Setup &2» &0", SetupMessages.NO_CHOOSE_IP);
+            terminalManager.closeAppend(PREFIX, NO_CHOOSE_IP);
             System.exit(0);
             return true;
         }
-        manager.closeAppend("&0SmoothCloud-Setup &2» &0", SetupMessages.CHOOSE_IP);
-        String allIps = null;
+        terminalManager.closeAppend(PREFIX, CHOOSE_IP);
+        StringBuilder allIps = null;
         for (String inet4Address : Collections.unmodifiableList(inet4Addresses)) {
             if (allIps == null) {
-                allIps = String.valueOf(inet4Address);
+                allIps = new StringBuilder(String.valueOf(inet4Address)).append(", ");
             }
-            if (!(allIps == null)) {
-                allIps = STR."\{allIps}, \{inet4Address}";
-            }
+            allIps.append(inet4Address);
         }
-        manager.openAppend("&0SmoothCloud-Setup &2» &0", STR."&0\{SetupMessages.CHOOSE_IP_AVAILABLE} \{allIps}");
+        terminalManager.openAppend(PREFIX, CHOOSE_IP_AVAILABLE + allIps);
         return false;
     }
 
     @SneakyThrows
     private boolean step1(String input) {
         if (!chooseIP(input)) {
-            manager.openAppend("&0SmoothCloud-Setup &2» &0", SetupMessages.NO_CHOOSE_IP);
+            terminalManager.openAppend(PREFIX, CHOOSE_IP_NOT_EXISTS);
             return true;
         }
-        manager.openAppend("&0SmoothCloud-Setup &2» &0", "&0Which port should we use for the node?");
+        terminalManager.openAppend(PREFIX, CHOOSE_PORT);
         return false;
     }
 
-    private void completed() {
-        manager.closeAppend("&0SmoothCloud-Setup &2» &0", SetupMessages.COMPLETED);
-        config.save();
+    private boolean step2(String input) {
+        boolean portAvailable = checkPortAvailability(Integer.parseInt(input.toLowerCase()));
+        if (!portAvailable) {
+            terminalManager.openAppend(PREFIX, CHOOSE_PORT_NOT_EXISTS);
+            return true;
+        }
+        config.setCloudHost(new HostAddress(host, input));
+        terminalManager.closeAppend(PREFIX, SAVE_HOST_PORT);
+        return false;
     }
 
     private boolean getEulaAgreement(String input) {
         String answer = input.toLowerCase();
         if (answer.equals("yes")) {
-            config.set("Eula", "true");
+            //config.setEulaAgreement(); todo
             return true;
         }
         return false;
     }
 
-    private void chooseNodePort(String input) {
-        int answer = Integer.parseInt(input.toLowerCase());
-        boolean portAvailable = checkPortAvailability(answer);
-        if (portAvailable) {
-            config.set("Port", input);
-            return;
-        }
-        manager.append("&0SmoothCloud-Setup &2» &0", "&3Port not available. Please choose an other Port!");
-    }
-
-    private void chooseWrapperPort(String input) {
-        manager.append("&0Which port should we use for the wrapper?");
-        int answer = Integer.parseInt(input.toLowerCase());
-        boolean portAvailable = checkPortAvailability(answer);
-        if (portAvailable) {
-            config.set("Wrapper-Port", input);
-            return;
-        }
-        manager.append("&0SmoothCloud-Setup &2» &0", "&3Port not available. Please choose an other Port!");
-    }
-
-    private boolean chooseIP(String input) throws UnknownHostException {
+    private boolean chooseIP(String input) {
         List<String> inet4Addresses = getAllIPAddresses();
         if (inet4Addresses.contains(input)) {
-            config.set("IP-Address", input);
+            host = input;
             return true;
         }
         return false;
@@ -140,22 +131,22 @@ public class CloudSetup {
         try {
             Socket socket = new Socket("localhost", port);
             socket.close();
-            return true;
-        } catch (IOException e) {
             return false;
+        } catch (IOException e) {
+            return true;
         }
     }
 
     private List<String> getAllIPAddresses() {
         List<String> addresses = new ArrayList<>();
         try {
-            for(Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces(); networkInterfaces.hasMoreElements(); ) {
+            for (Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces(); networkInterfaces.hasMoreElements(); ) {
                 final NetworkInterface networkInterface = networkInterfaces.nextElement();
-                if(networkInterface.isUp()) {
-                    for(Enumeration<InetAddress> addressEnumeration = networkInterface.getInetAddresses(); addressEnumeration.hasMoreElements(); ) {
+                if (networkInterface.isUp()) {
+                    for (Enumeration<InetAddress> addressEnumeration = networkInterface.getInetAddresses(); addressEnumeration.hasMoreElements(); ) {
                         InetAddress address = addressEnumeration.nextElement();
-                        if(address instanceof Inet4Address fourAddress) {
-                            if(address.getHostAddress().split("\\.")[3].equals("1")) {
+                        if (address instanceof Inet4Address fourAddress) {
+                            if (address.getHostAddress().split("\\.")[3].equals("1")) {
                                 continue;
                             }
                             if (!addresses.contains(fourAddress.getHostAddress())) {
