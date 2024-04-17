@@ -17,13 +17,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>syntaxjason</id>
-            <url>https://www.syntaxjason.de/maven/release</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>eu.smoothcloudservices.smoothcloud</groupId>
@@ -42,9 +35,14 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>me.syntaxjason</groupId>
-            <artifactId>syntconf</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>dev.eztxm</groupId>
+            <artifactId>ezTxmAPI</artifactId>
+            <version>1.0-PRE</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.javadev</groupId>
+            <artifactId>underscore</artifactId>
+            <version>1.100</version>
         </dependency>
         <dependency>
             <groupId>org.fusesource.jansi</groupId>

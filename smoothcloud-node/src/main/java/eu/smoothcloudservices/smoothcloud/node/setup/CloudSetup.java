@@ -2,8 +2,8 @@ package eu.smoothcloudservices.smoothcloud.node.setup;
 
 import eu.smoothcloudservices.smoothcloud.node.SmoothCloudNode;
 import eu.smoothcloudservices.smoothcloud.node.config.CloudConfig;
+import eu.smoothcloudservices.smoothcloud.node.config.entity.EulaAgreement;
 import eu.smoothcloudservices.smoothcloud.node.config.entity.HostAddress;
-import eu.smoothcloudservices.smoothcloud.node.config.parse.ConfigWriter;
 import eu.smoothcloudservices.smoothcloud.node.terminal.TerminalManager;
 import lombok.SneakyThrows;
 
@@ -56,8 +56,11 @@ public class CloudSetup {
         }
     }
 
+    @SneakyThrows
     private void completed() {
         terminalManager.closeAppend(PREFIX, COMPLETED);
+
+        this.config.save();
 
         ((SmoothCloudNode) SmoothCloudNode.getInstance()).startCloud();
     }
@@ -104,7 +107,7 @@ public class CloudSetup {
             terminalManager.openAppend(PREFIX, CHOOSE_PORT_NOT_EXISTS);
             return true;
         }
-        config.setCloudHost(new HostAddress(host, input));
+        config.setAddress(new HostAddress(host, input));
         terminalManager.closeAppend(PREFIX, SAVE_HOST_PORT);
         return false;
     }
@@ -112,7 +115,7 @@ public class CloudSetup {
     private boolean getEulaAgreement(String input) {
         String answer = input.toLowerCase();
         if (answer.equals("yes")) {
-            //config.setEulaAgreement(); todo
+            config.setAgreement(new EulaAgreement(true));
             return true;
         }
         return false;

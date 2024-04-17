@@ -22,10 +22,10 @@ public final class NettyServer {
                 .channelFactory(NettyUtils.getChannelFactory())
                 .group(bossGroup, workGroup)
                 .childHandler(new NettyNetworkServerInitializer())
-                .bind(config.getCloudHost().getHostName(), Integer.parseInt(config.getCloudHost().getHostPort()))
+                .bind(config.getAddress().getHostName(), Integer.parseInt(config.getAddress().getHostPort()))
                 .addListener(futures -> {
                 });
-        ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminal().closeAppend(SmoothCloudNode.PREFIX, STR."Netty Connection successfully started on HostAddress: \{config.getCloudHost().getHostAddress()}");
+        ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminal().closeAppend(SmoothCloudNode.PREFIX, STR."Netty Connection successfully started on HostAddress: \{config.getAddress().getHostAddress()}");
     }
 
     public void close() {

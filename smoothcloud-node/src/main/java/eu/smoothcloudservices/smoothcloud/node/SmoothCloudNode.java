@@ -1,17 +1,14 @@
 package eu.smoothcloudservices.smoothcloud.node;
 
 import com.github.lalyos.jfiglet.FigletFont;
-import com.github.lalyos.jfiglet.JFiglet;
 import eu.smoothcloudservices.smoothcloud.api.SmoothCloudAPI;
 import eu.smoothcloudservices.smoothcloud.api.group.CloudGroupProvider;
 import eu.smoothcloudservices.smoothcloud.api.service.CloudServiceProvider;
 import eu.smoothcloudservices.smoothcloud.node.command.CommandProvider;
 import eu.smoothcloudservices.smoothcloud.node.config.CloudConfig;
-import eu.smoothcloudservices.smoothcloud.node.config.parse.ConfigParser;
 import eu.smoothcloudservices.smoothcloud.node.group.CloudGroupProviderImpl;
 import eu.smoothcloudservices.smoothcloud.node.server.NettyServer;
 import eu.smoothcloudservices.smoothcloud.node.service.CloudServiceProviderImpl;
-import eu.smoothcloudservices.smoothcloud.node.setup.CloudSetup;
 import eu.smoothcloudservices.smoothcloud.node.terminal.JavaColor;
 import eu.smoothcloudservices.smoothcloud.node.terminal.TerminalManager;
 import eu.smoothcloudservices.smoothcloud.wrapper.SmoothCloudWrapper;
@@ -39,10 +36,16 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
 
     @SneakyThrows
     public SmoothCloudNode() {
+        File configFile = new File("E:/Desktop/SCS - Testing", "config.cfg");
+
         this.terminal = new TerminalManager();
 
-        this.config = new CloudConfig("E:/Desktop/SCS - Testing", "config");
+        this.config = new CloudConfig(configFile);
         this.config.load();
+
+        if(configFile.length() == 0) {
+            return;
+        }
 
         if(!isSettingUp) {
             startCloud();
@@ -71,7 +74,7 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
         this.terminal.closeAppend(PREFIX, "Connection for the wrapper started.");
 
         this.terminal.closeAppend(PREFIX, "Starting Internal Wrapper...");
-        this.wrapper = new SmoothCloudWrapper(config.getCloudHost().getHostName(), config.getCloudHost().getHostPort());
+        this.wrapper = new SmoothCloudWrapper(config.getAddress().getHostName(), config.getAddress().getHostPort());
         this.terminal.closeAppend(PREFIX, "Internal Wrapper started.");
 
         this.terminal.closeAppend("\n");
