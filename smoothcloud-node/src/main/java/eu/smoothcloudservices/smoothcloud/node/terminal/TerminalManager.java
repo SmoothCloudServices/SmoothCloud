@@ -29,7 +29,7 @@ public class TerminalManager {
         if(input) {
             closeInput();
         }
-        terminal.getWriter().append(Color.translate("&0CloudSystem &2» &1")).append(Color.translate(text));
+        terminal.getWriter().append(JavaColor.apply("&0CloudSystem &2» &1")).append(JavaColor.apply(text));
         terminal.getWriter().flush();
     }
 
@@ -37,16 +37,16 @@ public class TerminalManager {
         if(!input) {
             startInput();
         }
-        terminal.getWriter().append(Color.translate("&0CloudSystem &2» &1")).append(Color.translate(text));
+        terminal.getWriter().append(JavaColor.apply("&0CloudSystem &2» &1")).append(JavaColor.apply(text));
         terminal.getWriter().flush();
     }
 
     public void append(String text) {
-        terminal.getWriter().append(Color.translate("&0CloudSystem &2» &1")).append(Color.translate(text));
+        terminal.getWriter().append(JavaColor.apply("&0CloudSystem &2» &1")).append(JavaColor.apply(text));
         terminal.getWriter().flush();
         if(input) {
             terminal.getWriter().append("\n");
-            terminal.getWriter().append(Color.translate("&0CloudSystem &2» &1"));
+            terminal.getWriter().append(JavaColor.apply("&0CloudSystem &2» &1"));
         }
     }
 
@@ -54,7 +54,7 @@ public class TerminalManager {
         if(input) {
             closeInput();
         }
-        terminal.getWriter().append(Color.translate(prefix)).append(Color.translate(text));
+        terminal.getWriter().append(JavaColor.apply(prefix)).append(JavaColor.apply(text)).append("\n");
         terminal.getWriter().flush();
     }
 
@@ -62,16 +62,19 @@ public class TerminalManager {
         if(!input) {
             startInput();
         }
-        terminal.getWriter().append(Color.translate(prefix)).append(Color.translate(text));
+        terminal.getWriter().append(JavaColor.apply(prefix)).append(JavaColor.apply(text));
+        terminal.getWriter().flush();
+        terminal.getWriter().append("\n");
+        terminal.getWriter().append(JavaColor.apply(prefix));
         terminal.getWriter().flush();
     }
 
     public void append(String prefix, String text) {
-        terminal.getWriter().append(Color.translate(prefix)).append(Color.translate(text));
+        terminal.getWriter().append(JavaColor.apply(prefix)).append(JavaColor.apply(text));
         terminal.getWriter().flush();
         if(input) {
             terminal.getWriter().append("\n");
-            terminal.getWriter().append(Color.translate(prefix));
+            terminal.getWriter().append(JavaColor.apply(prefix));
         }
     }
 

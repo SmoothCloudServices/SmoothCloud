@@ -62,7 +62,7 @@ public class CloudSetup {
             return true;
         }
         manager.closeAppend("&0SmoothCloud-Setup &2» &0", SetupMessages.EULA_ACCEPTED);
-        List<Inet4Address> inet4Addresses = getAllIPAddresses();
+        List<String> inet4Addresses = getAllIPAddresses();
         if (inet4Addresses.isEmpty()) {
             manager.closeAppend("&0SmoothCloud-Setup &2» &0", SetupMessages.NO_CHOOSE_IP);
             System.exit(0);
@@ -70,7 +70,7 @@ public class CloudSetup {
         }
         manager.closeAppend("&0SmoothCloud-Setup &2» &0", SetupMessages.CHOOSE_IP);
         String allIps = null;
-        for (Inet4Address inet4Address : Collections.unmodifiableList(inet4Addresses)) {
+        for (String inet4Address : Collections.unmodifiableList(inet4Addresses)) {
             if (allIps == null) {
                 allIps = String.valueOf(inet4Address);
             }
@@ -82,6 +82,7 @@ public class CloudSetup {
         return false;
     }
 
+    @SneakyThrows
     private boolean step1(String input) {
         if (!chooseIP(input)) {
             manager.openAppend("&0SmoothCloud-Setup &2» &0", SetupMessages.NO_CHOOSE_IP);
@@ -126,8 +127,8 @@ public class CloudSetup {
         manager.append("&0SmoothCloud-Setup &2» &0", "&3Port not available. Please choose an other Port!");
     }
 
-    private boolean chooseIP(String input) {
-        List<Inet4Address> inet4Addresses = getAllIPAddresses();
+    private boolean chooseIP(String input) throws UnknownHostException {
+        List<String> inet4Addresses = getAllIPAddresses();
         if (inet4Addresses.contains(input)) {
             config.set("IP-Address", input);
             return true;
@@ -145,8 +146,8 @@ public class CloudSetup {
         }
     }
 
-    private List<Inet4Address> getAllIPAddresses() {
-        List<Inet4Address> addresses = new ArrayList<>();
+    private List<String> getAllIPAddresses() {
+        List<String> addresses = new ArrayList<>();
         try {
             for(Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces(); networkInterfaces.hasMoreElements(); ) {
                 final NetworkInterface networkInterface = networkInterfaces.nextElement();
@@ -157,8 +158,8 @@ public class CloudSetup {
                             if(address.getHostAddress().split("\\.")[3].equals("1")) {
                                 continue;
                             }
-                            if (!addresses.contains(fourAddress)) {
-                                addresses.add(fourAddress);
+                            if (!addresses.contains(fourAddress.getHostAddress())) {
+                                addresses.add(fourAddress.getHostAddress());
                             }
                         }
                     }

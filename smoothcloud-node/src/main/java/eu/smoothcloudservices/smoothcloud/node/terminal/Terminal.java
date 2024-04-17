@@ -31,15 +31,15 @@ public class Terminal {
                 while(true) {
 
                     if(new File("config.cfg").length() == 0) {
-                        writer.append(Color.translate(STR."&0SmoothCloud-Setup &2» &0\{SetupMessages.EULA_ACCEPT}"));
+                        writer.append(JavaColor.apply(STR."&0SmoothCloud-Setup &2» &0\{SetupMessages.EULA_ACCEPT}"));
                         writer.flush();
-                        writer.append("\n").append(Color.translate("&0SmoothCloud-Setup &2» &1"));
+                        writer.append("\n").append(JavaColor.apply("&0SmoothCloud-Setup &2» &1"));
                         writer.flush();
                         new CloudSetup().setup();
                         continue;
                     }
 
-                    writer.append(Color.translate("&0SmoothCloud &2» &1"));
+                    writer.append(JavaColor.apply("&0SmoothCloud &2» &1"));
                     writer.flush();
                     String input = reader.readLine().trim();
 

@@ -5,7 +5,6 @@ import eu.smoothcloudservices.smoothcloud.api.group.GroupType;
 import eu.smoothcloudservices.smoothcloud.node.SmoothCloudNode;
 import eu.smoothcloudservices.smoothcloud.node.command.Command;
 import eu.smoothcloudservices.smoothcloud.node.group.CloudGroupImpl;
-import eu.smoothcloudservices.smoothcloud.node.terminal.Color;
 
 public final class CreateGroupCommand implements Command {
 
