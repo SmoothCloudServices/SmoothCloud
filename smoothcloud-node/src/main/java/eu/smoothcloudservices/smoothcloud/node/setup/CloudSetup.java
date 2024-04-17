@@ -18,6 +18,7 @@ public class CloudSetup {
 
     public CloudSetup() {
         this.terminal = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminal();
+        setup(new CloudConfig());
     }
 
 
@@ -29,7 +30,7 @@ public class CloudSetup {
 
 
         try {
-            System.out.println(FigletFont.convertOneLine("SmoothCloud  Setup"));
+            terminal.write(FigletFont.convertOneLine("SmoothCloud Setup"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -62,15 +63,14 @@ public class CloudSetup {
 
     private boolean getEulaAgreement(Scanner scanner, CloudConfig config) {
         while (true) {
-            String answer = scanner.nextLine().toLowerCase();
-            if(answer.equals("yes") || answer.equals("y")) {
-                config.set("cloud.eula", true);
+            String answer = new JLine3Terminal().getLineReader().readLine().toLowerCase().replace(" ", "");
+            if(answer.contains("yes") || answer.contains("y")) {
                 return true;
-            }
-            if(answer.equals("no") || answer.equals("n")) {
+            } else if(answer.contains("no") || answer.contains("n")) {
                 return false;
+            } else {
+                terminal.write(Color.translate("&0CloudSystem &2» &3Please answer with yes or no!"));
             }
-            terminal.write(Color.translate("&0CloudSystem &2» &3Please answer with yes or no!"));
         }
     }
 
@@ -80,7 +80,7 @@ public class CloudSetup {
             int answer = Integer.parseInt(scanner.nextLine().toLowerCase());
             boolean portAvailable = checkPortAvailability(answer);
             if (portAvailable) {
-                config.set("cloud.nodeport", scanner.nextLine());
+
                 return;
             }
             terminal.write(Color.translate("&0CloudSystem &2» &3Port not available. Please choose an other Port!"));
@@ -93,7 +93,7 @@ public class CloudSetup {
             int answer = Integer.parseInt(scanner.nextLine().toLowerCase());
             boolean portAvailable = checkPortAvailability(answer);
             if (portAvailable) {
-                config.set("cloud.wrapperport", scanner.nextLine());
+
                 return;
             }
             terminal.write(Color.translate("&0CloudSystem &2» &3Port not available. Please choose an other Port!"));
@@ -102,7 +102,7 @@ public class CloudSetup {
 
     private boolean chooseNodeIP(Scanner scanner, CloudConfig config) {
         while (true) {
-            List<InetAddress> inetAddresses = getAllIPAddresses();
+            List<String> inetAddresses = getAllIPAddresses();
             if (inetAddresses.isEmpty()) {
                 terminal.write(Color.translate("&0CloudSystem &2» &3No IP addresses available. Aborting setup!"));
                 return false;
@@ -110,9 +110,9 @@ public class CloudSetup {
 
             String allIps;
             allIps = null;
-            for (InetAddress inetAddress : Collections.unmodifiableList(inetAddresses)) {
+            for (String inetAddress : Collections.unmodifiableList(inetAddresses)) {
                 if (allIps == null) {
-                    allIps = String.valueOf(inetAddress);
+                    allIps = inetAddress;
                 }
                 if (!(allIps == null)) {
                     allIps = STR."\{allIps}, \{inetAddress}";
@@ -123,7 +123,7 @@ public class CloudSetup {
             terminal.write(Color.translate(STR."&0CloudSystem &2» &0Available IPs: \{allIps}"));
 
             if (inetAddresses.contains(scanner.nextLine())) {
-                config.set("cloud.nodeip", scanner.nextLine());
+
                 return true;
             }
             terminal.write(Color.translate("&0CloudSystem &2» &3Please choose an IP address from above!"));
@@ -132,7 +132,7 @@ public class CloudSetup {
 
     private boolean chooseWrapperIP(Scanner scanner, CloudConfig config) {
         while (true) {
-            List<InetAddress> inetAddresses = getAllIPAddresses();
+            List<String> inetAddresses = getAllIPAddresses();
             if (inetAddresses.isEmpty()) {
                 terminal.write(Color.translate("&0CloudSystem &2» &3No IP addresses available. Aborting setup!"));
                 return false;
@@ -140,9 +140,9 @@ public class CloudSetup {
 
             String allIps;
             allIps = null;
-            for (InetAddress inetAddress : Collections.unmodifiableList(inetAddresses)) {
+            for (String inetAddress : Collections.unmodifiableList(inetAddresses)) {
                 if (allIps == null) {
-                    allIps = String.valueOf(inetAddress);
+                    allIps = inetAddress;
                 }
                 if (!(allIps == null)) {
                     allIps = STR."\{allIps}, \{inetAddress}";
@@ -153,7 +153,7 @@ public class CloudSetup {
             terminal.write(Color.translate(STR."&0CloudSystem &2» &0Available IPs: \{allIps}"));
 
             if (inetAddresses.contains(scanner.nextLine())) {
-                config.set("cloud.wrapperip", scanner.nextLine());
+
                 return true;
             }
             terminal.write(Color.translate("&0CloudSystem &2» &3Please choose an IP address from above!"));
@@ -181,14 +181,14 @@ public class CloudSetup {
         }
     }
 
-    private List<InetAddress> getAllIPAddresses () {
-        List<InetAddress> addrList = new ArrayList<>();
+    private List<String> getAllIPAddresses () {
+        List<String> addrList = new ArrayList<>();
         try {
             for(Enumeration<NetworkInterface> eni = NetworkInterface.getNetworkInterfaces(); eni.hasMoreElements(); ) {
                 final NetworkInterface ifc = eni.nextElement();
                 if(ifc.isUp()) {
                     for(Enumeration<InetAddress> ena = ifc.getInetAddresses(); ena.hasMoreElements(); ) {
-                        addrList.add(ena.nextElement());
+                        addrList.add(ena.nextElement().getHostAddress());
                     }
                 }
             }

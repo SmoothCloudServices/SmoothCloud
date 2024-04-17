@@ -8,6 +8,7 @@ import eu.smoothcloudservices.smoothcloud.node.config.CloudConfig;
 import eu.smoothcloudservices.smoothcloud.node.group.CloudGroupProviderImpl;
 import eu.smoothcloudservices.smoothcloud.node.server.NettyServer;
 import eu.smoothcloudservices.smoothcloud.node.service.CloudServiceProviderImpl;
+import eu.smoothcloudservices.smoothcloud.node.setup.CloudSetup;
 import eu.smoothcloudservices.smoothcloud.node.terminal.JLine3Terminal;
 import lombok.Getter;
 
@@ -35,5 +36,6 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
         this.nettyServer = new NettyServer();
 
         Runtime.getRuntime().addShutdownHook(new Thread(SmoothCloudShutdownHandler::run));
+        new CloudSetup();
     }
 }
