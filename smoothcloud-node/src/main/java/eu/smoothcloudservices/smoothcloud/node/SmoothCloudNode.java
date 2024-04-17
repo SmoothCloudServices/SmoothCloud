@@ -12,21 +12,33 @@ import eu.smoothcloudservices.smoothcloud.node.setup.CloudSetup;
 import eu.smoothcloudservices.smoothcloud.node.terminal.JLine3Terminal;
 import lombok.Getter;
 
+import java.io.File;
+import java.util.ArrayList;
+
 @Getter
 public final class SmoothCloudNode extends SmoothCloudAPI {
     private final JLine3Terminal terminal;
     private final CloudConfig config;
-    private final CommandProvider commandProvider;
+    private final CloudSetup setup;
+    private CommandProvider commandProvider;
 
-    private final CloudGroupProvider groupProvider;
-    private final CloudServiceProvider serviceProvider;
+    private CloudGroupProvider groupProvider;
+    private CloudServiceProvider serviceProvider;
 
-    private final NettyServer nettyServer;
+    private NettyServer nettyServer;
 
     public SmoothCloudNode() {
         this.terminal = new JLine3Terminal();
 
         this.config = new CloudConfig();
+        this.setup = new CloudSetup();
+
+        String[] strings = new String[1];
+        this.setup.setup(new String[1]);
+
+        if (new File("config.cfg").length() == 0) { // todo: after complete start - temporary
+            return;
+        }
 
         this.commandProvider = new CommandProvider();
 
