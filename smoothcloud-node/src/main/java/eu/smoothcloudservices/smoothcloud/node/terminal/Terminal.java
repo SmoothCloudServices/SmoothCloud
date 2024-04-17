@@ -3,6 +3,7 @@ package eu.smoothcloudservices.smoothcloud.node.terminal;
 import eu.smoothcloudservices.smoothcloud.node.SmoothCloudNode;
 import eu.smoothcloudservices.smoothcloud.node.command.CommandProvider;
 import eu.smoothcloudservices.smoothcloud.node.setup.CloudSetup;
+import eu.smoothcloudservices.smoothcloud.node.setup.SetupMessages;
 import lombok.Getter;
 
 import java.io.*;
@@ -10,12 +11,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Terminal {
-
     @Getter
     private PrintWriter writer;
     @Getter
     private BufferedReader reader;
-    private ExecutorService service;
+    private final ExecutorService service;
 
     public Terminal() {
         this.writer = new PrintWriter(System.out, true);
@@ -31,9 +31,9 @@ public class Terminal {
                 while(true) {
 
                     if(new File("config.cfg").length() == 0) {
-                        writer.append(Color.translate("&0CloudSetup &2» &0Do you agree to the Mojang EULA (https://www.minecraft.net/en-us/eula)? Possible answers: yes, no"));
+                        writer.append(Color.translate(STR."&0SmoothCloud-Setup &2» &0\{SetupMessages.EULA_ACCEPT}"));
                         writer.flush();
-                        writer.append("\n").append(Color.translate("&0CloudSetup &2» &1"));
+                        writer.append("\n").append(Color.translate("&0SmoothCloud-Setup &2» &1"));
                         writer.flush();
                         new CloudSetup().setup();
                         continue;
