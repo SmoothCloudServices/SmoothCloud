@@ -2,6 +2,7 @@ package eu.smoothcloudservices.smoothcloud.node.terminal;
 
 import eu.smoothcloudservices.smoothcloud.node.SmoothCloudNode;
 import eu.smoothcloudservices.smoothcloud.node.command.CommandProvider;
+import eu.smoothcloudservices.smoothcloud.node.setup.CloudSetup;
 import lombok.Getter;
 
 import java.io.*;
@@ -28,7 +29,17 @@ public class Terminal {
         service.execute(() -> {
             try {
                 while(true) {
-                    writer.append(Color.translate("&0CloudSystem &2» &1"));
+
+                    if(new File("config.cfg").length() == 0) {
+                        writer.append(Color.translate("&0CloudSetup &2» &0Do you agree to the Mojang EULA (https://www.minecraft.net/en-us/eula)? Possible answers: yes, no"));
+                        writer.flush();
+                        writer.append("\n").append(Color.translate("&0CloudSetup &2» &1"));
+                        writer.flush();
+                        new CloudSetup().setup();
+                        continue;
+                    }
+
+                    writer.append(Color.translate("&0SmoothCloud &2» &1"));
                     writer.flush();
                     String input = reader.readLine().trim();
 

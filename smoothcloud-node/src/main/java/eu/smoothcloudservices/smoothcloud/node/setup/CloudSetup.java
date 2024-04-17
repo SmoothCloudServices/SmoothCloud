@@ -25,11 +25,9 @@ public class CloudSetup {
     public void setup() {
         var input = manager.read();
 
-
         switch (step) {
             case 0 -> {
                 String eulaURL = "https://www.minecraft.net/en-us/eula";
-                presentEula(eulaURL);
             }
             case 1 -> {
                 boolean eulaAccepted = getEulaAgreement(input);
@@ -72,10 +70,6 @@ public class CloudSetup {
     private void completed() {
         manager.append("&0Setup has been completed.");
         config.save();
-    }
-
-    private void presentEula(String eulaUrl) {
-        manager.append("&0Do you agree to the Mojang EULA (https://www.minecraft.net/en-us/eula)? Possible answers: yes, no");
     }
 
     private boolean getEulaAgreement(String input) {

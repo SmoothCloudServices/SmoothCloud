@@ -18,7 +18,6 @@ import java.io.File;
 public final class SmoothCloudNode extends SmoothCloudAPI {
     private final TerminalManager terminal;
     private final CloudConfig config;
-    private final CloudSetup setup;
     private CommandProvider commandProvider;
 
     private CloudGroupProvider groupProvider;
@@ -30,10 +29,6 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
         this.terminal = new TerminalManager();
 
         this.config = new CloudConfig();
-
-        this.setup = new CloudSetup();
-
-        this.setup.setup();
 
         if (new File("config.cfg").length() == 0) { // todo: after complete start - temporary
             return;
