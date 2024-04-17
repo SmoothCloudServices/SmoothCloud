@@ -15,11 +15,11 @@ public final class DeleteGroupCommand implements Command {
             var name = args[1];
 
             if (!SmoothCloudAPI.getInstance().getGroupProvider().existsGroup(name)) {
-                terminal.write(Color.translate(STR."&0CloudSystem &2» &1Group &0\{name}&1 not found."));
+                terminal.append(STR."&1Group &0\{name}&1 not found.");
                 return;
             }
             SmoothCloudAPI.getInstance().getGroupProvider().deleteGroup(SmoothCloudAPI.getInstance().getGroupProvider().getGroup(name));
-            terminal.write(Color.translate(STR."&0CloudSystem &2» &1Group &0\{name}&1 deleted."));
+            terminal.append(STR."&1Group &0\{name}&1 deleted.");
             return;
         }
     }

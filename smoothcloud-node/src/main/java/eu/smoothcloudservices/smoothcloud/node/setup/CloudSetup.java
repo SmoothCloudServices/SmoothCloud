@@ -1,33 +1,31 @@
 package eu.smoothcloudservices.smoothcloud.node.setup;
 
-import com.github.lalyos.jfiglet.FigletFont;
 import eu.smoothcloudservices.smoothcloud.node.SmoothCloudNode;
 import eu.smoothcloudservices.smoothcloud.node.config.CloudConfig;
 import eu.smoothcloudservices.smoothcloud.node.terminal.Color;
-import eu.smoothcloudservices.smoothcloud.node.terminal.JLine3Terminal;
+import eu.smoothcloudservices.smoothcloud.node.terminal.TerminalManager;
 import lombok.SneakyThrows;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.Socket;
-import java.net.SocketException;
+import java.net.*;
 import java.util.*;
 
 public class CloudSetup {
-    private final JLine3Terminal terminal;
+
+    private final TerminalManager manager;
     private final CloudConfig config;
     private int step = 0;
 
     public CloudSetup() {
-        this.terminal = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminal();
         this.config = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig();
+        this.manager = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminal();
     }
 
     @SneakyThrows
-    public void setup(String[] line) {
-        var input = new ArrayList<>(Arrays.stream(line).toList()).removeFirst();
-        terminal.write(FigletFont.convertOneLine("SmoothCloud  Setup"));
+    public void setup() {
+        var input = manager.read();
+
+
         switch (step) {
             case 0 -> {
                 String eulaURL = "https://www.minecraft.net/en-us/eula";
@@ -36,14 +34,14 @@ public class CloudSetup {
             case 1 -> {
                 boolean eulaAccepted = getEulaAgreement(input);
                 if (!eulaAccepted) {
-                    terminal.write(Color.translate("&0CloudSystem &2» &3EULA not accepted. Aborting setup!"));
+                    manager.append("&3EULA not accepted. Aborting setup!");
                     System.exit(0);
                     return;
                 }
             }
             case 2 -> {
                 if (!chooseNodeIP(input)) {
-                    terminal.write(Color.translate("&0CloudSystem &2» &3This IP-Address ist already in use. Please select an another IP-Address"));
+                    manager.append("&3This IP-Address ist already in use. Please select an another IP-Address");
                 }
             }
             case 3 -> {
@@ -54,7 +52,7 @@ public class CloudSetup {
                 completed();
             }
             default -> {
-                terminal.write(Color.translate("&0CloudSystem &2» &3Setup error. Please reinstall your cloud!"));
+                manager.append("&3Setup error. Please reinstall your cloud!");
                 Thread.sleep(5000);
                 System.exit(0);
             }
@@ -66,15 +64,18 @@ public class CloudSetup {
         }*/
 
         step++;
+        if(step < 4) {
+            this.setup();
+        }
     }
 
     private void completed() {
-        terminal.write(Color.translate("&0CloudSystem &2» &0Setup has been completed."));
+        manager.append("&0Setup has been completed.");
         config.save();
     }
 
     private void presentEula(String eulaUrl) {
-        terminal.write(Color.translate("&0CloudSystem &2» &0Do you agree to the Mojang EULA (https://www.minecraft.net/en-us/eula)? Possible answers: yes, no"));
+        manager.append("&0Do you agree to the Mojang EULA (https://www.minecraft.net/en-us/eula)? Possible answers: yes, no");
     }
 
     private boolean getEulaAgreement(String input) {
@@ -86,34 +87,34 @@ public class CloudSetup {
             } else if(answer.contains("no") || answer.contains("n")) {
                 return false;
             } else {
-                terminal.write(Color.translate("&0CloudSystem &2» &3Please answer with yes or no!"));
+                manager.append("&3Please answer with yes or no!");
             }
         }
     }
 
     private void chooseNodePort(String input) {
         while (true) {
-            terminal.write(Color.translate("&0CloudSystem &2» &0Which port should we use for the node?"));
+            manager.append("&0Which port should we use for the node?");
             int answer = Integer.parseInt(input.toLowerCase());
             boolean portAvailable = checkPortAvailability(answer);
             if (portAvailable) {
                 config.set("Port", input);
                 return;
             }
-            terminal.write(Color.translate("&0CloudSystem &2» &3Port not available. Please choose an other Port!"));
+            manager.append("&3Port not available. Please choose an other Port!");
         }
     }
 
     private void chooseWrapperPort(String input) {
         while (true) {
-            terminal.write(Color.translate("&0CloudSystem &2» &0Which port should we use for the wrapper?"));
+            manager.append("&0Which port should we use for the wrapper?");
             int answer = Integer.parseInt(input.toLowerCase());
             boolean portAvailable = checkPortAvailability(answer);
             if (portAvailable) {
                 config.set("Wrapper-Port", input);
                 return;
             }
-            terminal.write(Color.translate("&0CloudSystem &2» &3Port not available. Please choose an other Port!"));
+            manager.append("&3Port not available. Please choose an other Port!");
         }
     }
 
@@ -121,7 +122,7 @@ public class CloudSetup {
         while (true) {
             List<InetAddress> inetAddresses = getAllIPAddresses();
             if (inetAddresses.isEmpty()) {
-                terminal.write(Color.translate("&0CloudSystem &2» &3No IP addresses available. Aborting setup!"));
+                manager.append("&3No IP addresses available. Aborting setup!");
                 return false;
             }
 
@@ -136,14 +137,14 @@ public class CloudSetup {
                 }
             }
 
-            terminal.write(Color.translate("&0CloudSystem &2» &0Which IP should we use for the node?"));
-            terminal.write(Color.translate(STR."&0CloudSystem &2» &0Available IPs: \{allIps}"));
+            manager.append("&0Which IP should we use for the node?");
+            manager.append(STR."&0Available IPs: \{allIps}");
 
             if (inetAddresses.contains(input)) {
                 config.set("IP-Address", input);
                 return true;
             }
-            terminal.write(Color.translate("&0CloudSystem &2» &3Please choose an IP address from above!"));
+            manager.append("&3Please choose an IP address from above!");
         }
     }
 
@@ -197,7 +198,13 @@ public class CloudSetup {
                 final NetworkInterface networkInterface = networkInterfaces.nextElement();
                 if(networkInterface.isUp()) {
                     for(Enumeration<InetAddress> addressEnumeration = networkInterface.getInetAddresses(); addressEnumeration.hasMoreElements(); ) {
-                        addresses.add(addressEnumeration.nextElement());
+                        InetAddress address = addressEnumeration.nextElement();
+                        if(address instanceof Inet4Address) {
+                            if(address.getHostAddress().split("\\.")[3].equals("1")) {
+                                continue;
+                            }
+                            addresses.add(address);
+                        }
                     }
                 }
             }

@@ -21,6 +21,10 @@ public class CommandProvider {
         commands.put(id, command);
     }
 
+    public boolean containsCommand(String command) {
+        return commands.containsKey(command.toLowerCase());
+    }
+
     public void call(String[] args) {
         var arguments = new ArrayList<>(Arrays.stream(args).toList());
         var id = arguments.removeFirst();

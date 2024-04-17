@@ -19,10 +19,10 @@ public final class CreateGroupCommand implements Command {
 
             if (!SmoothCloudAPI.getInstance().getGroupProvider().existsGroup(name)) {
                 SmoothCloudAPI.getInstance().getGroupProvider().createGroup(new CloudGroupImpl(name, 1, 1, GroupType.valueOf(type.toUpperCase())));
-                terminal.write(Color.translate(STR."&0CloudSystem &2» &1Group &0\{name}&1 created."));
+                terminal.append(STR."&1Group &0\{name}&1 created.");
                 return;
             }
-            terminal.write(Color.translate(STR."&0CloudSystem &2» &1Group &0\{name}&1 already exists."));
+            terminal.append(STR."&1Group &0\{name}&1 already exists.");
         }
     }
 }
