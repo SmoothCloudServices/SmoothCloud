@@ -24,6 +24,12 @@ public class Terminal {
         start();
     }
 
+    public void clearScreen() {
+        for (int i = 0; i < 100; i++) {
+            System.out.println();
+        }
+    }
+
     private void start() {
 
         service.execute(() -> {

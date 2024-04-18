@@ -35,14 +35,14 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>dev.eztxm</groupId>
-            <artifactId>ezTxmAPI</artifactId>
-            <version>1.0-PRE</version>
-        </dependency>
-        <dependency>
             <groupId>com.github.javadev</groupId>
             <artifactId>underscore</artifactId>
             <version>1.100</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version>
         </dependency>
         <dependency>
             <groupId>org.fusesource.jansi</groupId>

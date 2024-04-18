@@ -36,7 +36,7 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
 
     @SneakyThrows
     public SmoothCloudNode() {
-        File configFile = new File("E:/Desktop/SCS - Testing", "config.cfg");
+        File configFile = new File("C:/Users/Synta/Desktop/SmoothCloud", "config.cfg");
 
         this.terminal = new TerminalManager();
 
