@@ -5,6 +5,8 @@ import eu.smoothcloudservices.smoothcloud.wrapper.service.Service;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+
 @Getter
 @Setter
 public class Group {
@@ -12,7 +14,8 @@ public class Group {
     private int maxMem;
     private int post;
     private String hostAddress;
-    private Service maxServices;
+    private ArrayList<Service> maxServices;
+    private ArrayList<Service> onlineServices;
     private ServerJar serverJar;
 
     public Group(int maxMem, int post, String hostAddress, int services, ServerJar serverJar) {

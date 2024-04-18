@@ -1,5 +1,7 @@
 package eu.smoothcloudservices.smoothcloud.wrapper.group;
 
+import eu.smoothcloudservices.smoothcloud.wrapper.util.ThreadSafe;
+
 import java.util.ArrayList;
 
 public class CloudGroupManager {
@@ -10,7 +12,7 @@ public class CloudGroupManager {
 
     }
 
-    public Group buildNewGroup(int maxMem, int port, String hostAddress) {
+    public ThreadSafe<Group> buildNewGroup(int maxMem, int port, String hostAddress) {
         return null;
     }
 

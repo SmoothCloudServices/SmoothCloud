@@ -17,11 +17,16 @@ import java.nio.file.Path;
 public class ServerJar {
 
     private final String path = "C:/Users/Synta/Desktop/SmoothCloud/instances/versions";
+    private String getJarPath;
+    private String version;
+    private String type;
     private final String spigotPath = "https://download.getbukkit.org/spigot/spigot-%s.jar";
     private final String paperPath = "https://api.papermc.io/v2/projects/paper/versions/%s";
 
 
     public ServerJar(String version, String type) {
+        this.version = version;
+        this.type = type;
         if(type.toLowerCase().equals("spigot")) {
 
             return;
@@ -29,7 +34,6 @@ public class ServerJar {
         if(type.toLowerCase().equals("paper")) {
             BuildInfo info = getBuildInfo(paperPath.formatted(version));
             if(info == null) {
-
                 return;
             }
             int[] builds = info.getBuilds();
