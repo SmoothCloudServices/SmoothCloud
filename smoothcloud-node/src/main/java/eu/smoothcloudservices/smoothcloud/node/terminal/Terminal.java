@@ -1,7 +1,6 @@
 package eu.smoothcloudservices.smoothcloud.node.terminal;
 
 import eu.smoothcloudservices.smoothcloud.node.SmoothCloudNode;
-import eu.smoothcloudservices.smoothcloud.node.command.CommandProvider;
 import eu.smoothcloudservices.smoothcloud.node.setup.CloudSetup;
 import eu.smoothcloudservices.smoothcloud.node.setup.SetupMessages;
 import lombok.Getter;
@@ -24,12 +23,6 @@ public class Terminal {
         start();
     }
 
-    public void clearScreen() {
-        for (int i = 0; i < 100; i++) {
-            System.out.println();
-        }
-    }
-
     private void start() {
 
         service.execute(() -> {
@@ -40,9 +33,9 @@ public class Terminal {
                         if(SmoothCloudNode.isSettingUp) {
                             continue;
                         }
-                        writer.append(JavaColor.apply(STR."&9Smooth&bCloud&8-&2Setup &8» &7\{SetupMessages.EULA_ACCEPT}"));
+                        writer.append(JavaColor.apply(SetupMessages.PREFIX + SetupMessages.EULA_ACCEPT));
                         writer.flush();
-                        writer.append("\n").append(JavaColor.apply("&9Smooth&bCloud&8-&2Setup &8» &7"));
+                        writer.append("\n").append(JavaColor.apply(SetupMessages.PREFIX));
                         writer.flush();
                         new CloudSetup().setup();
                         continue;

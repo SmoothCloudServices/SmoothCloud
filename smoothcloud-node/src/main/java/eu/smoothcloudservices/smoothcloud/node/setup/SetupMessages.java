@@ -1,7 +1,7 @@
 package eu.smoothcloudservices.smoothcloud.node.setup;
 
 public class SetupMessages {
-    public static final String PREFIX = "&9Smooth&bCloud-Setup &8» &7";
+    public static final String PREFIX = "&9Smooth&bCloud&8-&2Setup &8» &7";
 
     public static final String EULA_ACCEPT = "&7Do you agree to the Mojang EULA (https://www.minecraft.net/en-us/eula)? Possible answers: yes, no";
     public static final String EULA_ACCEPTED = "&aYou has been accepted the Mojang EULA.";

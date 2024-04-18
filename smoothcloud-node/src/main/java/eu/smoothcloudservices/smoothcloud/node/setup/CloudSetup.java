@@ -62,6 +62,10 @@ public class CloudSetup {
 
         this.config.save();
 
+        SmoothCloudNode.isSettingUp = false;
+
+        ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminal().clearScreen().get();
+
         ((SmoothCloudNode) SmoothCloudNode.getInstance()).startCloud();
     }
 

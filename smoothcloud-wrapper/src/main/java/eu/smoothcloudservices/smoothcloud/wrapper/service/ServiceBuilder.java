@@ -1,8 +1,8 @@
 package eu.smoothcloudservices.smoothcloud.wrapper.service;
 
+import eu.smoothcloudservices.smoothcloud.api.util.ThreadSafe;
 import eu.smoothcloudservices.smoothcloud.wrapper.group.Group;
 import eu.smoothcloudservices.smoothcloud.wrapper.mojang.ServerJar;
-import eu.smoothcloudservices.smoothcloud.wrapper.util.ThreadSafe;
 
 import java.util.UUID;
 
@@ -19,12 +19,10 @@ public class ServiceBuilder {
     }
 
     public ThreadSafe<Service> createService(String serviceName, Group serviceGroup) {
-        return new ThreadSafe<Service>().supply(() -> {
+        return ThreadSafe.supply(() -> {
 
             UUID uniqueId = UUID.randomUUID();
-            String path = STR."static/service-\{uniqueId.toString()}";
-
-            
+            String path = STR."static/\{serviceName}";
 
             return null;
         });

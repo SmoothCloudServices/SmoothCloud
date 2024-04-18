@@ -1,6 +1,6 @@
 package eu.smoothcloudservices.smoothcloud.wrapper.group;
 
-import eu.smoothcloudservices.smoothcloud.wrapper.util.ThreadSafe;
+import eu.smoothcloudservices.smoothcloud.api.util.ThreadSafe;
 
 import java.util.ArrayList;
 

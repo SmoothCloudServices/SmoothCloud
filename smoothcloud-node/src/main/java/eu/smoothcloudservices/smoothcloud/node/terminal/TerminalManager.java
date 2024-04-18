@@ -1,5 +1,6 @@
 package eu.smoothcloudservices.smoothcloud.node.terminal;
 
+import eu.smoothcloudservices.smoothcloud.api.util.ThreadSafe;
 import lombok.Getter;
 
 import java.io.IOException;
@@ -84,6 +85,14 @@ public class TerminalManager {
             terminal.getWriter().append("\n");
             terminal.getWriter().append(JavaColor.apply(prefix));
         }
+    }
+
+    public ThreadSafe<Void> clearScreen() {
+        return ThreadSafe.run(() -> {
+            for (int i = 0; i < 300; i++) {
+                System.out.println();
+            }
+        });
     }
 
     public String read() {
