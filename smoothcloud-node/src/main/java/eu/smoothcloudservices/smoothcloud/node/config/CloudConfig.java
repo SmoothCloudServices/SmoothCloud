@@ -10,7 +10,10 @@ import java.io.File;
 
 public class CloudConfig {
 
-    private File file;
+    private final File file;
+
+    @Getter
+    private boolean loaded = false;
 
     @Getter
     @Setter
@@ -31,6 +34,7 @@ public class CloudConfig {
         this.agreement = new EulaAgreement(config.getBoolean("eulaAgreement"));
         this.address = new HostAddress(config.getString("hostName"), config.getString("hostPort"));
         this.language = new Language();
+        loaded = true;
     }
 
     public void save() {

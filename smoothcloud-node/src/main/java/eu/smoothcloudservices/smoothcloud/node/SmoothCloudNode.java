@@ -45,11 +45,11 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
         File configFile = new File(path, "config.json");
 
         this.config = new CloudConfig(configFile);
-        this.config.load();
 
         this.terminal = new TerminalManager();
 
-        if(!isSettingUp && this.config.getAddress().getHostName() != null) {
+        if(!isSettingUp && this.config.isLoaded()) {
+            this.config.load();
             startCloud();
         }
     }
