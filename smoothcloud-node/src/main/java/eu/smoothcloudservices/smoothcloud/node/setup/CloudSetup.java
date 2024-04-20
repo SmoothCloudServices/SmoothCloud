@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
-import static eu.smoothcloudservices.smoothcloud.node.setup.SetupMessages.*;
+import static eu.smoothcloudservices.smoothcloud.node.messages.SetupMessages.*;
 
 public class CloudSetup {
 
@@ -35,13 +35,13 @@ public class CloudSetup {
         var input = terminalManager.read();
         switch (step) {
             case 0 -> {
-                if (step0(input)) return;
+                if (!step0(input)) return;
             }
             case 1 -> {
-                if (step1(input)) return;
+                if (!step1(input)) return;
             }
             case 2 -> {
-                if (step2(input)) return;
+                if (!step2(input)) return;
                 completed();
             }
             default -> {
@@ -74,14 +74,14 @@ public class CloudSetup {
         if (!eulaAccepted) {
             terminalManager.openAppend(PREFIX, EULA_NOT_ACCEPTED);
             System.exit(0);
-            return true;
+            return false;
         }
         terminalManager.closeAppend(PREFIX, EULA_ACCEPTED);
         List<String> inet4Addresses = getAllIPAddresses();
         if (inet4Addresses.isEmpty()) {
             terminalManager.closeAppend(PREFIX, NO_CHOOSE_IP);
             System.exit(0);
-            return true;
+            return false;
         }
         terminalManager.closeAppend(PREFIX, CHOOSE_IP);
         StringBuilder allIps = null;
@@ -92,28 +92,28 @@ public class CloudSetup {
             allIps.append(inet4Address);
         }
         terminalManager.openAppend(PREFIX, CHOOSE_IP_AVAILABLE + allIps);
-        return false;
+        return true;
     }
 
     @SneakyThrows
     private boolean step1(String input) {
         if (!chooseIP(input)) {
             terminalManager.openAppend(PREFIX, CHOOSE_IP_NOT_EXISTS);
-            return true;
+            return false;
         }
         terminalManager.openAppend(PREFIX, CHOOSE_PORT);
-        return false;
+        return true;
     }
 
     private boolean step2(String input) {
         boolean portAvailable = checkPortAvailability(Integer.parseInt(input.toLowerCase()));
         if (!portAvailable) {
             terminalManager.openAppend(PREFIX, CHOOSE_PORT_NOT_EXISTS);
-            return true;
+            return false;
         }
         config.setAddress(new HostAddress(host, input));
         terminalManager.closeAppend(PREFIX, SAVE_HOST_PORT);
-        return false;
+        return true;
     }
 
     private boolean getEulaAgreement(String input) {

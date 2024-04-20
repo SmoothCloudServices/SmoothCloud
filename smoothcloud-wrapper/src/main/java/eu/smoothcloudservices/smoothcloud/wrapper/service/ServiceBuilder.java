@@ -20,9 +20,7 @@ public class ServiceBuilder {
 
     public ThreadSafe<Service> createService(String serviceName, Group serviceGroup) {
         return ThreadSafe.supply(() -> {
-
-            UUID uniqueId = UUID.randomUUID();
-            String path = STR."static/\{serviceName}";
+            
 
             return null;
         });

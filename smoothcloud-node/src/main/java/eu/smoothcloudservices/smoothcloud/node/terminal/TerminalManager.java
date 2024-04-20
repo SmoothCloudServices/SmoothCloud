@@ -89,7 +89,7 @@ public class TerminalManager {
 
     public ThreadSafe<Void> clearScreen() {
         return ThreadSafe.run(() -> {
-            for (int i = 0; i < 300; i++) {
+            for (int i = 0; i < 500; i++) {
                 System.out.println();
             }
         });

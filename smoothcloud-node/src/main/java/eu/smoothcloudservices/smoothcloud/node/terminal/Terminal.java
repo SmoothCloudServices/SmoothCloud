@@ -2,7 +2,8 @@ package eu.smoothcloudservices.smoothcloud.node.terminal;
 
 import eu.smoothcloudservices.smoothcloud.node.SmoothCloudNode;
 import eu.smoothcloudservices.smoothcloud.node.setup.CloudSetup;
-import eu.smoothcloudservices.smoothcloud.node.setup.SetupMessages;
+import eu.smoothcloudservices.smoothcloud.node.messages.SetupGroupMessages;
+import eu.smoothcloudservices.smoothcloud.node.messages.SetupMessages;
 import lombok.Getter;
 
 import java.io.*;
@@ -27,15 +28,19 @@ public class Terminal {
 
         service.execute(() -> {
             try {
-                while(true) {
-
-                    if(new File("E:/Desktop/SCS - Testing", "config.cfg").length() == 0) {
-                        if(SmoothCloudNode.isSettingUp) {
-                            continue;
-                        }
+                while (true) {
+                    if (SmoothCloudNode.isSettingUp) {
                         writer.append(JavaColor.apply(SetupMessages.PREFIX + SetupMessages.EULA_ACCEPT));
                         writer.flush();
                         writer.append("\n").append(JavaColor.apply(SetupMessages.PREFIX));
+                        writer.flush();
+                        new CloudSetup().setup();
+                        continue;
+                    }
+                    if (SmoothCloudNode.isCreatingGroup) {
+                        writer.append(JavaColor.apply(SetupGroupMessages.PREFIX + SetupGroupMessages.MEMORY));
+                        writer.flush();
+                        writer.append("\n").append(JavaColor.apply(SetupGroupMessages.PREFIX));
                         writer.flush();
                         new CloudSetup().setup();
                         continue;
@@ -45,7 +50,7 @@ public class Terminal {
                     writer.flush();
                     String input = reader.readLine().trim();
 
-                    if( ((SmoothCloudNode) SmoothCloudNode.getInstance()).getCommandProvider() != null && ((SmoothCloudNode) SmoothCloudNode.getInstance()).getCommandProvider().containsCommand(input)) {
+                    if (((SmoothCloudNode) SmoothCloudNode.getInstance()).getCommandProvider() != null && ((SmoothCloudNode) SmoothCloudNode.getInstance()).getCommandProvider().containsCommand(input)) {
                         ((SmoothCloudNode) SmoothCloudNode.getInstance()).getCommandProvider().call(input.split(" "));
                         continue;
                     }

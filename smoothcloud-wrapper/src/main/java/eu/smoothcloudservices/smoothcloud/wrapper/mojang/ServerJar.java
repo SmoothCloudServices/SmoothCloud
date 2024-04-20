@@ -1,6 +1,7 @@
 package eu.smoothcloudservices.smoothcloud.wrapper.mojang;
 
 import com.google.gson.Gson;
+import eu.smoothcloudservices.smoothcloud.api.group.GroupType;
 import lombok.SneakyThrows;
 
 import java.io.FileOutputStream;
@@ -19,19 +20,20 @@ public class ServerJar {
     private final String path = "C:/Users/Synta/Desktop/SmoothCloud/instances/versions";
     private String getJarPath;
     private String version;
-    private String type;
+    private GroupType type;
     private final String spigotPath = "https://download.getbukkit.org/spigot/spigot-%s.jar";
-    private final String paperPath = "https://api.papermc.io/v2/projects/paper/versions/%s";
+    private final String paperPath = "https://api.papermc.io/v2/projects/velocity/versions/%s";
+    private final String velocityPath = "https://api.papermc.io/v2/projects/velocity/versions/%s";
 
 
-    public ServerJar(String version, String type) {
+    public ServerJar(String version, GroupType type) {
         this.version = version;
         this.type = type;
-        if(type.toLowerCase().equals("spigot")) {
+        if (type.equals(GroupType.SPIGOT)) {
 
             return;
         }
-        if(type.toLowerCase().equals("paper")) {
+        if (type.equals(GroupType.PAPER)) {
             BuildInfo info = getBuildInfo(paperPath.formatted(version));
             if(info == null) {
                 return;
@@ -41,7 +43,22 @@ public class ServerJar {
             downloadVersion(paperPath.formatted(STR."\{version}/builds/\{latestBuild}/downloads/paper-\{version}-\{latestBuild}.jar"));
             return;
         }
-        if(type.toLowerCase().equals("purpur")) {
+        if (type.equals(GroupType.PURPUR)) {
+
+        }
+        if (type.equals(GroupType.BUNGEECORD)) {
+
+        }
+        if (type.equals(GroupType.VELOCITY)) {
+            BuildInfo info = getBuildInfo(velocityPath.formatted(version));
+            if(info == null) {
+                return;
+            }
+            int[] builds = info.getBuilds();
+            int latestBuild = findLatestBuild(builds);
+            downloadVersion(velocityPath.formatted(STR."\{version}/builds/\{latestBuild}/downloads/velocity-\{version}-\{latestBuild}.jar"));
+        }
+        if (type.equals(GroupType.FLUX)) {
 
         }
     }
@@ -66,7 +83,7 @@ public class ServerJar {
                 Files.createDirectories(downloadDir);
             }
 
-            Path filePath = downloadDir.resolve(STR."version_\{System.currentTimeMillis()}.json");
+            Path filePath = downloadDir.resolve("/service/versions");
 
             try (InputStream inputStream = response.body();
                  FileOutputStream outputStream = new FileOutputStream(filePath.toFile())) {

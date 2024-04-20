@@ -1,4 +1,4 @@
-package eu.smoothcloudservices.smoothcloud.node.setup;
+package eu.smoothcloudservices.smoothcloud.node.messages;
 
 public class SetupMessages {
     public static final String PREFIX = "&9Smooth&bCloud&8-&2Setup &8» &7";
@@ -17,7 +17,7 @@ public class SetupMessages {
 
     public static final String SAVE_HOST_PORT = "&7IP address and port has been saved.";
 
-    public static final String ERROR = "&3Setup error. Please reinstall your cloud!";
+    public static final String ERROR = "&cSetup error. Please reinstall your cloud!";
 
     public static final String COMPLETED = "&aSetup has been completed.";
 }

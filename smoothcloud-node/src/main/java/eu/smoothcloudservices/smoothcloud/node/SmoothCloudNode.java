@@ -21,6 +21,8 @@ import java.io.File;
 public final class SmoothCloudNode extends SmoothCloudAPI {
 
     public static boolean isSettingUp = false;
+    public static boolean isCreatingGroup = false;
+
     public static final String PREFIX = "&9Smooth&bCloud &8» &7";
 
     private final TerminalManager terminal;
