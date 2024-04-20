@@ -27,14 +27,14 @@ public class CloudConfig {
     }
 
     public void load() {
-        JsonConfig config = new JsonConfig(file.getParent(), "config.cfg");
+        JsonConfig config = new JsonConfig(file.getParent(), "config.json");
         this.agreement = new EulaAgreement(config.getBoolean("eulaAgreement"));
         this.address = new HostAddress(config.getString("hostName"), config.getString("hostPort"));
         this.language = new Language();
     }
 
     public void save() {
-        JsonConfig config = new JsonConfig(file.getParent(), "config.cfg");
+        JsonConfig config = new JsonConfig(file.getParent(), "config.json");
         config.setBoolean("eulaAgreement", agreement.getAgreement());
         config.setString("hostName", address.getHostName());
         config.setString("hostPort", address.getHostPort());

@@ -1,7 +1,6 @@
 package eu.smoothcloudservices.smoothcloud.node.setup;
 
 import eu.smoothcloudservices.smoothcloud.node.SmoothCloudNode;
-import eu.smoothcloudservices.smoothcloud.node.config.CloudConfig;
 import eu.smoothcloudservices.smoothcloud.node.config.entity.EulaAgreement;
 import eu.smoothcloudservices.smoothcloud.node.config.entity.HostAddress;
 import eu.smoothcloudservices.smoothcloud.node.terminal.TerminalManager;
@@ -19,13 +18,11 @@ import static eu.smoothcloudservices.smoothcloud.node.messages.SetupMessages.*;
 public class CloudSetup {
 
     private final TerminalManager terminalManager;
-    private final CloudConfig config;
     private int step = 0;
 
     private String host;
 
     public CloudSetup() {
-        this.config = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig();
         this.terminalManager = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminal();
     }
 
@@ -46,7 +43,7 @@ public class CloudSetup {
             }
             default -> {
                 terminalManager.closeAppend(PREFIX, ERROR);
-                Thread.sleep(2000);
+                Thread.sleep(1000);
                 System.exit(0);
             }
         }
@@ -60,7 +57,7 @@ public class CloudSetup {
     private void completed() {
         terminalManager.closeAppend(PREFIX, COMPLETED);
 
-        this.config.save();
+        ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().save();
 
         SmoothCloudNode.isSettingUp = false;
 
@@ -111,7 +108,7 @@ public class CloudSetup {
             terminalManager.openAppend(PREFIX, CHOOSE_PORT_NOT_EXISTS);
             return false;
         }
-        config.setAddress(new HostAddress(host, input));
+        ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setAddress(new HostAddress(host, input));
         terminalManager.closeAppend(PREFIX, SAVE_HOST_PORT);
         return true;
     }
@@ -119,7 +116,7 @@ public class CloudSetup {
     private boolean getEulaAgreement(String input) {
         String answer = input.toLowerCase();
         if (answer.equals("yes")) {
-            config.setAgreement(new EulaAgreement(true));
+            ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setAgreement(new EulaAgreement(true));
             return true;
         }
         return false;

@@ -1,7 +1,7 @@
 package eu.smoothcloudservices.smoothcloud.node.setup;
 
 import eu.smoothcloudservices.smoothcloud.api.SmoothCloudAPI;
-import eu.smoothcloudservices.smoothcloud.api.group.GroupType;
+import eu.smoothcloudservices.smoothcloud.api.group.ServerType;
 import eu.smoothcloudservices.smoothcloud.node.SmoothCloudNode;
 import eu.smoothcloudservices.smoothcloud.node.config.JsonConfig;
 import eu.smoothcloudservices.smoothcloud.node.group.CloudGroupImpl;
@@ -17,7 +17,7 @@ public class SetupGroup {
     private final JsonConfig config;
     private int step = 0;
 
-    private GroupType type;
+    private ServerType type;
 
     @SneakyThrows
     public SetupGroup(String name) {
@@ -60,6 +60,8 @@ public class SetupGroup {
 
     @SneakyThrows
     private void completed() {
+        createGroup();
+
         terminalManager.openAppend(PREFIX, COMPLETED.formatted(name));
 
         SmoothCloudNode.isCreatingGroup = false;
@@ -78,11 +80,13 @@ public class SetupGroup {
     }
 
     private boolean step1(String input) {
-
+        // todo
+        return true;
     }
 
     private boolean step2(String input) {
-        createGroup();
+        // todo
+        return true;
     }
 
     private String calculateMemory(String input) {
@@ -124,7 +128,7 @@ public class SetupGroup {
 
     private void createGroup() {
         if (!SmoothCloudAPI.getInstance().getGroupProvider().existsGroup(name)) {
-            SmoothCloudAPI.getInstance().getGroupProvider().createGroup(new CloudGroupImpl(name, 1, 1, type));
+            SmoothCloudAPI.getInstance().getGroupProvider().createGroup(new CloudGroupImpl(name, 1, 1, 512 , type)); // todo change with variables
             terminalManager.closeAppend(STR."&1Group &0\{name}&1 created.");
             return;
         }

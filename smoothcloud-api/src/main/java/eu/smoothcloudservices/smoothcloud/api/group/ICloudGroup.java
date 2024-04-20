@@ -1,10 +1,11 @@
 package eu.smoothcloudservices.smoothcloud.api.group;
 
-public interface CloudGroup {
+public interface ICloudGroup {
 
     String getName();
     int getMinOnlineCount();
     int getMaxOnlineCount();
-    GroupType getType();
+    int getMemory();
+    ServerType getType();
 
 }

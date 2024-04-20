@@ -2,14 +2,8 @@ package eu.smoothcloudservices.smoothcloud.api.group;
 
 public enum GroupType {
 
-    // Server-Software
-    SPIGOT,
-    PAPER,
-    PURPUR,
-    MINESTOM,
+    LOBBY, // the fallback type
+    PROXY,
+    SERVER
 
-    // Proxy-Software
-    VELOCITY,
-    BUNGEECORD,
-    FLUX
 }

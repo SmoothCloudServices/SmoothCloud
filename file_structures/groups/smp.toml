@@ -1,0 +1,15 @@
+name = "SMP"
+templateName = "SMP"
+minMemory = "2GB"
+maxMemory = "12GB"
+maxPlayers = 50
+minOnlineServices = 1
+maxOnlineServices = 1
+permission = "none"
+maintenance = false
+static = true
+priority = 50
+wrapper = "InternalWrapper"
+Server = "PURPUR"
+Version = "1.21"
+Java = "java"

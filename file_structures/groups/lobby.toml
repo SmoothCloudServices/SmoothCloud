@@ -1,0 +1,16 @@
+name = "Lobby"
+templateName = "Lobby"
+minMemory = "512MB"
+maxMemory = "768MB"
+maxPlayers = 20
+minOnlineServices = 1
+maxOnlineServices = 5
+permission = "none"
+maintenance = false
+static = false
+priority = 100
+wrapper = "InternalWrapper"
+percentOfPlayersOnGroupToStartNewService = 90
+Server = "PAPER"
+Version = "1.20.4"
+Java = "java"

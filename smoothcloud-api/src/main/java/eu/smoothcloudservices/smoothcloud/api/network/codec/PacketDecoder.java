@@ -1,6 +1,6 @@
 package eu.smoothcloudservices.smoothcloud.api.network.codec;
 
-import eu.smoothcloudservices.smoothcloud.api.network.Packet;
+import eu.smoothcloudservices.smoothcloud.api.network.IPacket;
 import eu.smoothcloudservices.smoothcloud.api.network.PacketListener;
 import io.netty5.buffer.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
@@ -19,7 +19,7 @@ public final class PacketDecoder extends ByteToMessageDecoder {
             throw new IllegalStateException(STR."Packet with Id \{id} not found");
         }
 
-        val packet = (Packet) PacketListener.getPacketClass(id).getConstructor().newInstance();
+        val packet = (IPacket) PacketListener.getPacketClass(id).getConstructor().newInstance();
         packet.read(in);
 
         ctx.fireChannelRead(packet);

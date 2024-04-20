@@ -4,6 +4,7 @@ import eu.smoothcloudservices.smoothcloud.node.SmoothCloudNode;
 import eu.smoothcloudservices.smoothcloud.node.setup.CloudSetup;
 import eu.smoothcloudservices.smoothcloud.node.messages.SetupGroupMessages;
 import eu.smoothcloudservices.smoothcloud.node.messages.SetupMessages;
+import eu.smoothcloudservices.smoothcloud.node.setup.SetupGroup;
 import lombok.Getter;
 
 import java.io.*;
@@ -25,11 +26,13 @@ public class Terminal {
     }
 
     private void start() {
-
         service.execute(() -> {
             try {
                 while (true) {
-                    if (SmoothCloudNode.isSettingUp) {
+                    if (((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().getAddress().getHostName() == null) {
+                        if (SmoothCloudNode.isSettingUp) {
+                            continue;
+                        }
                         writer.append(JavaColor.apply(SetupMessages.PREFIX + SetupMessages.EULA_ACCEPT));
                         writer.flush();
                         writer.append("\n").append(JavaColor.apply(SetupMessages.PREFIX));
@@ -42,7 +45,7 @@ public class Terminal {
                         writer.flush();
                         writer.append("\n").append(JavaColor.apply(SetupGroupMessages.PREFIX));
                         writer.flush();
-                        new CloudSetup().setup();
+                        new SetupGroup("name").setup();
                         continue;
                     }
 
@@ -59,7 +62,6 @@ public class Terminal {
                 e.fillInStackTrace();
             }
         });
-
     }
 
     public void shutdown() {
@@ -71,7 +73,4 @@ public class Terminal {
             throw new RuntimeException(e);
         }
     }
-
-
-
 }
