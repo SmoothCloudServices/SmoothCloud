@@ -10,9 +10,16 @@ import lombok.Getter;
 public final class CloudGroupImpl implements ICloudGroup {
 
     private String name;
+    private String templateName;
+    private String version;
+    private String wrapperName;
+
     private int minOnlineCount;
     private int maxOnlineCount;
-    private int memory;
+    private int minMemory;
+    private int maxMemory;
+
     private ServerType type;
 
+    private boolean staticService;
 }

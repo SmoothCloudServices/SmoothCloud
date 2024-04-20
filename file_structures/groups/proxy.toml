@@ -10,5 +10,5 @@ maintenance = false
 static = false
 priority = 10
 wrapper = "InternalWrapper"
-Server = "VELOCTIY"
+ServerType = "VELOCTIY"
 Java = "java"

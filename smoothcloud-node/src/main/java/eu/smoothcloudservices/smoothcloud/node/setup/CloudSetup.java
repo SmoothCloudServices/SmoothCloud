@@ -39,7 +39,7 @@ public class CloudSetup {
             }
             case 2 -> {
                 if (!step2(input)) return;
-                completed();
+                complete();
             }
             default -> {
                 terminalManager.closeAppend(PREFIX, ERROR);
@@ -54,7 +54,7 @@ public class CloudSetup {
     }
 
     @SneakyThrows
-    private void completed() {
+    private void complete() {
         terminalManager.closeAppend(PREFIX, COMPLETED);
 
         ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().save();
@@ -115,11 +115,11 @@ public class CloudSetup {
 
     private boolean getEulaAgreement(String input) {
         String answer = input.toLowerCase();
-        if (answer.equals("yes")) {
-            ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setAgreement(new EulaAgreement(true));
-            return true;
+        if (!answer.equals("yes")) {
+            return false;
         }
-        return false;
+        ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setAgreement(new EulaAgreement(true));
+        return true;
     }
 
     private boolean chooseIP(String input) {

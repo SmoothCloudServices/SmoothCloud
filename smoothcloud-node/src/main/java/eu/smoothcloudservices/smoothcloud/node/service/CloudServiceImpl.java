@@ -22,6 +22,11 @@ public final class CloudServiceImpl implements ICloudService {
     private Process process;
 
     @Override
+    public String getHost() {
+        return null;
+    }
+
+    @Override
     public CompletableFuture<ICloudGroup> getGroupAsync() {
         return CompletableFuture.completedFuture(group);
     }
@@ -29,6 +34,11 @@ public final class CloudServiceImpl implements ICloudService {
     @Override
     public CompletableFuture<List<UUID>> getPlayersAsync() {
         return CompletableFuture.completedFuture(players);
+    }
+
+    @Override
+    public int getPort() {
+        return 0;
     }
 
     @Override
@@ -44,5 +54,10 @@ public final class CloudServiceImpl implements ICloudService {
     @Override
     public void stop() {
          // TODO
+    }
+
+    @Override
+    public double getOnlinePercentage() {
+        return Double.parseDouble(String.valueOf(getPlayerCount())) / Double.parseDouble(String.valueOf(getMaxPlayerCount()));
     }
 }

@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class CommandProvider {
-    private final HashMap<String, Command> commands = new HashMap<>();
+    private static final HashMap<String, Command> commands = new HashMap<>();
 
     public CommandProvider() {
         registerCommand("shutdown", new ShutdownCommand());
@@ -32,5 +32,9 @@ public class CommandProvider {
         if (commands.containsKey(id)) {
             commands.get(id).execute(arguments.toArray(new String[0]));
         }
+    }
+
+    public static HashMap<String, Command> getCommands() {
+        return commands;
     }
 }

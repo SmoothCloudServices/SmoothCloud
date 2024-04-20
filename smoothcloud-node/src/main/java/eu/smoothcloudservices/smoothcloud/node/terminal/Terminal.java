@@ -26,9 +26,10 @@ public class Terminal {
     }
 
     private void start() {
+        boolean isRunning = true;
         service.execute(() -> {
             try {
-                while (true) {
+                while (isRunning) {
                     if (!((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().isLoaded()) {
                         if (SmoothCloudNode.isSettingUp) {
                             continue;
@@ -55,7 +56,6 @@ public class Terminal {
 
                     if (((SmoothCloudNode) SmoothCloudNode.getInstance()).getCommandProvider() != null && ((SmoothCloudNode) SmoothCloudNode.getInstance()).getCommandProvider().containsCommand(input)) {
                         ((SmoothCloudNode) SmoothCloudNode.getInstance()).getCommandProvider().call(input.split(" "));
-                        continue;
                     }
                 }
             } catch (IOException e) {

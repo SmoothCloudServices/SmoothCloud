@@ -128,7 +128,9 @@ public class SetupGroup {
 
     private void createGroup() {
         if (!SmoothCloudAPI.getInstance().getGroupProvider().existsGroup(name)) {
-            SmoothCloudAPI.getInstance().getGroupProvider().createGroup(new CloudGroupImpl(name, 1, 1, 512 , type)); // todo change with variables
+            SmoothCloudAPI.getInstance().getGroupProvider().createGroup(new CloudGroupImpl(
+                    name, name, "1.20.4", "InternalWrapper", 1, 1, 512, 1024, type, false // todo change with variables
+            ));
             terminalManager.closeAppend(STR."&1Group &0\{name}&1 created.");
             return;
         }

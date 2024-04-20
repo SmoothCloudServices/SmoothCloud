@@ -10,6 +10,7 @@ public interface ICloudService {
 
     String getName();
     String getGroupName();
+    String getHost();
 
     ICloudGroup getGroup();
     CompletableFuture<ICloudGroup> getGroupAsync();
@@ -17,6 +18,7 @@ public interface ICloudService {
     List<UUID> getPlayers();
     CompletableFuture<List<UUID>> getPlayersAsync();
 
+    int getPort();
     int getPlayerCount();
     int getMaxPlayerCount();
     int getMemoryUsage();
@@ -24,4 +26,5 @@ public interface ICloudService {
 
     void stop();
 
+    double getOnlinePercentage();
 }
