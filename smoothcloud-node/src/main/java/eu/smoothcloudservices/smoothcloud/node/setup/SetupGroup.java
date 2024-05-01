@@ -1,9 +1,9 @@
 package eu.smoothcloudservices.smoothcloud.node.setup;
 
+import dev.eztxm.config.JsonConfig;
 import eu.smoothcloudservices.smoothcloud.api.SmoothCloudAPI;
 import eu.smoothcloudservices.smoothcloud.api.group.ServerType;
 import eu.smoothcloudservices.smoothcloud.node.SmoothCloudNode;
-import eu.smoothcloudservices.smoothcloud.node.config.JsonConfig;
 import eu.smoothcloudservices.smoothcloud.node.group.CloudGroupImpl;
 import eu.smoothcloudservices.smoothcloud.node.terminal.TerminalManager;
 import lombok.SneakyThrows;

@@ -18,7 +18,7 @@ public final class NettyServer {
 
         CloudConfig config = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig();
 
-        new ServerBootstrap()
+        /*new ServerBootstrap()
                 .channelFactory(NettyUtils.getChannelFactory())
                 .group(bossGroup, workGroup)
                 .childHandler(new NettyNetworkServerInitializer())
@@ -26,7 +26,9 @@ public final class NettyServer {
                 .addListener(futures -> {
                 });
         ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminal().closeAppend(SmoothCloudNode.PREFIX, STR."Netty Connection successfully started on HostAddress: \{config.getAddress().getHostAddress()}");
+    */
     }
+
 
     public void close() {
         bossGroup.shutdownGracefully();

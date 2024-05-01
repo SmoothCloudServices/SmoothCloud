@@ -48,15 +48,15 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
 
         this.terminal = new TerminalManager();
 
-        if(!isSettingUp && this.config.isLoaded()) {
-            this.config.load();
+        if(!isSettingUp/* && this.config.isLoaded()*/) {
+            //this.config.load();
             startCloud();
         }
     }
 
     @SneakyThrows
     public void startCloud() {
-        this.terminal.closeAppend("\n");
+        this.terminal.clearScreen();
         this.terminal.closeAppend(JavaColor.apply(STR."&b\{FigletFont.convertOneLine("SmoothCloud")}"));
         this.terminal.closeAppend("\n");
 
@@ -77,11 +77,11 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
         this.terminal.closeAppend(PREFIX, "CloudPlayerProvider started.");
 
         this.terminal.closeAppend(PREFIX, "Starting Connection for the wrapper...");
-        this.nettyServer = new NettyServer();
+        //this.nettyServer = new NettyServer();
         this.terminal.closeAppend(PREFIX, "Connection for the wrapper started.");
 
         this.terminal.closeAppend(PREFIX, "Starting Internal Wrapper...");
-        this.wrapper = new SmoothCloudWrapper(config.getAddress().getHostName(), config.getAddress().getHostPort());
+        //this.wrapper = new SmoothCloudWrapper(config.getAddress().getHostName(), config.getAddress().getHostPort());
         this.terminal.closeAppend(PREFIX, "Internal Wrapper started.");
 
         this.terminal.closeAppend("\n");

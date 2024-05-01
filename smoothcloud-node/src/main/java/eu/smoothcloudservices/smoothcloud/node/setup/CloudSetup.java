@@ -1,8 +1,6 @@
 package eu.smoothcloudservices.smoothcloud.node.setup;
 
 import eu.smoothcloudservices.smoothcloud.node.SmoothCloudNode;
-import eu.smoothcloudservices.smoothcloud.node.config.entity.EulaAgreement;
-import eu.smoothcloudservices.smoothcloud.node.config.entity.HostAddress;
 import eu.smoothcloudservices.smoothcloud.node.terminal.TerminalManager;
 import lombok.SneakyThrows;
 
@@ -108,7 +106,7 @@ public class CloudSetup {
             terminalManager.openAppend(PREFIX, CHOOSE_PORT_NOT_EXISTS);
             return false;
         }
-        ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setAddress(new HostAddress(host, input));
+        //((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setAddress(new HostAddress(host, input));
         terminalManager.closeAppend(PREFIX, SAVE_HOST_PORT);
         return true;
     }
@@ -118,7 +116,7 @@ public class CloudSetup {
         if (!answer.equals("yes")) {
             return false;
         }
-        ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setAgreement(new EulaAgreement(true));
+        //((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setAgreement(new EulaAgreement(true));
         return true;
     }
 

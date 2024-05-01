@@ -30,7 +30,7 @@ public class Terminal {
         service.execute(() -> {
             try {
                 while (isRunning) {
-                    if (!((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().isLoaded()) {
+                    if (false/*!((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().isLoaded()*/) {
                         if (SmoothCloudNode.isSettingUp) {
                             continue;
                         }

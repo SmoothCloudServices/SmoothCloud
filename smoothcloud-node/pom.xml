@@ -17,6 +17,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>${project.parent.groupId}</groupId>
@@ -30,19 +37,14 @@
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
-            <artifactId>netty5-all</artifactId>
-            <version>5.0.0.Alpha5</version>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.109.Final</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.github.javadev</groupId>
             <artifactId>underscore</artifactId>
             <version>1.101</version>
-        </dependency>
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20240303</version>
         </dependency>
         <dependency>
             <groupId>org.fusesource.jansi</groupId>
@@ -62,19 +64,9 @@
             <version>0.0.9</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>2.17.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.17.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.electronwill.night-config</groupId>
-            <artifactId>toml</artifactId>
-            <version>3.6.7</version>
+            <groupId>com.github.ezTxmMC</groupId>
+            <artifactId>ezLib</artifactId>
+            <version>18b7194f8b</version>
         </dependency>
     </dependencies>
 
