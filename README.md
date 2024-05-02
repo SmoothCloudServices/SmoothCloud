@@ -19,11 +19,10 @@ More efficient and resource-saving than anything else on the market.
   - Velocity
   - Flux
 - Supported **Databases**:
-  - MongoDB
   - MariaDB
+  - MongoDB
   - SQLite
+  - PostgreSQL
+  - H2
 - **Language** System
 - Powerful **API**
-
-### Template System
-
