@@ -2,6 +2,7 @@ package eu.smoothcloudservices.smoothcloud.node.group;
 
 import eu.smoothcloudservices.smoothcloud.api.group.ICloudGroup;
 import eu.smoothcloudservices.smoothcloud.api.group.ServerType;
+import eu.smoothcloudservices.smoothcloud.node.util.service.ServiceGroupMode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
