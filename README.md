@@ -6,6 +6,8 @@ More efficient and resource-saving than anything else on the market.
 
 ## Features
 
+(✅ = Done, ⚙️ = currently working on, ❌ = not started)
+
 - Multi-Root
 - **Internal**-Wrapper
 - Template-System
