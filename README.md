@@ -6,7 +6,7 @@ More efficient and resource-saving than anything else on the market.
 
 ## Features
 
-(✅ = Done, ⚙️ = currently working on, ❌ = not started)
+(✅ = done, ⚙️ = working in progress, ❌ = not started)
 
 - Multi-Root
 - **Internal**-Wrapper
