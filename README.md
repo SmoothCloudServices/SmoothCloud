@@ -1,4 +1,4 @@
-# SmoothCloud
+![smoothcloudbanner](https://github.com/SmoothCloudServices/SmoothCloud/assets/96041552/be285d49-5b23-485e-9518-fc37e34e95bc)
 
 The quality of minecraft clouds.
 
