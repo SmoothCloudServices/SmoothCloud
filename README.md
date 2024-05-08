@@ -2,9 +2,10 @@
 
 The quality of minecraft clouds.
 
-> We want to create something new in the Minecraft cloud scene.
+We want to create something new in the Minecraft cloud scene.
+We want to be powerful, efficient and resource-saving.
 
-> [!CAUTION]
+> [!WARNING]
 > Do not use the cloud yet, as it is still at an early stage of development.
 
 ## Goals
@@ -26,6 +27,6 @@ The quality of minecraft clouds.
 - **Language** System ❌
 - Powerful multilingual **API** ⚙️
 
-# 
+#
 
 *Concept by [CloudVEX](https://github.com/CloudVEX)*
