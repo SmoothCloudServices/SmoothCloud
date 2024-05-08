@@ -1,8 +1,15 @@
-![smoothcloudbanner](https://github.com/SmoothServices/SmoothCloud/assets/96041552/54521fde-d9bb-45af-bbb6-b984ccd25a6d)
+# ![smoothcloudbanner](https://github.com/SmoothServices/SmoothCloud/assets/96041552/54521fde-d9bb-45af-bbb6-b984ccd25a6d)
 
-The quality of minecraft clouds.
+## The quality of minecraft clouds.
 
-More efficient and resource-saving than anything else on the market.
+> [!CAUTION]
+> Do not use the cloud yet, as it is still at an early stage of development.
+
+## Goals
+
+- Fast: We try to adapt the system to multithreading and asynchrony.
+- Easy to use: Simple operation and handling, as well as well-listed documentation.
+- Minimalistic: Install what you need.
 
 ## Features
 
