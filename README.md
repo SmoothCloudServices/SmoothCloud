@@ -19,7 +19,7 @@
 - **Internal**-Wrapper ⚙️
 - Template-System ❌
 - **Optional** Module-System ❌
-- Default **Server Support** ⚙️
-- Default **Databases Support** ❌
+- Multiple **Serversoftware Support** ⚙️
+- Multiple **Databases Support** ❌
 - **Language** System ❌
 - Powerful multilingual **API** ⚙️
