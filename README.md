@@ -1,6 +1,8 @@
 # ![smoothcloudbanner](https://github.com/SmoothServices/SmoothCloud/assets/96041552/54521fde-d9bb-45af-bbb6-b984ccd25a6d)
 
-## The quality of minecraft clouds.
+The quality of minecraft clouds.
+
+> We want to create something new in the Minecraft cloud scene.
 
 > [!CAUTION]
 > Do not use the cloud yet, as it is still at an early stage of development.
