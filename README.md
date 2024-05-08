@@ -7,9 +7,9 @@
 
 ## Goals
 
-- Fast: We try to adapt the system to multithreading and asynchrony.
-- Easy to use: Simple operation and handling, as well as well-listed documentation.
-- Minimalistic: Install what you need.
+- **Fast**: We try to adapt the system to multithreading and asynchrony.
+- **Easy to use**: Simple operation and handling, as well as well-listed documentation.
+- **Minimalistic**: Install what you need.
 
 ## Features
 
