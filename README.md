@@ -22,4 +22,4 @@
 - Default **Server Support** ⚙️
 - Default **Databases Support** ❌
 - **Language** System ❌
-- Powerful **API** ⚙️
+- Powerful multilingual **API** ⚙️
