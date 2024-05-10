@@ -13,7 +13,6 @@ import eu.smoothcloudservices.smoothcloud.node.server.NettyServer;
 import eu.smoothcloudservices.smoothcloud.node.service.CloudServiceProviderImpl;
 import eu.smoothcloudservices.smoothcloud.node.terminal.JavaColor;
 import eu.smoothcloudservices.smoothcloud.node.terminal.TerminalManager;
-import eu.smoothcloudservices.smoothcloud.wrapper.SmoothCloudWrapper;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
@@ -37,8 +36,6 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
     private ICloudPlayerProvider playerProvider;
 
     private NettyServer nettyServer;
-
-    private SmoothCloudWrapper wrapper;
 
     @SneakyThrows
     public SmoothCloudNode() {
