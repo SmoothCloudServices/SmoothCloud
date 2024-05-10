@@ -61,7 +61,7 @@
         <dependency>
             <groupId>com.github.ezTxmMC</groupId>
             <artifactId>ezLib</artifactId>
-            <version>ae4e75fff3</version>
+            <version>1.0-ALPHA5</version>
         </dependency>
     </dependencies>
 

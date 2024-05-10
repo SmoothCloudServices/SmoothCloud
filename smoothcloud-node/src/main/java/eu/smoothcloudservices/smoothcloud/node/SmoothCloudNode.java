@@ -6,7 +6,7 @@ import eu.smoothcloudservices.smoothcloud.api.group.ICloudGroupProvider;
 import eu.smoothcloudservices.smoothcloud.api.player.ICloudPlayerProvider;
 import eu.smoothcloudservices.smoothcloud.api.service.ICloudServiceProvider;
 import eu.smoothcloudservices.smoothcloud.node.command.CommandProvider;
-import eu.smoothcloudservices.smoothcloud.node.config.CloudConfig;
+import eu.smoothcloudservices.smoothcloud.node.config.MainConfig;
 import eu.smoothcloudservices.smoothcloud.node.group.ICloudGroupProviderImpl;
 import eu.smoothcloudservices.smoothcloud.node.player.CloudPlayerProviderImpl;
 import eu.smoothcloudservices.smoothcloud.node.server.NettyServer;
@@ -27,7 +27,7 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
 
     public static final String PREFIX = "&9Smooth&bCloud &8» &7";
 
-    private final CloudConfig config;
+    private final MainConfig config;
     private final TerminalManager terminal;
     private CommandProvider commandProvider;
 
@@ -39,9 +39,9 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
 
     @SneakyThrows
     public SmoothCloudNode() {
-        File configFile = new File(path, "config.json");
+        File configFile = new File(path, "config.yml");
 
-        this.config = new CloudConfig(configFile);
+        this.config = new MainConfig(configFile);
 
         this.terminal = new TerminalManager();
 

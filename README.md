@@ -1,28 +1,32 @@
-# SmoothCloud
+# ![smoothcloudbanner](https://github.com/SmoothServices/SmoothCloud/assets/96041552/54521fde-d9bb-45af-bbb6-b984ccd25a6d)
 
 The quality of minecraft clouds.
 
-More efficient and resource-saving than anything else on the market.
+We want to create something new in the Minecraft cloud scene.
+We want to be powerful, efficient and resource-saving.
+
+> [!WARNING]
+> Do not use the cloud yet, as it is still at an early stage of development.
+
+## Goals
+
+- **Fast**: We try to adapt the system to multithreading and asynchrony.
+- **Easy to use**: Simple operation and handling, as well as well-listed documentation.
+- **Minimalistic**: Install what you need.
 
 ## Features
 
-- Multi-Root
-- **Internal**-Wrapper
-- Template-System
-- **Optional** Module-System
-- Default **Server Support** for:
-  - Spigot
-  - Paper
-  - Purpur
-  - Pufferfish
-  - Bungeecord
-  - Velocity
-  - Flux
-- Supported **Databases**:
-  - MariaDB
-  - MongoDB
-  - SQLite
-  - PostgreSQL
-  - H2
-- **Language** System
-- Powerful **API**
+(✅ = done, ⚙️ = working in progress, ❌ = not started)
+
+- Multi-Root ❌
+- **Internal**-Wrapper ⚙️
+- Template-System ❌
+- **Optional** Module-System ❌
+- Multiple **Serversoftware Support** ⚙️
+- Multiple **Databases Support** ❌
+- **Language** System ❌
+- Powerful multilingual **API** ⚙️
+
+#
+
+*Concept by [CloudVEX](https://github.com/CloudVEX)*
