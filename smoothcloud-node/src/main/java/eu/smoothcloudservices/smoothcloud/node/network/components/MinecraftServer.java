@@ -6,7 +6,6 @@ import eu.smoothcloudservices.smoothcloud.node.util.service.ServiceGroupMode;
 import eu.smoothcloudservices.smoothcloud.node.util.service.ServiceId;
 import eu.smoothcloudservices.smoothcloud.node.util.service.ServiceProcessMeta;
 import eu.smoothcloudservices.smoothcloud.node.util.service.info.ServiceInfo;
-import eu.smoothcloudservices.smoothcloud.wrapper.SmoothCloudWrapper;
 import io.netty.channel.Channel;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +16,7 @@ public class MinecraftServer implements INetworkComponent {
 
     private ServiceId serviceId;
     private ServiceProcessMeta processMeta;
-    private SmoothCloudWrapper wrapper;
+    private Wrapper wrapper;
     private ServiceGroupMode serviceGroupMode;
 
     private long channelLostTime = 0L;
@@ -26,7 +25,7 @@ public class MinecraftServer implements INetworkComponent {
     private ServiceInfo lastServiceInfo;
     private Channel channel;
 
-    public MinecraftServer(ServiceProcessMeta processMeta, SmoothCloudWrapper wrapper, ServiceGroupMode serviceGroupMode, ServiceInfo serviceInfo) {
+    public MinecraftServer(ServiceProcessMeta processMeta, Wrapper wrapper, ServiceGroupMode serviceGroupMode, ServiceInfo serviceInfo) {
         this.processMeta = processMeta;
         this.serviceId = serviceInfo.getServiceId();
         this.wrapper = wrapper;
@@ -37,7 +36,7 @@ public class MinecraftServer implements INetworkComponent {
     }
 
     @Override
-    public SmoothCloudWrapper getWrapper() {
+    public Wrapper getWrapper() {
         return wrapper;
     }
 

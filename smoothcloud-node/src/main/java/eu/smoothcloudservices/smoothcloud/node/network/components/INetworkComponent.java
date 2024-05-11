@@ -5,15 +5,12 @@ import eu.smoothcloudservices.smoothcloud.node.network.protocol.IProtocol;
 import eu.smoothcloudservices.smoothcloud.node.network.protocol.ProtocolRequest;
 import eu.smoothcloudservices.smoothcloud.node.network.protocol.packet.Packet;
 import eu.smoothcloudservices.smoothcloud.node.network.protocol.packet.PacketSender;
-import eu.smoothcloudservices.smoothcloud.node.terminal.TerminalManager;
 import eu.smoothcloudservices.smoothcloud.node.util.interfaces.ChannelUser;
-import eu.smoothcloudservices.smoothcloud.wrapper.SmoothCloudWrapper;
 import io.netty.channel.ChannelFutureListener;
-import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.Pack;
 
 public interface INetworkComponent extends PacketSender, ChannelUser {
 
-    SmoothCloudWrapper getWrapper();
+    Wrapper getWrapper();
 
     default void sendPacket(Packet... packets) {
         for(Packet packet : packets) {

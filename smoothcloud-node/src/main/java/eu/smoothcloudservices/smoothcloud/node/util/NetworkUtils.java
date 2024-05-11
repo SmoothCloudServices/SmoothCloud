@@ -183,7 +183,7 @@ public class NetworkUtils {
                     outputStreamWriter.flush();
                 }
             } catch (Exception e) {
-                ex.printStackTrace();
+                e.printStackTrace();
             }
         }
     }
