@@ -1,9 +1,0 @@
-startCopy = [
-    "libs->libaries",
-    "cache->cache"
-]
-
-shutdownCopy = [
-    "libaries->libs",
-    "cache->cache"
-]

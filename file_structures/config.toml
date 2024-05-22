@@ -1,7 +1,0 @@
-Host = "127.0.0.1"
-
-Port = 8805
-
-Memory = "4G"
-
-ServiceStartPort = 40502

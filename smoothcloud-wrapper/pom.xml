@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>eu.smoothcloudservices.smoothcloud</groupId>
+        <groupId>eu.smoothservices.smoothcloud</groupId>
         <artifactId>smoothcloud</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0-INDEV</version>
     </parent>
 
     <artifactId>smoothcloud-wrapper</artifactId>
@@ -20,14 +20,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>eu.smoothcloudservices.smoothcloud</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>smoothcloud-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
-            <artifactId>netty5-all</artifactId>
-            <version>5.0.0.Alpha5</version>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.109.Final</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -78,7 +78,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>eu.smoothcloudservices.smoothcloud.node.SmoothCloudLauncher</mainClass>
+                            <mainClass>eu.smoothservices.smoothcloud.node.SmoothCloudLauncher</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

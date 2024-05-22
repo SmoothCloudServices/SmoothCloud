@@ -1,0 +1,25 @@
+startCopy:
+    - copy-form: "libs"
+      copy-to: "libraries"
+    - copy-from: "cache"
+      copy-to: "cache"
+
+shutdownCopy:
+    - copy-form: "libraries"
+      copy-to: "libs"
+    - copy-from: "cache"
+      copy-to: "cache"
+
+randomStartCopy:
+    - copy-from: "extras/8x1"
+      copy-to: "%group%"
+    - copy-from: "extras/8x2"
+      copy-to: "%group%"
+    - copy-from: "extras/4x1"
+      copy-to: "%group%"
+    - copy-from: "extras/4x2"
+      copy-to: "%group%"
+    - copy-from: "extras/4x3"
+      copy-to: "%group%"
+    - copy-from: "extras/4x4"
+      copy-to: "%group%"

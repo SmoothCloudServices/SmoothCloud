@@ -1,0 +1,11 @@
+startCopy:
+    - copy-form: "libs"
+      copy-to: "libraries"
+    - copy-from: "cache"
+      copy-to: "cache"
+
+shutdownCopy:
+    - copy-form: "libraries"
+      copy-to: "libs"
+    - copy-from: "cache"
+      copy-to: "cache"

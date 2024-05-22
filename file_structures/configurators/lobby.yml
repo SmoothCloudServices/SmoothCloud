@@ -1,0 +1,18 @@
+max-players: "%max_players%"
+
+online-mode: false
+
+server-ip: "%ip%"
+server-port: "%port%"
+
+allow-flight: true
+allow-nether: false
+allow-end: false
+
+view-distance: 6
+simulation-distance: 6
+
+spawn-monsters: false
+spawn-animals: false
+
+pvp: false

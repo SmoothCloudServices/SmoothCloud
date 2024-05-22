@@ -1,5 +1,0 @@
-bind = "%ip%:%port%"
-
-player-info-forwarding-mode = "modern"
-
-show-players = "%max_players%"
