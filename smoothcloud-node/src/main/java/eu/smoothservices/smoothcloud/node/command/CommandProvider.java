@@ -1,20 +1,19 @@
 package eu.smoothservices.smoothcloud.node.command;
 
-import eu.smoothservices.smoothcloud.node.command.impl.ShutdownCommand;
-import eu.smoothservices.smoothcloud.node.command.impl.group.CreateGroupCommand;
-import eu.smoothservices.smoothcloud.node.command.impl.group.DeleteGroupCommand;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
 public class CommandProvider {
+    @Getter
     private static final HashMap<String, Command> commands = new HashMap<>();
 
     public CommandProvider() {
-        registerCommand("shutdown", new ShutdownCommand());
-        registerCommand("creategroup", new CreateGroupCommand());
-        registerCommand("deletegroup", new DeleteGroupCommand());
+//        registerCommand("shutdown", new ShutdownCommand());
+//        registerCommand("creategroup", new CreateGroupCommand());
+//        registerCommand("deletegroup", new DeleteGroupCommand());
     }
 
     public void registerCommand(String id, Command command) {
@@ -34,7 +33,4 @@ public class CommandProvider {
         }
     }
 
-    public static HashMap<String, Command> getCommands() {
-        return commands;
-    }
 }

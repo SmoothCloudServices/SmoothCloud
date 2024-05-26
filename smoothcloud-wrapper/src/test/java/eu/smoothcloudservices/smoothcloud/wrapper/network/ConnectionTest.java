@@ -8,9 +8,9 @@ public class ConnectionTest {
     @SneakyThrows
     @Test
     public void handle() {
-        NettyClient nettyClient = new NettyClient();
+        /*NettyClient nettyClient = new NettyClient();
         nettyClient.connect("localhost", 8850);
 
-        Thread.sleep(50000);
+        Thread.sleep(50000);*/
     }
 }

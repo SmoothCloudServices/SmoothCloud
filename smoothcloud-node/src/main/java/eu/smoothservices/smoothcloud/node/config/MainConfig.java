@@ -1,6 +1,7 @@
 package eu.smoothservices.smoothcloud.node.config;
 
 import dev.eztxm.config.YamlConfig;
+import dev.eztxm.object.ObjectConverter;
 
 import java.io.File;
 
@@ -28,7 +29,11 @@ public class MainConfig {
     }
 
     public String getHost() {
-        return this.config.get("Host").asString();
+        Object host = this.config.get("Host").asObject();
+        if (host == null) {
+            return null;
+        }
+        return new ObjectConverter(host).asString();
     }
 
     public int getPort() {

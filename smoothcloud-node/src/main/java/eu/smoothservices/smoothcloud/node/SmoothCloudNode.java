@@ -25,10 +25,8 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
     public static boolean isCreatingGroup = false;
     public static String path = "E:/Desktop/SCS - Testing";
 
-    public static final String PREFIX = "&9Smooth&bCloud &8» &7";
-
     private final MainConfig config;
-    private final TerminalManager terminal;
+    private final TerminalManager terminalManager;
     private CommandProvider commandProvider;
 
     private ICloudGroupProvider groupProvider;
@@ -43,46 +41,47 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
 
         this.config = new MainConfig(configFile);
 
-        this.terminal = new TerminalManager();
+        this.terminalManager = new TerminalManager();
 
-        if(!isSettingUp/* && this.config.isLoaded()*/) {
-            //this.config.load();
+        if(!isSettingUp /*&& this.config.getHost() != null*/) {
             startCloud();
+            return;
         }
+
+        // Start setup terminal
     }
 
     @SneakyThrows
     public void startCloud() {
-        this.terminal.clearScreen();
-        this.terminal.closeAppend(JavaColor.apply(STR."&b\{FigletFont.convertOneLine("SmoothCloud")}"));
-        this.terminal.closeAppend("\n");
+        this.terminalManager.start();
 
-        this.terminal.closeAppend(PREFIX, "Starting CommandProvider...");
+        this.terminalManager.getTerminal().writeCleanLine(JavaColor.apply(STR."\n&b\{FigletFont.convertOneLine("SmoothCloud")}"));
+
+        this.terminalManager.getTerminal().writeCleanLine("\n");
+
+        this.terminalManager.getTerminal().writeLine("Starting CommandProvider...");
         this.commandProvider = new CommandProvider();
-        this.terminal.closeAppend(PREFIX, "CommandProvider started.");
+        this.terminalManager.getTerminal().writeLine("CommandProvider started.");
 
-        this.terminal.closeAppend(PREFIX, "Starting CloudGroupProvider...");
+        this.terminalManager.getTerminal().writeLine("Starting CloudGroupProvider...");
         this.groupProvider = new ICloudGroupProviderImpl();
-        this.terminal.closeAppend(PREFIX, "CloudGroupProvider started.");
+        this.terminalManager.getTerminal().writeLine("CloudGroupProvider started.");
 
-        this.terminal.closeAppend(PREFIX, "Starting CloudServiceProvider...");
+        this.terminalManager.getTerminal().writeLine("Starting CloudServiceProvider...");
         this.serviceProvider = new CloudServiceProviderImpl();
-        this.terminal.closeAppend(PREFIX, "CloudServiceProvider started.");
+        this.terminalManager.getTerminal().writeLine("CloudServiceProvider started.");
 
-        this.terminal.closeAppend(PREFIX, "Starting CloudPlayerProvider...");
+        this.terminalManager.getTerminal().writeLine("Starting CloudPlayerProvider...");
         this.playerProvider = new CloudPlayerProviderImpl();
-        this.terminal.closeAppend(PREFIX, "CloudPlayerProvider started.");
+        this.terminalManager.getTerminal().writeLine("CloudPlayerProvider started.");
 
-        this.terminal.closeAppend(PREFIX, "Starting Connection for the wrapper...");
+        this.terminalManager.getTerminal().writeLine("Starting Connection for the wrapper...");
         //this.nettyServer = new NettyServer();
-        this.terminal.closeAppend(PREFIX, "Connection for the wrapper started.");
+        this.terminalManager.getTerminal().writeLine("Connection for the wrapper started.");
 
-        this.terminal.closeAppend(PREFIX, "Starting Internal Wrapper...");
+        this.terminalManager.getTerminal().writeLine("Starting Internal Wrapper...");
         //this.wrapper = new SmoothCloudWrapper(config.getAddress().getHostName(), config.getAddress().getHostPort());
-        this.terminal.closeAppend(PREFIX, "Internal Wrapper started.");
-
-        this.terminal.closeAppend("\n");
-        this.terminal.userAppend(PREFIX);
+        this.terminalManager.getTerminal().writeLine("Internal Wrapper started.");
 
         Runtime.getRuntime().addShutdownHook(new Thread(SmoothCloudShutdownHandler::run));
     }

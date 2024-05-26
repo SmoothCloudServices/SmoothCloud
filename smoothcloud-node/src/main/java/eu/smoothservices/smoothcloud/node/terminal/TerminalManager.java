@@ -1,105 +1,58 @@
 package eu.smoothservices.smoothcloud.node.terminal;
 
-import eu.smoothservices.smoothcloud.api.util.ThreadSafe;
+import eu.smoothservices.smoothcloud.node.SmoothCloudNode;
+import eu.smoothservices.smoothcloud.node.terminal.impl.MainTerminal;
+import eu.smoothservices.smoothcloud.node.terminal.impl.SetupTerminal;
 import lombok.Getter;
 
-import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Getter
 public class TerminalManager {
+    private final String prefix = JavaColor.apply("&9Smooth&bCloud &8» &7");
+    private ExecutorService service;
     private final Terminal terminal;
-    private boolean input = true;
 
     public TerminalManager() {
-        this.terminal = new Terminal();
-    }
-
-    public void shutdown() {
-        terminal.shutdown();
-    }
-
-    public void closeInput() {
-        input = false;
-    }
-
-    public void startInput() {
-        input = true;
-    }
-
-    public void closeAppend(String text) {
-        if(input) {
-            closeInput();
+        this.service = Executors.newCachedThreadPool();
+        if (SmoothCloudNode.isSettingUp) {
+            this.terminal = new SetupTerminal();
+            return;
         }
-        terminal.getWriter().append(JavaColor.apply(text));
-        terminal.getWriter().flush();
+        this.terminal = new MainTerminal();
     }
 
-    public void openAppend(String text) {
-        if(!input) {
-            startInput();
-        }
-        terminal.getWriter().append(JavaColor.apply(text));
-        terminal.getWriter().flush();
-    }
-
-    public void append(String text) {
-        terminal.getWriter().append(JavaColor.apply(text));
-        terminal.getWriter().flush();
-        if(input) {
-            terminal.getWriter().append("\n");
-            terminal.getWriter().append(JavaColor.apply("&9Smooth&bCloud &8» &7"));
-        }
-    }
-
-    public void closeAppend(String prefix, String text) {
-        if(input) {
-            closeInput();
-        }
-        terminal.getWriter().append(JavaColor.apply(prefix)).append(JavaColor.apply(text)).append("\n");
-        terminal.getWriter().flush();
-    }
-
-    public void userAppend(String prefix) {
-        if(!input) {
-            startInput();
-        }
-        terminal.getWriter().append(JavaColor.apply(prefix));
-        terminal.getWriter().flush();
-    }
-
-    public void openAppend(String prefix, String text) {
-        if(!input) {
-            startInput();
-        }
-        terminal.getWriter().append(JavaColor.apply(prefix)).append(JavaColor.apply(text));
-        terminal.getWriter().flush();
-        terminal.getWriter().append("\n");
-        terminal.getWriter().append(JavaColor.apply(prefix));
-        terminal.getWriter().flush();
-    }
-
-    public void append(String prefix, String text) {
-        terminal.getWriter().append(JavaColor.apply(prefix)).append(JavaColor.apply(text));
-        terminal.getWriter().flush();
-        if(input) {
-            terminal.getWriter().append("\n");
-            terminal.getWriter().append(JavaColor.apply(prefix));
-        }
-    }
-
-    public ThreadSafe<Void> clearScreen() {
-        return ThreadSafe.run(() -> {
-            for (int i = 0; i < 500; i++) {
-                System.out.println();
+    public void start() {
+        service.execute(() -> {
+            while (true) {
+                switch (terminal.readLine()) {
+                    case "shutdown" -> {
+                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}Shutting down cloud..."));
+                        System.exit(0);
+                    }
+                    case "help" -> {
+                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}----------------Help----------------"));
+                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /group create"));
+                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /group delete"));
+                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /group edit <name>"));
+                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /module <name> reload"));
+                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /module install <id>@<type>"));
+                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /module remove <id>@<type>"));
+                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /plugin install <id>@<type> <group>"));
+                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /plugin remove <id>@<type> <group>"));
+                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /service start from <group>"));
+                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /service restart <name>"));
+                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /service stop <name>"));
+                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}----------------Help----------------"));
+                    }
+                }
             }
         });
     }
 
-    public String read() {
-        try {
-            return terminal.getReader().readLine();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public void shutdown() {
+        service.shutdown();
+        service = null;
     }
 }

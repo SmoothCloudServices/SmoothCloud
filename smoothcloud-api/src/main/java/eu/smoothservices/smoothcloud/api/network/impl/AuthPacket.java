@@ -1,7 +1,7 @@
 package eu.smoothservices.smoothcloud.api.network.impl;
 
 import eu.smoothservices.smoothcloud.api.network.IPacket;
-import io.netty5.buffer.Buffer;
+import io.netty.buffer.ByteBuf;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 public class AuthPacket implements IPacket {
 
     @Override
-    public void write(Buffer buffer) {
+    public void write(ByteBuf buffer) {
 
     }
 
     @Override
-    public void read(Buffer buffer) {
+    public void read(ByteBuf buffer) {
 
     }
 }

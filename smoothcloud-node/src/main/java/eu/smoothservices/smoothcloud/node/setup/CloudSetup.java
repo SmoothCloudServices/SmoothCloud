@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
-import static eu.smoothcloudservices.smoothcloud.node.messages.SetupMessages.*;
+import static eu.smoothservices.smoothcloud.node.messages.SetupMessages.*;
 
 public class CloudSetup {
 
@@ -21,13 +21,13 @@ public class CloudSetup {
     private String host;
 
     public CloudSetup() {
-        this.terminalManager = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminal();
+        this.terminalManager = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminalManager();
     }
 
     @SneakyThrows
     public void setup() {
         SmoothCloudNode.isSettingUp = true;
-        var input = terminalManager.read();
+        var input = terminalManager.getTerminal().readLine();
         switch (step) {
             case 0 -> {
                 if (!step0(input)) return;
@@ -40,7 +40,7 @@ public class CloudSetup {
                 complete();
             }
             default -> {
-                terminalManager.closeAppend(PREFIX, ERROR);
+                terminalManager.getTerminal().writeLine(PREFIX + ERROR);
                 Thread.sleep(1000);
                 System.exit(0);
             }
@@ -53,32 +53,26 @@ public class CloudSetup {
 
     @SneakyThrows
     private void complete() {
-        terminalManager.closeAppend(PREFIX, COMPLETED);
-
-        ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().save();
-
+        terminalManager.getTerminal().writeLine(PREFIX + COMPLETED);
         SmoothCloudNode.isSettingUp = false;
-
-        ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminal().clearScreen().get();
-
         ((SmoothCloudNode) SmoothCloudNode.getInstance()).startCloud();
     }
 
     private boolean step0(String input) {
         boolean eulaAccepted = getEulaAgreement(input);
         if (!eulaAccepted) {
-            terminalManager.openAppend(PREFIX, EULA_NOT_ACCEPTED);
+            terminalManager.getTerminal().writeLine(PREFIX + EULA_NOT_ACCEPTED);
             System.exit(0);
             return false;
         }
-        terminalManager.closeAppend(PREFIX, EULA_ACCEPTED);
+        terminalManager.getTerminal().writeLine(PREFIX + EULA_ACCEPTED);
         List<String> inet4Addresses = getAllIPAddresses();
         if (inet4Addresses.isEmpty()) {
-            terminalManager.closeAppend(PREFIX, NO_CHOOSE_IP);
+            terminalManager.getTerminal().writeLine(PREFIX + NO_CHOOSE_IP);
             System.exit(0);
             return false;
         }
-        terminalManager.closeAppend(PREFIX, CHOOSE_IP);
+        terminalManager.getTerminal().writeLine(PREFIX + CHOOSE_IP);
         StringBuilder allIps = null;
         for (String inet4Address : Collections.unmodifiableList(inet4Addresses)) {
             if (allIps == null) {
@@ -86,28 +80,28 @@ public class CloudSetup {
             }
             allIps.append(inet4Address);
         }
-        terminalManager.openAppend(PREFIX, CHOOSE_IP_AVAILABLE + allIps);
+        terminalManager.getTerminal().writeLine(PREFIX + CHOOSE_IP_AVAILABLE + allIps);
         return true;
     }
 
     @SneakyThrows
     private boolean step1(String input) {
         if (!chooseIP(input)) {
-            terminalManager.openAppend(PREFIX, CHOOSE_IP_NOT_EXISTS);
+            terminalManager.getTerminal().writeLine(PREFIX + CHOOSE_IP_NOT_EXISTS);
             return false;
         }
-        terminalManager.openAppend(PREFIX, CHOOSE_PORT);
+        terminalManager.getTerminal().writeLine(PREFIX + CHOOSE_PORT);
         return true;
     }
 
     private boolean step2(String input) {
         boolean portAvailable = checkPortAvailability(Integer.parseInt(input.toLowerCase()));
         if (!portAvailable) {
-            terminalManager.openAppend(PREFIX, CHOOSE_PORT_NOT_EXISTS);
+            terminalManager.getTerminal().writeLine(PREFIX + CHOOSE_PORT_NOT_EXISTS);
             return false;
         }
         //((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setAddress(new HostAddress(host, input));
-        terminalManager.closeAppend(PREFIX, SAVE_HOST_PORT);
+        terminalManager.getTerminal().writeLine(PREFIX + SAVE_HOST_PORT);
         return true;
     }
 

@@ -8,8 +8,8 @@ import io.netty.channel.MultithreadEventLoopGroup;
 import io.netty.util.concurrent.Future;
 
 public final class NettyServer {
-    private final EventLoopGroup bossGroup = new MultithreadEventLoopGroup(NettyUtils.getFactory());
-    private final EventLoopGroup workGroup = new MultithreadEventLoopGroup(NettyUtils.getFactory());
+//    private final EventLoopGroup bossGroup = new MultithreadEventLoopGroup(NettyUtils.getFactory());
+//    private final EventLoopGroup workGroup = new MultithreadEventLoopGroup(NettyUtils.getFactory());
 
     private Future<Void> future;
 
@@ -30,7 +30,7 @@ public final class NettyServer {
 
 
     public void close() {
-        bossGroup.shutdownGracefully();
-        workGroup.shutdownGracefully();
+//        bossGroup.shutdownGracefully();
+//        workGroup.shutdownGracefully();
     }
 }

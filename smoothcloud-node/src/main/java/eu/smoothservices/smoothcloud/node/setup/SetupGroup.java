@@ -22,7 +22,7 @@ public class SetupGroup {
     @SneakyThrows
     public SetupGroup(String name) {
         this.name = name;
-        this.terminalManager = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminal();
+        this.terminalManager = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminalManager();
         this.config = new JsonConfig(STR."\{getClass()
                 .getProtectionDomain()
                 .getCodeSource()
@@ -34,7 +34,7 @@ public class SetupGroup {
     @SneakyThrows
     public void setup() {
         SmoothCloudNode.isCreatingGroup = true;
-        var input = terminalManager.read();
+        var input = terminalManager.getTerminal().readLine();
         switch (step) {
             case 0 -> {
                 if (!step0(input)) return;
@@ -47,7 +47,7 @@ public class SetupGroup {
                 completed();
             }
             default -> {
-                terminalManager.closeAppend(PREFIX, ERROR);
+                terminalManager.getTerminal().writeLine(PREFIX + ERROR);
                 Thread.sleep(2000);
                 System.exit(0);
             }
@@ -61,21 +61,17 @@ public class SetupGroup {
     @SneakyThrows
     private void completed() {
         createGroup();
-
-        terminalManager.openAppend(PREFIX, COMPLETED.formatted(name));
-
+        terminalManager.getTerminal().writeLine(PREFIX + COMPLETED.formatted(name));
         SmoothCloudNode.isCreatingGroup = false;
-
-        ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminal().clearScreen().get();
     }
 
     private boolean step0(String input) {
         if (!correctMemory(input)) {
-            terminalManager.closeAppend(PREFIX, WRONG_MEMORY);
+            terminalManager.getTerminal().writeLine(PREFIX + WRONG_MEMORY);
             return false;
         }
-        config.setString("Memory", calculateMemory(input));
-        terminalManager.openAppend("");
+        config.set("Memory", calculateMemory(input));
+        terminalManager.getTerminal().writeLine("");
         return true;
     }
 
@@ -121,7 +117,7 @@ public class SetupGroup {
             Integer.parseInt(input);
             return false;
         } catch (NumberFormatException e) {
-            terminalManager.openAppend(PREFIX, HALF_NUMBER);
+            terminalManager.getTerminal().writeLine(PREFIX + HALF_NUMBER);
             return true;
         }
     }
@@ -131,9 +127,9 @@ public class SetupGroup {
             SmoothCloudAPI.getInstance().getGroupProvider().createGroup(new CloudGroupImpl(
                     name, name, "1.20.4", "InternalWrapper", 1, 1, 512, 1024, type, false // todo change with variables
             ));
-            terminalManager.closeAppend(STR."&1Group &0\{name}&1 created.");
+            terminalManager.getTerminal().writeLine(STR."\{PREFIX}&1Group &0\{name}&1 created.");
             return;
         }
-        terminalManager.closeAppend(STR."&1Group &0\{name}&1 already exists.");
+        terminalManager.getTerminal().writeLine(STR."\{PREFIX}&1Group &0\{name}&1 already exists.");
     }
 }
