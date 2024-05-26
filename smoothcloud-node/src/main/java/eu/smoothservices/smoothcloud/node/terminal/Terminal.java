@@ -5,7 +5,8 @@ import lombok.Getter;
 import java.util.Scanner;
 
 @Getter
-public record Terminal(String name, String prefix) {
+public class Terminal {
+    private final String name, prefix;
 
     public Terminal(String name, String prefix) {
         this.name = name;

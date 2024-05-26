@@ -53,11 +53,9 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
 
     @SneakyThrows
     public void startCloud() {
-        this.terminalManager.start();
-
         this.terminalManager.getTerminal().writeCleanLine(JavaColor.apply(STR."\n&b\{FigletFont.convertOneLine("SmoothCloud")}"));
 
-        this.terminalManager.getTerminal().writeCleanLine("\n");
+        this.terminalManager.start();
 
         this.terminalManager.getTerminal().writeLine("Starting CommandProvider...");
         this.commandProvider = new CommandProvider();

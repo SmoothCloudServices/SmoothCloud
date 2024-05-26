@@ -26,23 +26,23 @@ public class TerminalManager {
             while (true) {
                 switch (terminal.readLine()) {
                     case "shutdown" -> {
-                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}Shutting down cloud..."));
+                        terminal.writeLine(JavaColor.apply("Shutting down cloud..."));
                         System.exit(0);
                     }
                     case "help" -> {
-                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}----------------Help----------------"));
-                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /group create"));
-                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /group delete"));
-                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /group edit <name>"));
-                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /module <name> reload"));
-                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /module install <id>@<type>"));
-                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /module remove <id>@<type>"));
-                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /plugin install <id>@<type> <group>"));
-                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /plugin remove <id>@<type> <group>"));
-                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /service start from <group>"));
-                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /service restart <name>"));
-                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /service stop <name>"));
-                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}----------------Help----------------"));
+                        terminal.writeLine(JavaColor.apply("----------------Help----------------"));
+                        terminal.writeLine(JavaColor.apply("- /group create"));
+                        terminal.writeLine(JavaColor.apply("- /group delete"));
+                        terminal.writeLine(JavaColor.apply("- /group edit <name>"));
+                        terminal.writeLine(JavaColor.apply("- /module <name> reload"));
+                        terminal.writeLine(JavaColor.apply("- /module install <id>@<type>"));
+                        terminal.writeLine(JavaColor.apply("- /module remove <id>@<type>"));
+                        terminal.writeLine(JavaColor.apply("- /plugin install <id>@<type> <group>"));
+                        terminal.writeLine(JavaColor.apply("- /plugin remove <id>@<type> <group>"));
+                        terminal.writeLine(JavaColor.apply("- /service start from <group>"));
+                        terminal.writeLine(JavaColor.apply("- /service restart <name>"));
+                        terminal.writeLine(JavaColor.apply("- /service stop <name>"));
+                        terminal.writeLine(JavaColor.apply("----------------Help----------------"));
                     }
                 }
             }
