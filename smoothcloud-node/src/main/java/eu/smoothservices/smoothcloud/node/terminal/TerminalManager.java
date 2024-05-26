@@ -1,8 +1,6 @@
 package eu.smoothservices.smoothcloud.node.terminal;
 
 import eu.smoothservices.smoothcloud.node.SmoothCloudNode;
-import eu.smoothservices.smoothcloud.node.terminal.impl.MainTerminal;
-import eu.smoothservices.smoothcloud.node.terminal.impl.SetupTerminal;
 import lombok.Getter;
 
 import java.util.concurrent.ExecutorService;
@@ -11,16 +9,16 @@ import java.util.concurrent.Executors;
 @Getter
 public class TerminalManager {
     private final String prefix = JavaColor.apply("&9Smooth&bCloud &8» &7");
-    private ExecutorService service;
     private final Terminal terminal;
+    private ExecutorService service;
 
     public TerminalManager() {
-        this.service = Executors.newCachedThreadPool();
         if (SmoothCloudNode.isSettingUp) {
-            this.terminal = new SetupTerminal();
+            this.terminal = new Terminal("setup", "&9Smooth&bCloud&8-&2Setup &8» &7");
             return;
         }
-        this.terminal = new MainTerminal();
+        this.terminal = new Terminal("main", prefix);
+        this.service = Executors.newCachedThreadPool();
     }
 
     public void start() {
@@ -28,23 +26,23 @@ public class TerminalManager {
             while (true) {
                 switch (terminal.readLine()) {
                     case "shutdown" -> {
-                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}Shutting down cloud..."));
+                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}Shutting down cloud..."));
                         System.exit(0);
                     }
                     case "help" -> {
-                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}----------------Help----------------"));
-                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /group create"));
-                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /group delete"));
-                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /group edit <name>"));
-                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /module <name> reload"));
-                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /module install <id>@<type>"));
-                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /module remove <id>@<type>"));
-                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /plugin install <id>@<type> <group>"));
-                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /plugin remove <id>@<type> <group>"));
-                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /service start from <group>"));
-                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /service restart <name>"));
-                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}- /service stop <name>"));
-                        System.out.println(JavaColor.apply(StringTemplate.STR."\{prefix}----------------Help----------------"));
+                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}----------------Help----------------"));
+                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /group create"));
+                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /group delete"));
+                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /group edit <name>"));
+                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /module <name> reload"));
+                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /module install <id>@<type>"));
+                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /module remove <id>@<type>"));
+                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /plugin install <id>@<type> <group>"));
+                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /plugin remove <id>@<type> <group>"));
+                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /service start from <group>"));
+                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /service restart <name>"));
+                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}- /service stop <name>"));
+                        terminal.writeLine(JavaColor.apply(StringTemplate.STR."\{prefix}----------------Help----------------"));
                     }
                 }
             }
