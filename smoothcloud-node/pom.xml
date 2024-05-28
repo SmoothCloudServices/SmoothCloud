@@ -66,7 +66,7 @@
         <dependency>
             <groupId>com.github.ezTxmMC</groupId>
             <artifactId>ezLib</artifactId>
-            <version>1.0-ALPHA5</version>
+            <version>aac64fafc3</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>

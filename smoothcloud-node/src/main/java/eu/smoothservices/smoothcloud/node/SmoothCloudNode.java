@@ -18,14 +18,11 @@ import eu.smoothservices.smoothcloud.node.util.service.ServiceId;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 @Getter
 public final class SmoothCloudNode extends SmoothCloudAPI {
-
-    public static boolean isSettingUp = false;
+    public static boolean hasSetup = false;
     public static boolean isCreatingGroup = false;
     public static String path = "E:/Desktop/SCS - Testing";
 
@@ -44,18 +41,14 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
     @SneakyThrows
     public SmoothCloudNode() {
         groups = new HashMap<>();
-        File configFile = new File(path, "config.yml");
-
-        this.config = new MainConfig(configFile);
-
+        this.config = new MainConfig(path, "config");
         this.terminalManager = new TerminalManager();
-
-        if(!isSettingUp /*&& this.config.getHost() != null*/) {
+        if(!hasSetup && this.config.getHost() != null) {
             startCloud();
             return;
         }
-
-        // Start setup terminal
+        this.terminalManager.getTerminal().writeCleanLine(JavaColor.apply(STR."\n&b\{FigletFont.convertOneLine("SmoothCloud  Setup")}"));
+        this.terminalManager.start();
     }
 
     @SneakyThrows

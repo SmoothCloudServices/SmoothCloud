@@ -3,11 +3,11 @@ package eu.smoothservices.smoothcloud.node.util;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import eu.smoothservices.smoothcloud.node.SmoothCloudNode;
-import eu.smoothservices.smoothcloud.node.network.lib.SmoothNetwork;
-import eu.smoothservices.smoothcloud.node.network.protocol.codec.ProtocolInDecoder;
-import eu.smoothservices.smoothcloud.node.network.protocol.codec.ProtocolLengthDeserializer;
-import eu.smoothservices.smoothcloud.node.network.protocol.codec.ProtocolLengthSerializer;
-import eu.smoothservices.smoothcloud.node.network.protocol.codec.ProtocolOutEncoder;
+import eu.smoothservices.smoothcloud.client.lib.SmoothNetwork;
+import eu.smoothservices.smoothcloud.client.protocol.codec.ProtocolInDecoder;
+import eu.smoothservices.smoothcloud.client.protocol.codec.ProtocolLengthDeserializer;
+import eu.smoothservices.smoothcloud.client.protocol.codec.ProtocolLengthSerializer;
+import eu.smoothservices.smoothcloud.client.protocol.codec.ProtocolOutEncoder;
 import eu.smoothservices.smoothcloud.node.util.document.Document;
 import eu.smoothservices.smoothcloud.node.util.interfaces.Acceptable;
 import eu.smoothservices.smoothcloud.node.util.interfaces.Catcher;
@@ -222,5 +222,6 @@ public class NetworkUtils {
 
     public static SmoothNetwork newSmoothNetwork() {
         SmoothNetwork network = new SmoothNetwork();
+        return network;
     }
 }

@@ -1,49 +1,69 @@
 package eu.smoothservices.smoothcloud.node.terminal;
 
 import eu.smoothservices.smoothcloud.node.SmoothCloudNode;
+import eu.smoothservices.smoothcloud.node.setup.CloudSetup;
 import lombok.Getter;
 
+import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static eu.smoothservices.smoothcloud.node.messages.SetupMessages.EULA_ACCEPT;
+
 @Getter
 public class TerminalManager {
-    private final String prefix = JavaColor.apply("&9Smooth&bCloud &8» &7");
+    private final HashMap<String, Terminal> terminals;
+    private final String prefix = "&9Smooth&bCloud &8» &7";
     private final Terminal terminal;
+    private CloudSetup cloudSetup;
     private ExecutorService service;
 
     public TerminalManager() {
-        if (SmoothCloudNode.isSettingUp) {
-            this.terminal = new Terminal("setup", "&9Smooth&bCloud&8-&2Setup &8» &7");
+        this.terminals = new HashMap<>();
+        this.service = Executors.newCachedThreadPool();
+        if (!SmoothCloudNode.hasSetup) {
+            this.terminal = new Terminal("setup", "&9Smooth&bCloud&8 &8» &7");
+            this.terminals.put(this.terminal.getName(), this.terminal);
+            this.cloudSetup = new CloudSetup(this);
             return;
         }
         this.terminal = new Terminal("main", prefix);
-        this.service = Executors.newCachedThreadPool();
+        this.terminals.put(this.terminal.getName(), this.terminal);
     }
 
     public void start() {
+        if (!SmoothCloudNode.hasSetup) {
+            this.terminal.writeLine(EULA_ACCEPT);
+        }
         service.execute(() -> {
             while (true) {
-                switch (terminal.readLine()) {
-                    case "shutdown" -> {
-                        terminal.writeLine(JavaColor.apply("Shutting down cloud..."));
-                        System.exit(0);
+                switch (terminal.getName()) {
+                    case "main" -> {
+                        switch (terminal.readLine()) {
+                            case "shutdown" -> {
+                                terminal.writeLine("Shutting down cloud...");
+                                System.exit(0);
+                            }
+                            case "help" -> {
+                                terminal.writeLine("----------------Help----------------");
+                                terminal.writeLine("- group create");
+                                terminal.writeLine("- group delete");
+                                terminal.writeLine("- group edit <name>");
+                                terminal.writeLine("- module <name> reload");
+                                terminal.writeLine("- module install <id>@<type>");
+                                terminal.writeLine("- module remove <id>@<type>");
+                                terminal.writeLine("- plugin install <id>@<type> <group>");
+                                terminal.writeLine("- plugin install <id>@<type> <service>");
+                                terminal.writeLine("- plugin remove <id>@<type> <group>");
+                                terminal.writeLine("- plugin remove <id>@<type> <service>");
+                                terminal.writeLine("- service start <group>");
+                                terminal.writeLine("- service restart <name>");
+                                terminal.writeLine("- service stop <name>");
+                                terminal.writeLine("----------------Help----------------");
+                            }
+                        }
                     }
-                    case "help" -> {
-                        terminal.writeLine(JavaColor.apply("----------------Help----------------"));
-                        terminal.writeLine(JavaColor.apply("- /group create"));
-                        terminal.writeLine(JavaColor.apply("- /group delete"));
-                        terminal.writeLine(JavaColor.apply("- /group edit <name>"));
-                        terminal.writeLine(JavaColor.apply("- /module <name> reload"));
-                        terminal.writeLine(JavaColor.apply("- /module install <id>@<type>"));
-                        terminal.writeLine(JavaColor.apply("- /module remove <id>@<type>"));
-                        terminal.writeLine(JavaColor.apply("- /plugin install <id>@<type> <group>"));
-                        terminal.writeLine(JavaColor.apply("- /plugin remove <id>@<type> <group>"));
-                        terminal.writeLine(JavaColor.apply("- /service start from <group>"));
-                        terminal.writeLine(JavaColor.apply("- /service restart <name>"));
-                        terminal.writeLine(JavaColor.apply("- /service stop <name>"));
-                        terminal.writeLine(JavaColor.apply("----------------Help----------------"));
-                    }
+                    case "setup" -> cloudSetup.start();
                 }
             }
         });

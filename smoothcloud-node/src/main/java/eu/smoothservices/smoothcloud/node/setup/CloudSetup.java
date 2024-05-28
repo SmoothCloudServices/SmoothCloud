@@ -14,19 +14,15 @@ import java.util.List;
 import static eu.smoothservices.smoothcloud.node.messages.SetupMessages.*;
 
 public class CloudSetup {
-
     private final TerminalManager terminalManager;
     private int step = 0;
 
-    private String host;
-
-    public CloudSetup() {
-        this.terminalManager = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminalManager();
+    public CloudSetup(TerminalManager terminalManager) {
+        this.terminalManager = terminalManager;
     }
 
     @SneakyThrows
-    public void setup() {
-        SmoothCloudNode.isSettingUp = true;
+    public void start() {
         var input = terminalManager.getTerminal().readLine();
         switch (step) {
             case 0 -> {
@@ -39,69 +35,89 @@ public class CloudSetup {
                 if (!step2(input)) return;
                 complete();
             }
+            case 3 -> {
+                if (!step3(input)) return;
+                complete();
+            }
             default -> {
-                terminalManager.getTerminal().writeLine(PREFIX + ERROR);
+                terminalManager.getTerminal().writeLine(ERROR);
                 Thread.sleep(1000);
                 System.exit(0);
             }
         }
         step++;
         if(step < 4) {
-            setup();
+            start();
         }
     }
 
     @SneakyThrows
     private void complete() {
-        terminalManager.getTerminal().writeLine(PREFIX + COMPLETED);
-        SmoothCloudNode.isSettingUp = false;
+        terminalManager.getTerminal().writeLine(COMPLETED);
+        SmoothCloudNode.hasSetup = true;
         ((SmoothCloudNode) SmoothCloudNode.getInstance()).startCloud();
     }
 
     private boolean step0(String input) {
         boolean eulaAccepted = getEulaAgreement(input);
         if (!eulaAccepted) {
-            terminalManager.getTerminal().writeLine(PREFIX + EULA_NOT_ACCEPTED);
+            terminalManager.getTerminal().writeLine(EULA_NOT_ACCEPTED);
             System.exit(0);
             return false;
         }
-        terminalManager.getTerminal().writeLine(PREFIX + EULA_ACCEPTED);
+        terminalManager.getTerminal().writeLine(EULA_ACCEPTED);
         List<String> inet4Addresses = getAllIPAddresses();
         if (inet4Addresses.isEmpty()) {
-            terminalManager.getTerminal().writeLine(PREFIX + NO_CHOOSE_IP);
+            terminalManager.getTerminal().writeLine(NO_CHOOSE_IP);
             System.exit(0);
             return false;
         }
-        terminalManager.getTerminal().writeLine(PREFIX + CHOOSE_IP);
-        StringBuilder allIps = null;
+        terminalManager.getTerminal().writeLine(CHOOSE_IP);
+        StringBuilder allIps = new StringBuilder();
         for (String inet4Address : Collections.unmodifiableList(inet4Addresses)) {
-            if (allIps == null) {
-                allIps = new StringBuilder(String.valueOf(inet4Address)).append(", ");
+            if (inet4Addresses.getLast().equalsIgnoreCase(inet4Address)) {
+                allIps.append(inet4Address);
+                continue;
             }
-            allIps.append(inet4Address);
+            allIps.append(inet4Address).append(", ");
         }
-        terminalManager.getTerminal().writeLine(PREFIX + CHOOSE_IP_AVAILABLE + allIps);
+        terminalManager.getTerminal().writeLine(CHOOSE_IP_AVAILABLE + allIps);
         return true;
     }
 
     @SneakyThrows
     private boolean step1(String input) {
         if (!chooseIP(input)) {
-            terminalManager.getTerminal().writeLine(PREFIX + CHOOSE_IP_NOT_EXISTS);
+            terminalManager.getTerminal().writeLine(CHOOSE_IP_NOT_EXISTS);
             return false;
         }
-        terminalManager.getTerminal().writeLine(PREFIX + CHOOSE_PORT);
+        terminalManager.getTerminal().writeLine(CHOOSE_PORT);
         return true;
     }
 
     private boolean step2(String input) {
         boolean portAvailable = checkPortAvailability(Integer.parseInt(input.toLowerCase()));
         if (!portAvailable) {
-            terminalManager.getTerminal().writeLine(PREFIX + CHOOSE_PORT_NOT_EXISTS);
+            terminalManager.getTerminal().writeLine(CHOOSE_PORT_NOT_EXISTS);
             return false;
         }
-        //((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setAddress(new HostAddress(host, input));
-        terminalManager.getTerminal().writeLine(PREFIX + SAVE_HOST_PORT);
+        try {
+            //((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setPort(Integer.parseInt(input));
+            terminalManager.getTerminal().writeLine(CHOOSE_MEMORY);
+            return true;
+        } catch (NumberFormatException e) {
+            terminalManager.getTerminal().writeLine(WRONG_INPUT);
+            return false;
+        }
+    }
+
+    private boolean step3(String input) {
+        if (!correctMemory(input)) {
+            terminalManager.getTerminal().writeLine(WRONG_MEMORY);
+            return false;
+        }
+        //((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setMemory(calculateMemory(input));
+        terminalManager.getTerminal().writeLine(SAVED);
         return true;
     }
 
@@ -110,14 +126,15 @@ public class CloudSetup {
         if (!answer.equals("yes")) {
             return false;
         }
-        //((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setAgreement(new EulaAgreement(true));
+        //((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setEulaAgreement(true);
         return true;
     }
 
     private boolean chooseIP(String input) {
         List<String> inet4Addresses = getAllIPAddresses();
+        inet4Addresses.forEach(string -> terminalManager.getTerminal().writeLine(string));
         if (inet4Addresses.contains(input)) {
-            host = input;
+            //((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setHost(input);
             return true;
         }
         return false;
@@ -156,5 +173,42 @@ public class CloudSetup {
             throw new RuntimeException(e);
         }
         return addresses;
+    }
+
+    private String calculateMemory(String input) {
+        if (input.toLowerCase().endsWith("mb")) {
+            return input.toLowerCase().split("mb")[0];
+        }
+        if (input.toLowerCase().endsWith("gb")) {
+            var modifiedInput = input.toLowerCase().split("gb")[0];
+            var calculatedMegabytes = Integer.parseInt(modifiedInput) * 1024;
+            return String.valueOf(calculatedMegabytes);
+        }
+        return input.toLowerCase().split("mb")[0];
+    }
+
+    private boolean correctMemory(String input) {
+        if (input.toLowerCase().endsWith("mb")) {
+            var modifiedInput = input.toLowerCase().split("mb")[0];
+            if (!halfNumber(modifiedInput)) {
+                return Integer.parseInt(modifiedInput) >= 256;
+            }
+            return false;
+        }
+        if (input.toLowerCase().endsWith("gb")) {
+            var modifiedInput = input.toLowerCase().split("gb")[0];
+            return !halfNumber(modifiedInput);
+        }
+        return !halfNumber(input);
+    }
+
+    private boolean halfNumber(String input) {
+        try {
+            Integer.parseInt(input);
+            return false;
+        } catch (NumberFormatException e) {
+            terminalManager.getTerminal().writeLine(HALF_NUMBER);
+            return true;
+        }
     }
 }

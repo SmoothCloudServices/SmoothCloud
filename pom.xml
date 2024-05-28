@@ -12,6 +12,7 @@
         <module>smoothcloud-api</module>
         <module>smoothcloud-node</module>
         <module>smoothcloud-wrapper</module>
+        <module>smoothcloud-client</module>
     </modules>
 
     <properties>

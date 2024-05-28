@@ -18,12 +18,12 @@ public class Terminal {
     }
 
     public void writeCleanLine(String message) {
-        System.out.println(message);
+        System.out.println(JavaColor.apply(message));
     }
 
     public String readLine() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print(prefix);
+        System.out.print(StringTemplate.STR."\{JavaColor.apply("&c")}\{System.getProperty("user.name")}\{JavaColor.apply("&7@")}" + prefix);
         return scanner.nextLine().trim();
     }
 }

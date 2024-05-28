@@ -87,26 +87,26 @@ public class SetupGroup {
 
     private String calculateMemory(String input) {
         if (input.toLowerCase().endsWith("mb")) {
-            return input.split("mb")[0];
+            return input.toLowerCase().split("mb")[0];
         }
         if (input.toLowerCase().endsWith("gb")) {
-            var modifiedInput = input.split("gb")[0];
+            var modifiedInput = input.toLowerCase().split("gb")[0];
             var calculatedMegabytes = Integer.parseInt(modifiedInput) * 1024;
             return String.valueOf(calculatedMegabytes);
         }
-        return input.split("mb")[0];
+        return input.toLowerCase().split("mb")[0];
     }
 
     private boolean correctMemory(String input) {
         if (input.toLowerCase().endsWith("mb")) {
-            var modifiedInput = input.split("mb")[0];
+            var modifiedInput = input.toLowerCase().split("mb")[0];
             if (!halfNumber(modifiedInput)) {
                 return Integer.parseInt(modifiedInput) >= 256;
             }
             return false;
         }
         if (input.toLowerCase().endsWith("gb")) {
-            var modifiedInput = input.split("gb")[0];
+            var modifiedInput = input.toLowerCase().split("gb")[0];
             return !halfNumber(modifiedInput);
         }
         return !halfNumber(input);

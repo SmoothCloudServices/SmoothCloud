@@ -1,15 +1,12 @@
 package eu.smoothservices.smoothcloud.node.config;
 
 import dev.eztxm.config.YamlConfig;
-import dev.eztxm.object.ObjectConverter;
-
-import java.io.File;
 
 public class MainConfig {
     private final YamlConfig config;
 
-    public MainConfig(File file) {
-        this.config = new YamlConfig(file.getPath(), file.getName());
+    public MainConfig(String path, String name) {
+        this.config = new YamlConfig(path, name);
     }
 
     public void setHost(String value) {
@@ -20,7 +17,7 @@ public class MainConfig {
         this.config.set("Port", value);
     }
 
-    public void setMemory(int value) {
+    public void setMemory(String value) {
         this.config.set("Memory", value);
     }
 
@@ -28,23 +25,32 @@ public class MainConfig {
         this.config.set("Language", value.name());
     }
 
+    public void setEulaAgreement(boolean agree) {
+        this.config.set("EulaAgreement", agree);
+    }
+
     public String getHost() {
-        Object host = this.config.get("Host").asObject();
-        if (host == null) {
-            return null;
-        }
-        return new ObjectConverter(host).asString();
+        if (this.config.get("Host") == null) return null;
+        return this.config.get("Host").asString();
     }
 
     public int getPort() {
+        if (this.config.get("Port") == null) return -1;
         return this.config.get("Port").asInteger();
     }
 
-    public int getMemory() {
-        return this.config.get("Memory").asInteger();
+    public String getMemory() {
+        if (this.config.get("Port") == null) return null;
+        return this.config.get("Memory").asString();
     }
 
     public Language getLanguage() {
+        if (this.config.get("Language") == null) return null;
         return Language.valueOf(this.config.get("Language").asString());
+    }
+
+    public boolean getEulaAgreement() {
+        if (this.config.get("EulaAgreement") == null) return false;
+        return this.config.get("EulaAgreement").asBoolean();
     }
 }
