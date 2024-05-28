@@ -2,6 +2,7 @@ package eu.smoothservices.smoothcloud.node;
 
 import com.github.lalyos.jfiglet.FigletFont;
 import eu.smoothservices.smoothcloud.api.SmoothCloudAPI;
+import eu.smoothservices.smoothcloud.api.group.ICloudGroup;
 import eu.smoothservices.smoothcloud.api.group.ICloudGroupProvider;
 import eu.smoothservices.smoothcloud.api.player.ICloudPlayerProvider;
 import eu.smoothservices.smoothcloud.api.service.ICloudServiceProvider;
@@ -13,10 +14,13 @@ import eu.smoothservices.smoothcloud.node.server.NettyServer;
 import eu.smoothservices.smoothcloud.node.service.CloudServiceProviderImpl;
 import eu.smoothservices.smoothcloud.node.terminal.JavaColor;
 import eu.smoothservices.smoothcloud.node.terminal.TerminalManager;
+import eu.smoothservices.smoothcloud.node.util.service.ServiceId;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @Getter
 public final class SmoothCloudNode extends SmoothCloudAPI {
@@ -24,6 +28,8 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
     public static boolean isSettingUp = false;
     public static boolean isCreatingGroup = false;
     public static String path = "E:/Desktop/SCS - Testing";
+
+    private static HashMap<ServiceId, ICloudGroup> groups;
 
     private final MainConfig config;
     private final TerminalManager terminalManager;
@@ -37,6 +43,7 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
 
     @SneakyThrows
     public SmoothCloudNode() {
+        groups = new HashMap<>();
         File configFile = new File(path, "config.yml");
 
         this.config = new MainConfig(configFile);
@@ -82,5 +89,9 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
         this.terminalManager.getTerminal().writeLine("Internal Wrapper started.");
 
         Runtime.getRuntime().addShutdownHook(new Thread(SmoothCloudShutdownHandler::run));
+    }
+
+    public static ICloudGroup getGroup(ServiceId serviceId) {
+        return groups.get(serviceId);
     }
 }

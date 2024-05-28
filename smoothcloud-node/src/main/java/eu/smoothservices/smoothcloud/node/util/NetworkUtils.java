@@ -3,6 +3,7 @@ package eu.smoothservices.smoothcloud.node.util;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import eu.smoothservices.smoothcloud.node.SmoothCloudNode;
+import eu.smoothservices.smoothcloud.node.network.lib.SmoothNetwork;
 import eu.smoothservices.smoothcloud.node.network.protocol.codec.ProtocolInDecoder;
 import eu.smoothservices.smoothcloud.node.network.protocol.codec.ProtocolLengthDeserializer;
 import eu.smoothservices.smoothcloud.node.network.protocol.codec.ProtocolLengthSerializer;
@@ -217,5 +218,9 @@ public class NetworkUtils {
 
     public static <K, V>ConcurrentHashMap<K, V> newConcurrentHashMap() {
         return new ConcurrentHashMap<>(0);
+    }
+
+    public static SmoothNetwork newSmoothNetwork() {
+        SmoothNetwork network = new SmoothNetwork();
     }
 }

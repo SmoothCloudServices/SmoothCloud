@@ -59,6 +59,12 @@ public class MinecraftServer implements INetworkComponent {
         return getServerId();
     }
 
+    public void disconnect() {
+        if(this.channel != null) {
+            this.channel.close().syncUninterruptibly();
+        }
+    }
+
     public ICloudGroup getGroup() {
         // TODO: implement this Method
         return null;
