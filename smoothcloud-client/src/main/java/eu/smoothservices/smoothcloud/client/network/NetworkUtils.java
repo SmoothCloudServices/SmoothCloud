@@ -1,13 +1,15 @@
-package eu.smoothservices.smoothcloud.node.util;
+package eu.smoothservices.smoothcloud.client.network;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import eu.smoothservices.smoothcloud.node.SmoothCloudNode;
+import com.sun.management.OperatingSystemMXBean;
 import eu.smoothservices.smoothcloud.client.lib.SmoothNetwork;
 import eu.smoothservices.smoothcloud.client.protocol.codec.ProtocolInDecoder;
 import eu.smoothservices.smoothcloud.client.protocol.codec.ProtocolLengthDeserializer;
 import eu.smoothservices.smoothcloud.client.protocol.codec.ProtocolLengthSerializer;
 import eu.smoothservices.smoothcloud.client.protocol.codec.ProtocolOutEncoder;
+import eu.smoothservices.smoothcloud.node.SmoothCloudNode;
+import eu.smoothservices.smoothcloud.node.util.ConnectableAddress;
 import eu.smoothservices.smoothcloud.node.util.document.Document;
 import eu.smoothservices.smoothcloud.node.util.interfaces.Acceptable;
 import eu.smoothservices.smoothcloud.node.util.interfaces.Catcher;
@@ -15,8 +17,6 @@ import io.netty.channel.AbstractChannel;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.Epoll;
-
-import com.sun.management.OperatingSystemMXBean;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.kqueue.KQueue;

@@ -1,10 +1,10 @@
 package eu.smoothservices.smoothcloud.client.protocol.packet;
 
+import eu.smoothservices.smoothcloud.client.network.NetworkUtils;
 import eu.smoothservices.smoothcloud.client.protocol.ProtocolBuffer;
 import eu.smoothservices.smoothcloud.client.protocol.ProtocolStream;
 
 import com.google.gson.reflect.TypeToken;
-import eu.smoothservices.smoothcloud.node.util.NetworkUtils;
 import eu.smoothservices.smoothcloud.node.util.document.Document;
 
 import java.lang.reflect.Type;

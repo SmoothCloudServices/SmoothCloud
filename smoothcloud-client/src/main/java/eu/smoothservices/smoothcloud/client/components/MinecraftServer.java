@@ -1,6 +1,10 @@
 package eu.smoothservices.smoothcloud.client.components;
 
 import eu.smoothservices.smoothcloud.api.group.ICloudGroup;
+import eu.smoothservices.smoothcloud.client.network.protocol.packet.out.PacketOutCustomSubChannelMessage;
+import eu.smoothservices.smoothcloud.node.SmoothCloudNode;
+import eu.smoothservices.smoothcloud.node.util.document.Document;
+import eu.smoothservices.smoothcloud.node.util.lib.DefaultType;
 import eu.smoothservices.smoothcloud.node.util.service.ServiceGroupMode;
 import eu.smoothservices.smoothcloud.node.util.service.ServiceId;
 import eu.smoothservices.smoothcloud.node.util.service.ServiceProcessMeta;
@@ -32,6 +36,26 @@ public class MinecraftServer implements INetworkComponent {
 
         this.serviceInfo = serviceInfo;
         this.lastServiceInfo = serviceInfo;
+    }
+
+    public ServiceInfo getServiceInfo() {
+        return serviceInfo;
+    }
+
+    public void setServerInfo(ServiceInfo serviceInfo) {
+        this.serviceInfo = serviceInfo;
+    }
+
+    public ServiceGroupMode getGroupMode() {
+        return serviceGroupMode;
+    }
+
+    public ServiceProcessMeta getProcessMeta() {
+        return processMeta;
+    }
+
+    public void sendCustomMessage(String channel, String message, Document value) {
+        this.sendPacket(new PacketOutCustomSubChannelMessage(DefaultType.BUKKIT, channel, message, value));
     }
 
     @Override
@@ -66,7 +90,6 @@ public class MinecraftServer implements INetworkComponent {
     }
 
     public ICloudGroup getGroup() {
-        // TODO: implement this Method
-        return null;
+        return SmoothCloudNode.getGroup(serviceId);
     }
 }

@@ -1,10 +1,11 @@
 package eu.smoothservices.smoothcloud.client.components;
 
+import eu.smoothservices.smoothcloud.api.group.ICloudGroup;
+import eu.smoothservices.smoothcloud.client.network.NetworkUtils;
+import eu.smoothservices.smoothcloud.client.network.protocol.packet.out.*;
 import eu.smoothservices.smoothcloud.node.SmoothCloudNode;
 import eu.smoothservices.smoothcloud.client.lib.WrapperInfo;
 import eu.smoothservices.smoothcloud.node.terminal.Terminal;
-import eu.smoothservices.smoothcloud.node.terminal.TerminalManager;
-import eu.smoothservices.smoothcloud.node.util.NetworkUtils;
 import eu.smoothservices.smoothcloud.node.util.lib.CollectionWrapper;
 import eu.smoothservices.smoothcloud.node.util.lib.DefaultType;
 import eu.smoothservices.smoothcloud.node.util.lib.Quad;
@@ -21,7 +22,6 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Setter
@@ -135,9 +135,9 @@ public class Wrapper implements INetworkComponent {
             return this;
         }
 
-        // java.util.Map<String, > groups = NetworkUtils.newConcurrentHashMap();
+        java.util.Map<String, ICloudGroup> groups = NetworkUtils.newConcurrentHashMap();
 
-        // java.util.Map<String, > proxyGroups = NetworkUtils.newConcurrentHashMap();
+        java.util.Map<String, ICloudGroup> proxyGroups = NetworkUtils.newConcurrentHashMap();
         return this;
     }
 
@@ -151,17 +151,17 @@ public class Wrapper implements INetworkComponent {
         this.channel = channel;
     }
 
-//    public void writeCommand(String commandLine) {
-//        sendPacket(new PacketOutExecuteCommand(commandLine));
-//    }
-//
-//    public void writeServerCommand(String commandLine, ServiceInfo serverInfo) {
-//        sendPacket(new PacketOutExecuteServerCommand(serverInfo, commandLine));
-//    }
-//
-//    public void writeProxyCommand(String commandLine, ProxyInfo proxyInfo) {
-//        sendPacket(new PacketOutExecuteServerCommand(proxyInfo, commandLine));
-//    }
+    public void writeCommand(String commandLine) {
+        sendPacket(new PacketOutExecuteCommand(commandLine));
+    }
+
+    public void writeServerCommand(String commandLine, ServiceInfo serverInfo) {
+        sendPacket(new PacketOutExecuteServerCommand(serverInfo, commandLine));
+    }
+
+    public void writeProxyCommand(String commandLine, ProxyInfo proxyInfo) {
+        sendPacket(new PacketOutExecuteServerCommand(proxyInfo, commandLine));
+    }
 
     public Collection<Integer> getBinndedPorts() {
         Collection<Integer> ports = new ArrayList<>();
@@ -181,108 +181,108 @@ public class Wrapper implements INetworkComponent {
         return ports;
     }
 
-//    public void startProxy(ProxyProcessMeta proxyProcessMeta) {
-//        sendPacket(new PacketOutStartProxy(proxyProcessMeta));
-//        ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminalManager().getTerminal().writeLine(StringTemplate.STR."Proxy [\{proxyProcessMeta.getServiceId()}] is now in \{serverId} queue.");
-//
-//        this.waitingServices.put(proxyProcessMeta.getServiceId().getServerId(),
-//                new Quad<>(proxyProcessMeta.getPort(),
-//                        proxyProcessMeta.getMemory(),
-//                        proxyProcessMeta.getServiceId(),
-//                        null));
-//    }
-//
-//    public void startProxyAsync(ProxyProcessMeta proxyProcessMeta) {
-//        sendPacket(new PacketOutStartProxy(proxyProcessMeta, true));
-//        System.out.println(StringTemplate.STR."Proxy [\{proxyProcessMeta.getServiceId()}] is now in \{serverId} queue.");
-//
-//        this.waitingServices.put(proxyProcessMeta.getServiceId().getServerId(),
-//                new Quad<>(proxyProcessMeta.getPort(),
-//                        proxyProcessMeta.getMemory(),
-//                        proxyProcessMeta.getServiceId(),
-//                        null));
-//    }
-//
-//    public void startGameServer(ServiceProcessMeta serverProcessMeta) {
-//        sendPacket(new PacketOutStartServer(serverProcessMeta));
-//        System.out.println(StringTemplate.STR."Service [\{serverProcessMeta.getServiceId()}] is now in \{serverId} queue.");
-//
-//        this.waitingServices.put(serverProcessMeta.getServiceId().getServerId(),
-//                new Quad<>(serverProcessMeta.getPort(),
-//                        serverProcessMeta.getMemory(),
-//                        serverProcessMeta.getServiceId(),
-//                        serverProcessMeta.getTemplate()));
-//    }
-//
-//    public void startGameServerAsync(ServiceProcessMeta serverProcessMeta) {
-//        sendPacket(new PacketOutStartServer(serverProcessMeta, true));
-//        System.out.println(StringTemplate.STR."Service [\{serverProcessMeta.getServiceId()}] is now in \{serverId} queue.");
-//
-//        this.waitingServices.put(serverProcessMeta.getServiceId().getServerId(),
-//                new Quad<>(serverProcessMeta.getPort(),
-//                        serverProcessMeta.getMemory(),
-//                        serverProcessMeta.getServiceId(),
-//                        serverProcessMeta.getTemplate()));
-//    }
-//
-//    public Wrapper stopServer(MinecraftServer minecraftServer) {
-//        if (this.servers.containsKey(minecraftServer.getServerId())) {
-//            sendPacket(new PacketOutStopServer(minecraftServer.getServerInfo()));
-//        }
-//
-//        this.waitingServices.remove(minecraftServer.getServerId());
-//        return this;
-//    }
-//
-//    public Wrapper stopServer(CloudService cloudServer) {
-//        if (this.servers.containsKey(cloudServer.getServerId())) {
-//            sendPacket(new PacketOutStopServer(cloudServer.getServerInfo()));
-//        }
-//
-//        this.waitingServices.remove(cloudServer.getServerId());
-//        return this;
-//    }
-//
-//    public Wrapper stopProxy(ProxyServer proxyServer) {
-//        if (this.proxys.containsKey(proxyServer.getServerId())) {
-//            sendPacket(new PacketOutStopProxy(proxyServer.getProxyInfo()));
-//        }
-//
-//        this.waitingServices.remove(proxyServer.getServerId());
-//        return this;
-//    }
-//
-//    public Wrapper enableScreen(ServiceInfo serverInfo) {
-//        sendPacket(new PacketOutScreen(serverInfo, DefaultType.BUKKIT, true));
-//        return this;
-//    }
-//
-//    public Wrapper enableScreen(ProxyInfo serverInfo) {
-//        sendPacket(new PacketOutScreen(serverInfo, DefaultType.BUNGEE_CORD, true));
-//        return this;
-//    }
-//
-//    public Wrapper disableScreen(ProxyInfo serverInfo) {
-//        sendPacket(new PacketOutScreen(serverInfo, DefaultType.BUNGEE_CORD, false));
-//        return this;
-//    }
-//
-//    public Wrapper disableScreen(ServiceInfo serverInfo) {
-//        sendPacket(new PacketOutScreen(serverInfo, DefaultType.BUKKIT, false));
-//        return this;
-//    }
-//
-//    public Wrapper copyServer(ServiceInfo serverInfo) {
-//        sendPacket(new PacketOutCopyServer(serverInfo));
-//        return this;
-//    }
-//
-//    public Wrapper copyServer(ServiceInfo serverInfo, Template template) {
-//        sendPacket(new PacketOutCopyServer(serverInfo, template));
-//        return this;
-//    }
+    public void startProxy(ProxyProcessMeta proxyProcessMeta) {
+        sendPacket(new PacketOutStartProxy(proxyProcessMeta));
+           ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminalManager().getTerminal().writeLine(StringTemplate.STR."Proxy [\{proxyProcessMeta.getServiceId()}] is now in \{serverId} queue.");
 
-    /*public void setConfigProperties(// properties) {
+        this.waitingServices.put(proxyProcessMeta.getServiceId().getServerId(),
+                new Quad<>(proxyProcessMeta.getPort(),
+                       proxyProcessMeta.getMemory(),
+                       proxyProcessMeta.getServiceId(),
+                       null));
+    }
+
+    public void startProxyAsync(ProxyProcessMeta proxyProcessMeta) {
+        sendPacket(new PacketOutStartProxy(proxyProcessMeta, true));
+        System.out.println(StringTemplate.STR."Proxy [\{proxyProcessMeta.getServiceId()}] is now in \{serverId} queue.");
+
+        this.waitingServices.put(proxyProcessMeta.getServiceId().getServerId(),
+                new Quad<>(proxyProcessMeta.getPort(),
+                        proxyProcessMeta.getMemory(),
+                        proxyProcessMeta.getServiceId(),
+                        null));
+    }
+
+    public void startGameServer(ServiceProcessMeta serverProcessMeta) {
+        sendPacket(new PacketOutStartServer(serverProcessMeta));
+        System.out.println(StringTemplate.STR."Service [\{serverProcessMeta.getServiceId()}] is now in \{serverId} queue.");
+
+        this.waitingServices.put(serverProcessMeta.getServiceId().getServerId(),
+                new Quad<>(serverProcessMeta.getPort(),
+                        serverProcessMeta.getMemory(),
+                        serverProcessMeta.getServiceId(),
+                        serverProcessMeta.getTemplate()));
+    }
+
+    public void startGameServerAsync(ServiceProcessMeta serverProcessMeta) {
+        sendPacket(new PacketOutStartServer(serverProcessMeta, true));
+        System.out.println(StringTemplate.STR."Service [\{serverProcessMeta.getServiceId()}] is now in \{serverId} queue.");
+
+        this.waitingServices.put(serverProcessMeta.getServiceId().getServerId(),
+                new Quad<>(serverProcessMeta.getPort(),
+                        serverProcessMeta.getMemory(),
+                        serverProcessMeta.getServiceId(),
+                        serverProcessMeta.getTemplate()));
+    }
+
+    public Wrapper stopServer(MinecraftServer minecraftServer) {
+        if (this.servers.containsKey(minecraftServer.getServerId())) {
+            sendPacket(new PacketOutStopServer(minecraftServer.getServiceInfo().getServiceId().getServerId()));
+        }
+
+        this.waitingServices.remove(minecraftServer.getServerId());
+        return this;
+    }
+
+    public Wrapper stopServer(CloudService cloudServer) {
+        if (this.servers.containsKey(cloudServer.getServerId())) {
+            sendPacket(new PacketOutStopServer(cloudServer.getServiceInfo().getServiceId().getServerId()));
+        }
+
+        this.waitingServices.remove(cloudServer.getServerId());
+        return this;
+    }
+
+    public Wrapper stopProxy(ProxyServer proxyServer) {
+        if (this.proxys.containsKey(proxyServer.getServerId())) {
+            sendPacket(new PacketOutStopProxy(proxyServer.getProxyInfo()));
+        }
+
+        this.waitingServices.remove(proxyServer.getServerId());
+        return this;
+    }
+
+    public Wrapper enableScreen(ServiceInfo serverInfo) {
+        sendPacket(new PacketOutScreen(serverInfo, DefaultType.BUKKIT, true));
+        return this;
+    }
+
+    public Wrapper enableScreen(ProxyInfo serverInfo) {
+        sendPacket(new PacketOutScreen(serverInfo, DefaultType.BUNGEE_CORD, true));
+        return this;
+    }
+
+    public Wrapper disableScreen(ProxyInfo serverInfo) {
+        sendPacket(new PacketOutScreen(serverInfo, DefaultType.BUNGEE_CORD, false));
+        return this;
+    }
+
+    public Wrapper disableScreen(ServiceInfo serverInfo) {
+        sendPacket(new PacketOutScreen(serverInfo, DefaultType.BUKKIT, false));
+        return this;
+    }
+
+    public Wrapper copyServer(ServiceInfo serverInfo) {
+        sendPacket(new PacketOutCopyServer(serverInfo));
+        return this;
+    }
+
+    public Wrapper copyServer(ServiceInfo serverInfo, Template template) {
+        sendPacket(new PacketOutCopyServer(serverInfo, template));
+        return this;
+        }
+
+    /*public void setConfigProperties( properties) {
         sendPacket(new PacketOutUpdateWrapperProperties(properties));
     }*/
 }

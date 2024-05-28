@@ -1,7 +1,6 @@
 package eu.smoothservices.smoothcloud.node.util.document;
 
 import com.google.gson.*;
-import eu.smoothservices.smoothcloud.node.util.NetworkUtils;
 
 import java.io.*;
 import java.lang.reflect.Type;

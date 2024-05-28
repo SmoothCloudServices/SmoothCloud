@@ -1,8 +1,8 @@
 package eu.smoothservices.smoothcloud.client.protocol;
 
+import eu.smoothservices.smoothcloud.client.network.NetworkUtils;
 import eu.smoothservices.smoothcloud.client.protocol.file.FileProtocol;
 import eu.smoothservices.smoothcloud.client.protocol.packet.PacketProtocol;
-import eu.smoothservices.smoothcloud.node.util.NetworkUtils;
 import io.netty.buffer.ByteBuf;
 
 import java.util.Collection;
