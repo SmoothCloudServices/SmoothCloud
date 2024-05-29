@@ -13,8 +13,8 @@ import io.netty.channel.Channel;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 public class MinecraftServer implements INetworkComponent {
 
     private ServiceId serviceId;
@@ -38,24 +38,8 @@ public class MinecraftServer implements INetworkComponent {
         this.lastServiceInfo = serviceInfo;
     }
 
-    public ServiceInfo getServiceInfo() {
-        return serviceInfo;
-    }
-
-    public void setServerInfo(ServiceInfo serviceInfo) {
-        this.serviceInfo = serviceInfo;
-    }
-
-    public ServiceGroupMode getGroupMode() {
-        return serviceGroupMode;
-    }
-
-    public ServiceProcessMeta getProcessMeta() {
-        return processMeta;
-    }
-
     public void sendCustomMessage(String channel, String message, Document value) {
-        this.sendPacket(new PacketOutCustomSubChannelMessage(DefaultType.BUKKIT, channel, message, value));
+        this.sendPacket(new PacketOutCustomSubChannelMessage(DefaultType.SPIGOT, channel, message, value));
     }
 
     @Override

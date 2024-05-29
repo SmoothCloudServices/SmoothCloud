@@ -1,12 +1,18 @@
 package eu.smoothservices.smoothcloud.client.components;
 
 import eu.smoothservices.smoothcloud.client.lib.info.NetworkInfo;
+import eu.smoothservices.smoothcloud.client.network.protocol.packet.out.PacketOutCustomChannelMessage;
 import eu.smoothservices.smoothcloud.node.util.document.Document;
+import eu.smoothservices.smoothcloud.node.util.lib.DefaultType;
 import eu.smoothservices.smoothcloud.node.util.proxy.ProxyInfo;
 import eu.smoothservices.smoothcloud.node.util.proxy.ProxyProcessMeta;
 import eu.smoothservices.smoothcloud.node.util.service.ServiceId;
 import io.netty.channel.Channel;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class ProxyServer implements INetworkComponent {
 
     private ServiceId serviceId;
@@ -31,6 +37,16 @@ public class ProxyServer implements INetworkComponent {
         this.lastProxyInfo = proxyInfo;
     }
 
+    public void sendCustomMessage(String channel, String message, Document value) {
+        this.sendPacket(new PacketOutCustomChannelMessage(channel, message, value));
+    }
+
+    public void disconnect() {
+        if (this.channel != null) {
+            this.channel.close().syncUninterruptibly();
+        }
+    }
+
     @Override
     public Channel getChannel() {
         return channel;
@@ -40,52 +56,6 @@ public class ProxyServer implements INetworkComponent {
     public void setChannel(Channel channel) {
         this.channel = channel;
     }
-
-    public ServiceId getServiceId() {
-        return serviceId;
-    }
-
-    public ProxyInfo getProxyInfo() {
-        return proxyInfo;
-    }
-
-    public void setProxyInfo(ProxyInfo proxyInfo) {
-        this.proxyInfo = proxyInfo;
-    }
-
-    public long getChannelLostTime() {
-        return channelLostTime;
-    }
-
-    public void setChannelLostTime(long channelLostTime) {
-        this.channelLostTime = channelLostTime;
-    }
-
-    public NetworkInfo getNetworkInfo() {
-        return networkInfo;
-    }
-
-    public ProxyInfo getLastProxyInfo() {
-        return lastProxyInfo;
-    }
-
-    public void setLastProxyInfo(ProxyInfo lastProxyInfo) {
-        this.lastProxyInfo = lastProxyInfo;
-    }
-
-    public ProxyProcessMeta getProcessMeta() {
-        return processMeta;
-    }
-
-    public void disconnect() {
-        if (this.channel != null) {
-            this.channel.close().syncUninterruptibly();
-        }
-    }
-
-//    public void sendCustomMessage(String channel, String message, Document value) {
-//        this.sendPacket(new PacketOutCustomChannelMessage(channel, message, value));
-//    }
 
     @Override
     public String getName() {
