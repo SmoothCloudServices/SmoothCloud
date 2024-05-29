@@ -18,12 +18,15 @@ import lombok.Setter;
 public class MinecraftServer implements INetworkComponent {
 
     private ServiceId serviceId;
+    @Getter
     private ServiceProcessMeta processMeta;
     private Wrapper wrapper;
     private ServiceGroupMode serviceGroupMode;
 
     private long channelLostTime = 0L;
 
+    @Setter
+    @Getter
     private ServiceInfo serviceInfo;
     private ServiceInfo lastServiceInfo;
     private Channel channel;
@@ -38,24 +41,12 @@ public class MinecraftServer implements INetworkComponent {
         this.lastServiceInfo = serviceInfo;
     }
 
-    public ServiceInfo getServiceInfo() {
-        return serviceInfo;
-    }
-
-    public void setServerInfo(ServiceInfo serviceInfo) {
-        this.serviceInfo = serviceInfo;
-    }
-
     public ServiceGroupMode getGroupMode() {
         return serviceGroupMode;
     }
 
-    public ServiceProcessMeta getProcessMeta() {
-        return processMeta;
-    }
-
     public void sendCustomMessage(String channel, String message, Document value) {
-        this.sendPacket(new PacketOutCustomSubChannelMessage(DefaultType.BUKKIT, channel, message, value));
+        this.sendPacket(new PacketOutCustomSubChannelMessage(DefaultType.SPIGOT, channel, message, value));
     }
 
     @Override

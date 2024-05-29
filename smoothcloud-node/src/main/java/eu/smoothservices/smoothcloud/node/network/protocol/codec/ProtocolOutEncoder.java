@@ -12,14 +12,13 @@ public final class ProtocolOutEncoder extends MessageToByteEncoder {
     protected void encode(ChannelHandlerContext channelHandlerContext, Object o, ByteBuf byteBuf) throws Exception {
         ProtocolBuffer protocolBuffer = ProtocolProvider.protocolBuffer(byteBuf);
 
-        if (o instanceof ProtocolRequest) {
-            ProtocolRequest protocolRequest = ((ProtocolRequest) o);
-            IProtocol iProtocol = ProtocolProvider.getProtocol(protocolRequest.getId());
-            ProtocolStream protocolStream = iProtocol.createElement(protocolRequest.getElement());
+        if (o instanceof ProtocolRequest protocolRequest) {
+            IProtocol protocol = ProtocolProvider.getProtocol(protocolRequest.getId());
+            ProtocolStream protocolStream = protocol.createElement(protocolRequest.getElement());
             protocolStream.write(protocolBuffer);
         } else {
-            for (IProtocol iProtocol : ProtocolProvider.protocols()) {
-                ProtocolStream protocolStream = iProtocol.createElement(o);
+            for (IProtocol protocol : ProtocolProvider.protocols()) {
+                ProtocolStream protocolStream = protocol.createElement(o);
                 if (protocolStream != null) {
                     protocolStream.write(protocolBuffer);
                     break;

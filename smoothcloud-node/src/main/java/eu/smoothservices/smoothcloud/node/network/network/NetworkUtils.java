@@ -71,7 +71,7 @@ public class NetworkUtils {
     }
 
     public static long systemMemory() {
-        return ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getTotalPhysicalMemorySize();
+        return ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getTotalMemorySize();
     }
 
     public static OperatingSystemMXBean system() {

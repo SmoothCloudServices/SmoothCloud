@@ -49,7 +49,7 @@ public class FileDeploy extends ProtocolStream {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 }

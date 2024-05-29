@@ -5,6 +5,7 @@ import eu.smoothservices.smoothcloud.node.network.protocol.ProtocolStream;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class PacketProtocol implements IProtocol {
 
@@ -15,7 +16,7 @@ public class PacketProtocol implements IProtocol {
 
     @Override
     public Collection<Class<?>> getAvailableClasses() {
-        return Arrays.asList(Packet.class);
+        return List.of(Packet.class);
     }
 
     @Override

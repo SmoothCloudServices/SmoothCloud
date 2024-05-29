@@ -8,7 +8,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
 public final class ProtocolLengthSerializer extends MessageToByteEncoder<ByteBuf> {
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, ByteBuf msg, ByteBuf out) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, ByteBuf msg, ByteBuf out) {
         ProtocolBuffer in = new ProtocolBuffer(msg), outbuffer = new ProtocolBuffer(out);
         int readableBytes = in.readableBytes(), lengthByteSpace = getVarIntSize(readableBytes);
 

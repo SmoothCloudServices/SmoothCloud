@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBufProcessor;
 import io.netty.buffer.Unpooled;
 import io.netty.util.ByteProcessor;
 import lombok.Getter;
+import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,13 +21,13 @@ import java.nio.charset.StandardCharsets;
 
 @Getter
 public class ProtocolBuffer extends ByteBuf implements Cloneable {
-
-    private ByteBuf byteBuf;
+    private final ByteBuf byteBuf;
 
     public ProtocolBuffer(ByteBuf byteBuf) {
         this.byteBuf = byteBuf;
     }
 
+    @SneakyThrows
     @Override
     public ProtocolBuffer clone() {
         return new ProtocolBuffer(Unpooled.buffer(byteBuf.readableBytes()).writeBytes(byteBuf));
@@ -50,16 +51,15 @@ public class ProtocolBuffer extends ByteBuf implements Cloneable {
         return result;
     }
 
-    public ProtocolBuffer writeVarInt(int value) {
+    public void writeVarInt(int value) {
         do {
             byte temp = (byte) (value & 0b01111111);
             value >>>= 7;
             if(value != 0) {
-                temp |= 0b10000000;
+                temp |= (byte) 0b10000000;
             }
             writeByte(temp);
         } while (value != 0);
-        return this;
     }
 
     public void writeString(String write) {
@@ -68,16 +68,15 @@ public class ProtocolBuffer extends ByteBuf implements Cloneable {
         writeBytes(values);
     }
 
-    public ProtocolBuffer writeVarLong(long value) {
+    public void writeVarLong(long value) {
         do {
             byte temp = (byte) (value & 0b01111111);
             value >>>= 7;
             if (value != 0) {
-                temp |= 0b10000000;
+                temp |= (byte) 0b10000000;
             }
             writeByte(temp);
         } while (value != 0);
-        return this;
     }
 
     public String readString() {
@@ -96,7 +95,7 @@ public class ProtocolBuffer extends ByteBuf implements Cloneable {
         do {
             read = readByte();
             int value = (read & 0b01111111);
-            result |= (value << (7 * numRead));
+            result |= ((long) value << (7 * numRead));
 
             numRead++;
             if (numRead > 10) {

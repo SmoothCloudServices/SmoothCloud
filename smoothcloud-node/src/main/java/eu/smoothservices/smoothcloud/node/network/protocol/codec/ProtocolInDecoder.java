@@ -13,7 +13,7 @@ import java.util.List;
 public class ProtocolInDecoder extends ByteToMessageDecoder {
 
     @Override
-    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
+    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) {
         ProtocolBuffer protocolBuffer = ProtocolProvider.protocolBuffer(byteBuf);
 
         for (IProtocol iProtocol : ProtocolProvider.protocols()) {
@@ -23,7 +23,7 @@ public class ProtocolInDecoder extends ByteToMessageDecoder {
                 list.add(protocolStream);
                 break;
             } catch (Exception ex) {
-
+                throw new RuntimeException(ex);
             }
         }
     }

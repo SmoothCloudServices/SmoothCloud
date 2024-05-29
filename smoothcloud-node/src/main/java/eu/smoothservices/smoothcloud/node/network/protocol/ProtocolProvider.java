@@ -9,8 +9,7 @@ import java.util.Collection;
 import java.util.Map;
 
 public class ProtocolProvider {
-
-    private static Map<Integer, IProtocol> protocols;
+    private static final Map<Integer, IProtocol> protocols;
 
     static {
         protocols = NetworkUtils.newConcurrentHashMap();

@@ -10,12 +10,12 @@ import eu.smoothservices.smoothcloud.node.util.service.info.ServiceInfo;
 
 public class PacketOutExecuteServerCommand extends Packet {
     public PacketOutExecuteServerCommand(ServiceInfo serverInfo, String commandLine) {
-        super(PacketRC.SC_CORE + 7, new Document("serverInfo", serverInfo).append("type", DefaultType.BUKKIT)
+        super(PacketRC.SC_CORE + 7, new Document("serverInfo", serverInfo).append("type", DefaultType.SPIGOT)
                 .append("commandLine", commandLine));
     }
 
     public PacketOutExecuteServerCommand(ProxyInfo serverInfo, String commandLine) {
-        super(PacketRC.SC_CORE + 7, new Document("proxyInfo", serverInfo).append("type", DefaultType.BUNGEE_CORD)
+        super(PacketRC.SC_CORE + 7, new Document("proxyInfo", serverInfo).append("type", DefaultType.BUNGEECORD)
                 .append("commandLine", commandLine));
     }
 }

@@ -47,12 +47,7 @@ public interface INetworkComponent extends PacketSender, ChannelUser {
             getChannel().writeAndFlush(object);
             return;
         }
-        getChannel().eventLoop().execute(new Runnable() {
-            @Override
-            public void run() {
-                getChannel().writeAndFlush(object);
-            }
-        });
+        getChannel().eventLoop().execute(() -> getChannel().writeAndFlush(object));
     }
 
     @Override

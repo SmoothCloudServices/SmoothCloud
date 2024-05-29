@@ -31,7 +31,7 @@ public class FileProtocol implements IProtocol {
                 String dest = ((File) element).getPath();
                 return new FileDeploy(dest, input);
             } catch (IOException e) {
-                e.printStackTrace();
+                e.fillInStackTrace();
             }
         }
 
@@ -41,7 +41,7 @@ public class FileProtocol implements IProtocol {
                 String dest = ((Path) element).toUri().toString();
                 return new FileDeploy(dest, input);
             } catch (IOException e) {
-                e.printStackTrace();
+                e.fillInStackTrace();
             }
         }
 

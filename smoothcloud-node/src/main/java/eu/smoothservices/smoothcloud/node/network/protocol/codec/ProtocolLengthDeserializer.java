@@ -11,7 +11,7 @@ import java.util.List;
 public class ProtocolLengthDeserializer extends ByteToMessageDecoder {
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
 
         in.markReaderIndex();
         byte[] lengthBytes = new byte[3];

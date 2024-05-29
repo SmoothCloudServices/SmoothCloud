@@ -9,7 +9,6 @@ import eu.smoothservices.smoothcloud.node.terminal.Terminal;
 import eu.smoothservices.smoothcloud.node.util.lib.CollectionWrapper;
 import eu.smoothservices.smoothcloud.node.util.lib.DefaultType;
 import eu.smoothservices.smoothcloud.node.util.lib.Quad;
-import eu.smoothservices.smoothcloud.node.util.lib.threading.Runnabled;
 import eu.smoothservices.smoothcloud.node.util.proxy.ProxyInfo;
 import eu.smoothservices.smoothcloud.node.util.proxy.ProxyProcessMeta;
 import eu.smoothservices.smoothcloud.node.util.service.ServiceId;
@@ -22,17 +21,18 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Setter
 @Getter
 public class Wrapper implements INetworkComponent {
 
-    private final java.util.Map<String, ProxyServer> proxys = NetworkUtils.newConcurrentHashMap();
-    private final java.util.Map<String, MinecraftServer> servers = NetworkUtils.newConcurrentHashMap();
-    private final java.util.Map<String, CloudService> cloudServers = NetworkUtils.newConcurrentHashMap();
+    private final Map<String, ProxyServer> proxys = NetworkUtils.newConcurrentHashMap();
+    private final Map<String, MinecraftServer> servers = NetworkUtils.newConcurrentHashMap();
+    private final Map<String, CloudService> cloudServers = NetworkUtils.newConcurrentHashMap();
     // Group, ServiceId
-    private final java.util.Map<String, Quad<Integer, Integer, ServiceId, Template>> waitingServices = NetworkUtils.newConcurrentHashMap();
+    private final Map<String, Quad<Integer, Integer, ServiceId, Template>> waitingServices = NetworkUtils.newConcurrentHashMap();
     private Channel channel;
     private WrapperInfo wrapperInfo;
     private WrapperMeta networkInfo;
@@ -67,14 +67,7 @@ public class Wrapper implements INetworkComponent {
 
     public int getUsedMemoryAndWaitings() {
         AtomicInteger integer = new AtomicInteger(getUsedMemory());
-
-        CollectionWrapper.iterator(this.waitingServices.values(), new Runnabled<Quad<Integer, Integer, ServiceId, Template>>() {
-            @Override
-            public void run(Quad<Integer, Integer, ServiceId, Template> obj) {
-                integer.addAndGet(obj.getSecond());
-            }
-        });
-
+        CollectionWrapper.iterator(this.waitingServices.values(), obj -> integer.addAndGet(obj.getSecond()));
         return integer.get();
     }
 
@@ -96,30 +89,30 @@ public class Wrapper implements INetworkComponent {
         sendPacket(new PacketOutExecuteCommand(commandLine));
     }
 
-    public void disconnct() {
+    public void disconnect() {
         this.wrapperInfo = null;
         this.maxMemory = 0;
         for (MinecraftServer minecraftServer : servers.values()) {
             try {
                 minecraftServer.disconnect();
-            } catch (Exception ex) {
-
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
 
         for (CloudService cloudServer : cloudServers.values()) {
             try {
                 cloudServer.disconnect();
-            } catch (Exception ex) {
-
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
 
         for (ProxyServer minecraftServer : proxys.values()) {
             try {
                 minecraftServer.disconnect();
-            } catch (Exception ex) {
-
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
 
@@ -130,14 +123,11 @@ public class Wrapper implements INetworkComponent {
     }
 
     public Wrapper updateWrapper() {
-
         if (getChannel() == null) {
             return this;
         }
-
-        java.util.Map<String, ICloudGroup> groups = NetworkUtils.newConcurrentHashMap();
-
-        java.util.Map<String, ICloudGroup> proxyGroups = NetworkUtils.newConcurrentHashMap();
+        Map<String, ICloudGroup> groups = NetworkUtils.newConcurrentHashMap();
+        Map<String, ICloudGroup> proxyGroups = NetworkUtils.newConcurrentHashMap();
         return this;
     }
 
@@ -225,51 +215,46 @@ public class Wrapper implements INetworkComponent {
                         serverProcessMeta.getTemplate()));
     }
 
-    public Wrapper stopServer(MinecraftServer minecraftServer) {
+    public void stopServer(MinecraftServer minecraftServer) {
         if (this.servers.containsKey(minecraftServer.getServerId())) {
             sendPacket(new PacketOutStopServer(minecraftServer.getServiceInfo().getServiceId().getServerId()));
         }
 
         this.waitingServices.remove(minecraftServer.getServerId());
-        return this;
     }
 
-    public Wrapper stopServer(CloudService cloudServer) {
+    public void stopServer(CloudService cloudServer) {
         if (this.servers.containsKey(cloudServer.getServerId())) {
             sendPacket(new PacketOutStopServer(cloudServer.getServiceInfo().getServiceId().getServerId()));
         }
 
         this.waitingServices.remove(cloudServer.getServerId());
-        return this;
     }
 
-    public Wrapper stopProxy(ProxyServer proxyServer) {
+    public void stopProxy(ProxyServer proxyServer) {
         if (this.proxys.containsKey(proxyServer.getServerId())) {
             sendPacket(new PacketOutStopProxy(proxyServer.getProxyInfo()));
         }
 
         this.waitingServices.remove(proxyServer.getServerId());
-        return this;
     }
 
     public Wrapper enableScreen(ServiceInfo serverInfo) {
-        sendPacket(new PacketOutScreen(serverInfo, DefaultType.BUKKIT, true));
+        sendPacket(new PacketOutScreen(serverInfo, DefaultType.SPIGOT, true));
         return this;
     }
 
     public Wrapper enableScreen(ProxyInfo serverInfo) {
-        sendPacket(new PacketOutScreen(serverInfo, DefaultType.BUNGEE_CORD, true));
+        sendPacket(new PacketOutScreen(serverInfo, DefaultType.BUNGEECORD, true));
         return this;
     }
 
-    public Wrapper disableScreen(ProxyInfo serverInfo) {
-        sendPacket(new PacketOutScreen(serverInfo, DefaultType.BUNGEE_CORD, false));
-        return this;
+    public void disableScreen(ProxyInfo serverInfo) {
+        sendPacket(new PacketOutScreen(serverInfo, DefaultType.BUNGEECORD, false));
     }
 
-    public Wrapper disableScreen(ServiceInfo serverInfo) {
-        sendPacket(new PacketOutScreen(serverInfo, DefaultType.BUKKIT, false));
-        return this;
+    public void disableScreen(ServiceInfo serverInfo) {
+        sendPacket(new PacketOutScreen(serverInfo, DefaultType.SPIGOT, false));
     }
 
     public Wrapper copyServer(ServiceInfo serverInfo) {
