@@ -5,13 +5,16 @@ import eu.smoothservices.smoothcloud.client.components.ProxyServer;
 import eu.smoothservices.smoothcloud.client.components.Wrapper;
 import eu.smoothservices.smoothcloud.client.network.NetworkUtils;
 import eu.smoothservices.smoothcloud.node.util.service.ServiceId;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Map;
 
+@Getter
 public class ScreenProvider {
+    private final Map<String, EnabledScreen> screens = NetworkUtils.newConcurrentHashMap();
 
-    private Map<String, EnabledScreen> screens = NetworkUtils.newConcurrentHashMap();
-
+    @Setter
     private ServiceId mainServiceId;
 
     public void handleEnableScreen(ServiceId serviceId, Wrapper wrapper) {
@@ -33,17 +36,5 @@ public class ScreenProvider {
         if (proxyServer != null) {
             proxyServer.getWrapper().disableScreen(proxyServer.getProxyInfo());
         }
-    }
-
-    public Map<String, EnabledScreen> getScreens() {
-        return screens;
-    }
-
-    public ServiceId getMainServiceId() {
-        return mainServiceId;
-    }
-
-    public void setMainServiceId(ServiceId mainServiceId) {
-        this.mainServiceId = mainServiceId;
     }
 }
