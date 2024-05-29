@@ -1,67 +1,31 @@
 package eu.smoothservices.smoothcloud.client.lib;
 
-public class WrapperInfo {
+import lombok.Getter;
 
-    private String serverId;
-    private String hostName;
-    private String version;
-    private boolean ready;
-    private int availableProcessors;
-    private int startPort;
-    private int process_queue_size;
-    private int memory;
-    public WrapperInfo(String serverId,
-                       String hostName,
-                       String version,
-                       boolean ready,
-                       int availableProcessors,
-                       int startPort,
-                       int process_queue_size,
-                       int memory) {
+@Getter
+public class WrapperInfo {
+    private final String serverId;
+    private final String hostName;
+    private final String version;
+    private final boolean ready;
+    private final int availableProcessors;
+    private final int startPort;
+    private final int processQueueSize;
+    private final int memory;
+
+    public WrapperInfo(String serverId, String hostName, String version, boolean ready, int availableProcessors, int startPort, int processQueueSize, int memory) {
         this.serverId = serverId;
         this.hostName = hostName;
         this.version = version;
         this.ready = ready;
         this.availableProcessors = availableProcessors;
         this.startPort = startPort;
-        this.process_queue_size = process_queue_size;
+        this.processQueueSize = processQueueSize;
         this.memory = memory;
     }
 
     @Override
     public String toString() {
-        return "WrapperInfo{" + "serverId='" + serverId + '\'' + ", hostName='" + hostName + '\'' + ", version='" + version + '\'' + ", ready=" + ready + ", availableProcessors=" + availableProcessors + ", startPort=" + startPort + ", process_queue_size=" + process_queue_size + ", memory=" + memory + '}';
-    }
-
-    public String getServerId() {
-        return serverId;
-    }
-
-    public int getStartPort() {
-        return startPort;
-    }
-
-    public int getProcess_queue_size() {
-        return process_queue_size;
-    }
-
-    public int getAvailableProcessors() {
-        return availableProcessors;
-    }
-
-    public int getMemory() {
-        return memory;
-    }
-
-    public String getHostName() {
-        return hostName;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public boolean isReady() {
-        return ready;
+        return StringTemplate.STR."WrapperInfo{serverId='\{serverId}\{'\''}, hostName='\{hostName}\{'\''}, version='\{version}\{'\''}, ready=\{ready}, availableProcessors=\{availableProcessors}, startPort=\{startPort}, process_queue_size=\{processQueueSize}, memory=\{memory}\{'}'}";
     }
 }
