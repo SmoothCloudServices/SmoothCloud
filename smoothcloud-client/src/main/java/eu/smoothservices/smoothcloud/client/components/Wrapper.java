@@ -44,7 +44,7 @@ public class Wrapper implements INetworkComponent {
     private String serverId;
 
     public Wrapper(WrapperMeta networkInfo) {
-        //this.serverId = networkInfo.getId();
+        this.serverId = networkInfo.getId();
         this.networkInfo = networkInfo;
         this.terminal = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminalManager().getTerminal();
     }
@@ -92,9 +92,9 @@ public class Wrapper implements INetworkComponent {
         return mem;
     }
 
-//    public void sendCommand(String commandLine) {
-//        sendPacket(new PacketOutExecuteCommand(commandLine));
-//    }
+    public void sendCommand(String commandLine) {
+        sendPacket(new PacketOutExecuteCommand(commandLine));
+    }
 
     public void disconnct() {
         this.wrapperInfo = null;
@@ -163,7 +163,7 @@ public class Wrapper implements INetworkComponent {
         sendPacket(new PacketOutExecuteServerCommand(proxyInfo, commandLine));
     }
 
-    public Collection<Integer> getBinndedPorts() {
+    public Collection<Integer> getBoundPorts() {
         Collection<Integer> ports = new ArrayList<>();
 
         for (Quad<Integer, Integer, ServiceId, Template> serviceIdValues : waitingServices.values()) {
