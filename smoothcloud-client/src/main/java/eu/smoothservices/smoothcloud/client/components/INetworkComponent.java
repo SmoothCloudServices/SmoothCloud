@@ -27,13 +27,10 @@ public interface INetworkComponent extends PacketSender, ChannelUser {
             } catch (Exception ignored) {}
             return;
         }
-        getChannel().eventLoop().execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    getChannel().writeAndFlush(packet).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
-                } catch (Exception ignored) {}
-            }
+        getChannel().eventLoop().execute(() -> {
+            try {
+                getChannel().writeAndFlush(packet).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+            } catch (Exception ignored) {}
         });
     }
 
