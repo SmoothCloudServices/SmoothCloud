@@ -1,15 +1,13 @@
 package eu.smoothservices.smoothcloud.node.setup;
 
 import eu.smoothservices.smoothcloud.node.SmoothCloudNode;
+import eu.smoothservices.smoothcloud.node.terminal.Terminal;
 import eu.smoothservices.smoothcloud.node.terminal.TerminalManager;
 import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 
 import static eu.smoothservices.smoothcloud.node.messages.SetupMessages.*;
 
@@ -33,7 +31,6 @@ public class CloudSetup {
             }
             case 2 -> {
                 if (!step2(input)) return;
-                complete();
             }
             case 3 -> {
                 if (!step3(input)) return;
@@ -54,6 +51,11 @@ public class CloudSetup {
     @SneakyThrows
     private void complete() {
         terminalManager.getTerminal().writeLine(COMPLETED);
+        Terminal terminal = new Terminal("main", terminalManager.getPrefix());
+        HashMap<String, Terminal> terminals = new HashMap<>();
+        terminals.put("main", terminal);
+        terminalManager.setTerminals(terminals);
+        terminalManager.changeTerminal(terminal);
         SmoothCloudNode.hasSetup = true;
         ((SmoothCloudNode) SmoothCloudNode.getInstance()).startCloud();
     }
@@ -132,7 +134,6 @@ public class CloudSetup {
 
     private boolean chooseIP(String input) {
         List<String> inet4Addresses = getAllIPAddresses();
-        inet4Addresses.forEach(string -> terminalManager.getTerminal().writeLine(string));
         if (inet4Addresses.contains(input)) {
             //((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setHost(input);
             return true;

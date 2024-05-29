@@ -17,7 +17,7 @@ public class SetupMessages {
     public static final String CHOOSE_PORT = JavaColor.apply("&7Which port should we use?");
     public static final String CHOOSE_PORT_NOT_EXISTS = JavaColor.apply("&cPort not available. Please choose another port!");
 
-    public static final String CHOOSE_MEMORY = JavaColor.apply("&7Which port should we use?");
+    public static final String CHOOSE_MEMORY = JavaColor.apply("&7How many memory should use the cloud?");
     public static final String WRONG_MEMORY = JavaColor.apply("&cYou have to write a number or you need to add equals or more than 2gb");
 
     public static final String SAVED = JavaColor.apply("&aIP address, port and memory has been successfully saved.");

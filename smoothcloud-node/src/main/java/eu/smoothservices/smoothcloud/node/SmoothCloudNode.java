@@ -43,12 +43,12 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
         groups = new HashMap<>();
         this.config = new MainConfig(path, "config");
         this.terminalManager = new TerminalManager();
-//        if(!hasSetup && this.config.getHost() != null) {
+        if(!hasSetup && this.config.getHost() != null) {
             startCloud();
-//            return;
-//        }
-//        this.terminalManager.getTerminal().writeCleanLine(JavaColor.apply(STR."\n&b\{FigletFont.convertOneLine("SmoothCloud  Setup")}"));
-//        this.terminalManager.start();
+            return;
+        }
+        this.terminalManager.getTerminal().writeCleanLine(JavaColor.apply(STR."\n&b\{FigletFont.convertOneLine("SmoothCloud  Setup")}"));
+        this.terminalManager.start();
     }
 
     @SneakyThrows
