@@ -23,7 +23,7 @@ public class Terminal {
 
     public String readLine() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print(StringTemplate.STR."\{JavaColor.apply("&c")}\{System.getProperty("user.name")}\{JavaColor.apply("&7@")}" + prefix);
+        System.out.print(StringTemplate.STR."\{JavaColor.colored("#ff5555", System.getProperty("user.name"))}\{JavaColor.apply("&7@")}" + prefix);
         return scanner.nextLine().trim();
     }
 }

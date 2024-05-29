@@ -1,6 +1,7 @@
 package eu.smoothservices.smoothcloud.node.util.document;
 
 import com.google.gson.*;
+import eu.smoothservices.smoothcloud.node.network.network.NetworkUtils;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -162,7 +163,7 @@ public class Document implements DocumentAbstract {
             backend.delete();
         }
 
-        try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(backend), "UTF-8")) {
+        try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(backend), StandardCharsets.UTF_8)) {
             GSON.toJson(dataCatcher, (writer));
             return true;
         } catch (IOException ex) {
@@ -183,11 +184,11 @@ public class Document implements DocumentAbstract {
     }
 
     public boolean saveAsConfig(Path path) {
-        try (OutputStreamWriter outputStreamWriter = new OutputStreamWriter(Files.newOutputStream(path), "UTF-8")) {
+        try (OutputStreamWriter outputStreamWriter = new OutputStreamWriter(Files.newOutputStream(path), StandardCharsets.UTF_8)) {
             GSON.toJson(dataCatcher, outputStreamWriter);
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
         return false;
     }
@@ -234,8 +235,8 @@ public class Document implements DocumentAbstract {
     public static Document loadDocument(Path backend) {
 
         try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(backend),
-                "UTF-8"); BufferedReader bufferedReader = new BufferedReader(reader)) {
-            JsonObject object = PARSER.parse(bufferedReader).getAsJsonObject();
+                StandardCharsets.UTF_8); BufferedReader bufferedReader = new BufferedReader(reader)) {
+            JsonObject object = JsonParser.parseReader(bufferedReader).getAsJsonObject();
             return new Document(object);
         } catch (Exception ex) {
             ex.getStackTrace();
@@ -244,17 +245,17 @@ public class Document implements DocumentAbstract {
     }
     public static Document $loadDocument(File backend) throws Exception {
         try {
-            return new Document(PARSER.parse(new String(Files.readAllBytes(backend.toPath()), StandardCharsets.UTF_8)).getAsJsonObject());
+            return new Document(PARSER.parse(Files.readString(backend.toPath())).getAsJsonObject());
         } catch (Exception ex) {
             throw new Exception(ex);
         }
     }
 
     public static Document load(String input) {
-        try (InputStreamReader reader = new InputStreamReader(new StringBufferInputStream(input), "UTF-8")) {
-            return new Document(PARSER.parse(new BufferedReader(reader)).getAsJsonObject());
+        try (InputStreamReader reader = new InputStreamReader(new StringBufferInputStream(input), StandardCharsets.UTF_8)) {
+            return new Document(JsonParser.parseReader(new BufferedReader(reader)).getAsJsonObject());
         } catch (IOException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
         return new Document();
     }
@@ -266,18 +267,6 @@ public class Document implements DocumentAbstract {
     @Override
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
     }
 
     public JsonObject obj() {
@@ -342,7 +331,7 @@ public class Document implements DocumentAbstract {
     }
 
     public boolean isEmpty() {
-        return this.dataCatcher.size() == 0;
+        return this.dataCatcher.isEmpty();
     }
 
     public JsonArray getArray(String key) {
@@ -359,7 +348,7 @@ public class Document implements DocumentAbstract {
             backend.delete();
         }
 
-        try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(backend), "UTF-8")) {
+        try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(backend), StandardCharsets.UTF_8)) {
             NetworkUtils.GSON.toJson(dataCatcher, (writer));
             return true;
         } catch (IOException ex) {
@@ -369,9 +358,9 @@ public class Document implements DocumentAbstract {
     }
 
     public Document loadToExistingDocument(File backend) {
-        try (InputStreamReader reader = new InputStreamReader(new FileInputStream(backend), "UTF-8")) {
+        try (InputStreamReader reader = new InputStreamReader(new FileInputStream(backend), StandardCharsets.UTF_8)) {
 
-            this.dataCatcher = PARSER.parse(reader).getAsJsonObject();
+            this.dataCatcher = JsonParser.parseReader(reader).getAsJsonObject();
             this.file = backend;
             return this;
         } catch (Exception ex) {
@@ -381,9 +370,8 @@ public class Document implements DocumentAbstract {
     }
 
     public Document loadToExistingDocument(Path path) {
-        try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(path), "UTF-8")) {
-
-            this.dataCatcher = PARSER.parse(reader).getAsJsonObject();
+        try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(path), StandardCharsets.UTF_8)) {
+            this.dataCatcher = JsonParser.parseReader(reader).getAsJsonObject();
             return this;
         } catch (Exception ex) {
             ex.getStackTrace();

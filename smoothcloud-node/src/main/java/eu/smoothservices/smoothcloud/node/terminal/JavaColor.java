@@ -22,7 +22,7 @@ public class JavaColor {
 
         int ansiCode = ((r / 51) * 36) + ((g / 51) * 6) + (b / 51) + 16;
 
-        return "\u001B[38;5;" + ansiCode + "m";
+        return StringTemplate.STR."\u001B[38;5;\{ansiCode}m";
     }
 
     private static final Map<Character, String> colorMap = createColorMap();
@@ -52,23 +52,23 @@ public class JavaColor {
 
     private static Map<Character, String> createColorMap() {
         Map<Character, String> colorMap = new HashMap<>();
-        colorMap.put('0', "\u001B[30m"); // Black
-        colorMap.put('1', "\u001B[34m"); // Dark Blue
-        colorMap.put('2', "\u001B[32m"); // Dark Green
-        colorMap.put('3', "\u001B[36m"); // Dark Aqua
-        colorMap.put('4', "\u001B[31m"); // Dark Red
-        colorMap.put('5', "\u001B[35m"); // Dark Purple
-        colorMap.put('6', "\u001B[33m"); // Gold
-        colorMap.put('7', "\u001B[37m"); // Gray
-        colorMap.put('8', "\u001B[90m"); // Dark Gray
-        colorMap.put('9', "\u001B[94m"); // Blue
-        colorMap.put('a', "\u001B[92m"); // Green
-        colorMap.put('b', "\u001B[96m"); // Aqua
-        colorMap.put('c', "\u001B[91m"); // Red
-        colorMap.put('d', "\u001B[95m"); // Light Purple
-        colorMap.put('e', "\u001B[93m"); // Yellow
-        colorMap.put('f', "\u001B[97m"); // White
-        colorMap.put('r', "\u001B[0m");  // Reset
+        colorMap.put('0', "\u001B[30m");
+        colorMap.put('1', "\u001B[34m");
+        colorMap.put('2', "\u001B[32m");
+        colorMap.put('3', "\u001B[36m");
+        colorMap.put('4', "\u001B[31m");
+        colorMap.put('5', "\u001B[35m");
+        colorMap.put('6', "\u001B[33m");
+        colorMap.put('7', "\u001B[37m");
+        colorMap.put('8', "\u001B[90m");
+        colorMap.put('9', "\u001B[94m");
+        colorMap.put('a', "\u001B[92m");
+        colorMap.put('b', "\u001B[96m");
+        colorMap.put('c', "\u001B[91m");
+        colorMap.put('d', "\u001B[95m");
+        colorMap.put('e', "\u001B[93m");
+        colorMap.put('f', "\u001B[97m");
+        colorMap.put('r', "\u001B[0m");
         return colorMap;
     }
 
@@ -114,7 +114,7 @@ public class JavaColor {
             int currentB = interpolate(startB, endB, i, steps);
 
             int ansiCode = ((currentR / 51) * 36) + ((currentG / 51) * 6) + (currentB / 51) + 16;
-            String colorCode = "\u001B[38;5;" + ansiCode + "m";
+            String colorCode = StringTemplate.STR."\u001B[38;5;\{ansiCode}m";
             transitionColors.add(colorCode);
         }
 
@@ -133,7 +133,7 @@ public class JavaColor {
         List<String> transitionColors = new ArrayList<>();
         for (int i = 0; i < steps; i++) {
             int currentCode = interpolate(startCode, endCode, i, steps);
-            String colorCode = "\u001B[" + currentCode + "m";
+            String colorCode = StringTemplate.STR."\u001B[\{currentCode}m";
             transitionColors.add(colorCode);
         }
 

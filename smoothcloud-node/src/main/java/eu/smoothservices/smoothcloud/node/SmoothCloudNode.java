@@ -47,7 +47,7 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
             startCloud();
             return;
         }
-        this.terminalManager.getTerminal().writeCleanLine(JavaColor.apply(STR."\n&b\{FigletFont.convertOneLine("SmoothCloud  Setup")}"));
+//        this.terminalManager.getTerminal().writeCleanLine(JavaColor.apply(STR."\n&b\{FigletFont.convertOneLine("SmoothCloud  Setup")}"));
         this.terminalManager.start();
     }
 
