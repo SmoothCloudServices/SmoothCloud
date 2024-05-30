@@ -1,6 +1,7 @@
 package eu.smoothservices.smoothcloud.node.setup;
 
 import eu.smoothservices.smoothcloud.node.SmoothCloudNode;
+import eu.smoothservices.smoothcloud.node.config.Language;
 import eu.smoothservices.smoothcloud.node.terminal.Terminal;
 import eu.smoothservices.smoothcloud.node.terminal.TerminalManager;
 import lombok.SneakyThrows;
@@ -50,6 +51,7 @@ public class CloudSetup {
 
     @SneakyThrows
     private void complete() {
+        ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setLanguage(Language.EN);
         terminalManager.getTerminal().writeLine(COMPLETED);
         Terminal terminal = new Terminal("main", terminalManager.getPrefix());
         HashMap<String, Terminal> terminals = new HashMap<>();
@@ -104,7 +106,7 @@ public class CloudSetup {
             return false;
         }
         try {
-            //((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setPort(Integer.parseInt(input));
+            ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setPort(Integer.parseInt(input));
             terminalManager.getTerminal().writeLine(CHOOSE_MEMORY);
             return true;
         } catch (NumberFormatException e) {
@@ -118,7 +120,7 @@ public class CloudSetup {
             terminalManager.getTerminal().writeLine(WRONG_MEMORY);
             return false;
         }
-        //((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setMemory(calculateMemory(input));
+        ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setMemory(calculateMemory(input));
         terminalManager.getTerminal().writeLine(SAVED);
         return true;
     }
@@ -128,14 +130,14 @@ public class CloudSetup {
         if (!answer.equals("yes")) {
             return false;
         }
-        //((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setEulaAgreement(true);
+        ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setEulaAgreement(true);
         return true;
     }
 
     private boolean chooseIP(String input) {
         List<String> inet4Addresses = getAllIPAddresses();
         if (inet4Addresses.contains(input)) {
-            //((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setHost(input);
+            ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setHost(input);
             return true;
         }
         return false;
@@ -153,6 +155,7 @@ public class CloudSetup {
 
     private List<String> getAllIPAddresses() {
         List<String> addresses = new ArrayList<>();
+        addresses.add("127.0.0.1");
         try {
             for (Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces(); networkInterfaces.hasMoreElements(); ) {
                 final NetworkInterface networkInterface = networkInterfaces.nextElement();

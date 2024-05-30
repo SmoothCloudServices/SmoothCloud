@@ -74,7 +74,7 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
         this.terminalManager.getTerminal().writeLine("CloudPlayerProvider started.");
 
         this.terminalManager.getTerminal().writeLine("Starting Connection for the wrapper...");
-        //this.nettyServer = new NettyServer();
+        this.nettyServer = new NettyServer();
         this.terminalManager.getTerminal().writeLine("Connection for the wrapper started.");
 
         this.terminalManager.getTerminal().writeLine("Starting Internal Wrapper...");
