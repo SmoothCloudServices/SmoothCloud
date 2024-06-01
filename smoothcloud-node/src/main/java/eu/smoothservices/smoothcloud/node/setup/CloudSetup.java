@@ -53,6 +53,8 @@ public class CloudSetup {
     private void complete() {
         ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setLanguage(Language.EN);
         terminalManager.getTerminal().writeLine(COMPLETED);
+        Thread.sleep(1000);
+        terminalManager.getTerminal().clearScreen();
         Terminal terminal = new Terminal("main", terminalManager.getPrefix());
         HashMap<String, Terminal> terminals = new HashMap<>();
         terminals.put("main", terminal);
