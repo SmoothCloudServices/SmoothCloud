@@ -1,4 +1,4 @@
-package eu.smoothcloudservices.smoothcloud.wrapper.network;
+package eu.smoothservices.smoothcloud.wrapper.network;
 
 import lombok.SneakyThrows;
 import org.junit.Test;

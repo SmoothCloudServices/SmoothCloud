@@ -1,4 +1,4 @@
-package eu.smoothcloudservices.smoothcloud.node;
+package eu.smoothservices.smoothcloud.node;
 
 import lombok.SneakyThrows;
 import org.junit.Test;
@@ -9,6 +9,6 @@ public class ServerConnectionTest {
     @Test
     public void handle() {
 //        new NettyServer();
-        Thread.sleep(1000000);
+//        Thread.sleep(1000000);
     }
 }
