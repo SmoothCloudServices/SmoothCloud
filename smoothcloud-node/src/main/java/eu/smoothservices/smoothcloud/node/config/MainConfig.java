@@ -1,6 +1,6 @@
 package eu.smoothservices.smoothcloud.node.config;
 
-import dev.eztxm.config.YamlConfig;
+import de.eztxm.config.YamlConfig;
 
 public class MainConfig {
     private final YamlConfig config;

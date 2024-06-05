@@ -1,6 +1,6 @@
 package eu.smoothservices.smoothcloud.node.setup;
 
-import dev.eztxm.config.JsonConfig;
+import de.eztxm.config.YamlConfig;
 import eu.smoothservices.smoothcloud.api.SmoothCloudAPI;
 import eu.smoothservices.smoothcloud.api.group.ServerType;
 import eu.smoothservices.smoothcloud.node.SmoothCloudNode;
@@ -14,7 +14,7 @@ public class SetupGroup {
 
     private final TerminalManager terminalManager;
     private final String name;
-    private final JsonConfig config;
+    private final YamlConfig config;
     private int step = 0;
 
     private ServerType type;
@@ -23,7 +23,7 @@ public class SetupGroup {
     public SetupGroup(String name) {
         this.name = name;
         this.terminalManager = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminalManager();
-        this.config = new JsonConfig(STR."\{getClass()
+        this.config = new YamlConfig(STR."\{getClass()
                 .getProtectionDomain()
                 .getCodeSource()
                 .getLocation()

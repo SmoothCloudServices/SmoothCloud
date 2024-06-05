@@ -19,8 +19,8 @@
 
     <repositories>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
+            <id>eztxm-repo</id>
+            <url>https://repo.eztxm.de/maven/</url>
         </repository>
     </repositories>
 
@@ -64,9 +64,9 @@
             <version>0.0.9</version>
         </dependency>
         <dependency>
-            <groupId>com.github.ezTxmMC</groupId>
-            <artifactId>ezLib</artifactId>
-            <version>02d82c85c2</version>
+            <groupId>de.eztxm</groupId>
+            <artifactId>ezlib-config-yaml</artifactId>
+            <version>1.0-ALPHA8</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
