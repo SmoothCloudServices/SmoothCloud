@@ -66,7 +66,7 @@
         <dependency>
             <groupId>de.eztxm</groupId>
             <artifactId>ezlib-config-yaml</artifactId>
-            <version>1.0-ALPHA8</version>
+            <version>1.0-ALPHA9</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
