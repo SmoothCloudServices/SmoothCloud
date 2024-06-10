@@ -34,7 +34,7 @@ public class SetupGroup {
     @SneakyThrows
     public void setup() {
         SmoothCloudNode.isCreatingGroup = true;
-        var input = terminalManager.getTerminal().readLine();
+        var input = terminalManager.getCloudTerminal().readLine();
         switch (step) {
             case 0 -> {
                 if (!step0(input)) return;
@@ -47,7 +47,7 @@ public class SetupGroup {
                 completed();
             }
             default -> {
-                terminalManager.getTerminal().writeLine(PREFIX + ERROR);
+                terminalManager.getCloudTerminal().writeLine(PREFIX + ERROR);
                 Thread.sleep(2000);
                 System.exit(0);
             }
@@ -61,17 +61,17 @@ public class SetupGroup {
     @SneakyThrows
     private void completed() {
         createGroup();
-        terminalManager.getTerminal().writeLine(PREFIX + COMPLETED.formatted(name));
+        terminalManager.getCloudTerminal().writeLine(PREFIX + COMPLETED.formatted(name));
         SmoothCloudNode.isCreatingGroup = false;
     }
 
     private boolean step0(String input) {
         if (!correctMemory(input)) {
-            terminalManager.getTerminal().writeLine(PREFIX + WRONG_MEMORY);
+            terminalManager.getCloudTerminal().writeLine(PREFIX + WRONG_MEMORY);
             return false;
         }
         config.set("Memory", calculateMemory(input));
-        terminalManager.getTerminal().writeLine("");
+        terminalManager.getCloudTerminal().writeLine("");
         return true;
     }
 
@@ -117,7 +117,7 @@ public class SetupGroup {
             Integer.parseInt(input);
             return false;
         } catch (NumberFormatException e) {
-            terminalManager.getTerminal().writeLine(PREFIX + HALF_NUMBER);
+            terminalManager.getCloudTerminal().writeLine(PREFIX + HALF_NUMBER);
             return true;
         }
     }
@@ -127,9 +127,9 @@ public class SetupGroup {
             SmoothCloudAPI.getInstance().getGroupProvider().createGroup(new CloudGroupImpl(
                     name, name, "1.20.4", "InternalWrapper", 1, 1, 512, 1024, type, false // todo change with variables
             ));
-            terminalManager.getTerminal().writeLine(STR."\{PREFIX}&1Group &0\{name}&1 created.");
+            terminalManager.getCloudTerminal().writeLine(STR."\{PREFIX}&1Group &0\{name}&1 created.");
             return;
         }
-        terminalManager.getTerminal().writeLine(STR."\{PREFIX}&1Group &0\{name}&1 already exists.");
+        terminalManager.getCloudTerminal().writeLine(STR."\{PREFIX}&1Group &0\{name}&1 already exists.");
     }
 }

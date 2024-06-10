@@ -5,7 +5,7 @@ import eu.smoothservices.smoothcloud.node.network.network.NetworkUtils;
 import eu.smoothservices.smoothcloud.node.network.network.protocol.packet.out.*;
 import eu.smoothservices.smoothcloud.node.SmoothCloudNode;
 import eu.smoothservices.smoothcloud.node.network.lib.WrapperInfo;
-import eu.smoothservices.smoothcloud.node.terminal.Terminal;
+import eu.smoothservices.smoothcloud.node.terminal.CloudTerminal;
 import eu.smoothservices.smoothcloud.node.util.lib.CollectionWrapper;
 import eu.smoothservices.smoothcloud.node.util.lib.DefaultType;
 import eu.smoothservices.smoothcloud.node.util.lib.Quad;
@@ -36,7 +36,7 @@ public class Wrapper implements INetworkComponent {
     private Channel channel;
     private WrapperInfo wrapperInfo;
     private WrapperMeta networkInfo;
-    private Terminal terminal;
+    private CloudTerminal cloudTerminal;
     private boolean ready;
     private double cpuUsage = -1;
     private int maxMemory = 0;
@@ -46,7 +46,7 @@ public class Wrapper implements INetworkComponent {
     public Wrapper(WrapperMeta networkInfo) {
         this.serverId = networkInfo.getId();
         this.networkInfo = networkInfo;
-        this.terminal = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminalManager().getTerminal();
+        this.cloudTerminal = ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminalManager().getCloudTerminal();
     }
 
 
@@ -173,7 +173,7 @@ public class Wrapper implements INetworkComponent {
 
     public void startProxy(ProxyProcessMeta proxyProcessMeta) {
         sendPacket(new PacketOutStartProxy(proxyProcessMeta));
-           ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminalManager().getTerminal().writeLine(StringTemplate.STR."Proxy [\{proxyProcessMeta.getServiceId()}] is now in \{serverId} queue.");
+           ((SmoothCloudNode) SmoothCloudNode.getInstance()).getTerminalManager().getCloudTerminal().writeLine(StringTemplate.STR."Proxy [\{proxyProcessMeta.getServiceId()}] is now in \{serverId} queue.");
 
         this.waitingServices.put(proxyProcessMeta.getServiceId().getServerId(),
                 new Quad<>(proxyProcessMeta.getPort(),

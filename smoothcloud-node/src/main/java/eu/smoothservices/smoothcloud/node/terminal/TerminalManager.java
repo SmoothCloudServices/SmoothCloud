@@ -4,64 +4,77 @@ import eu.smoothservices.smoothcloud.node.SmoothCloudNode;
 import eu.smoothservices.smoothcloud.node.setup.CloudSetup;
 import lombok.Getter;
 import lombok.Setter;
+import org.jline.reader.impl.completer.StringsCompleter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static eu.smoothservices.smoothcloud.node.messages.SetupMessages.*;
+import static eu.smoothservices.smoothcloud.node.messages.SetupMessages.EULA_ACCEPT;
 
 @Getter
 public class TerminalManager {
     private final String prefix = "&9Smooth&bCloud &8» &7";
     @Setter
-    private HashMap<String, Terminal> terminals;
-    private Terminal terminal;
+    private HashMap<String, CloudTerminal> terminals;
+    private CloudTerminal cloudTerminal;
     private CloudSetup cloudSetup;
     private ExecutorService service;
 
     public TerminalManager() {
         this.terminals = new HashMap<>();
         this.service = Executors.newCachedThreadPool();
-        if (!SmoothCloudNode.hasSetup) {
-            this.terminal = new Terminal("setup", prefix);
-            this.terminals.put(this.terminal.getName(), this.terminal);
+        if (SmoothCloudNode.needSetup) {
+            this.cloudTerminal = new CloudTerminal("setup", prefix, new StringsCompleter());
+            this.terminals.put(this.cloudTerminal.getName(), this.cloudTerminal);
             this.cloudSetup = new CloudSetup(this);
             return;
         }
-        this.terminal = new Terminal("main", prefix);
-        this.terminals.put(this.terminal.getName(), this.terminal);
+        createMainTerminal();
+        this.terminals.put(this.cloudTerminal.getName(), this.cloudTerminal);
+    }
+
+    public CloudTerminal createMainTerminal() {
+        List<String> commands = new ArrayList<>();
+        commands.add("group");
+        commands.add("module");
+        commands.add("plugin");
+        commands.add("service");
+        return this.cloudTerminal = new CloudTerminal("main", prefix, new StringsCompleter(commands));
     }
 
     public void start() {
+        if (SmoothCloudNode.needSetup) {
+            this.cloudTerminal.writeLine(EULA_ACCEPT);
+            this.cloudTerminal.userInput();
+        }
         service.execute(() -> {
-            if (!SmoothCloudNode.hasSetup) {
-                this.terminal.writeLine(EULA_ACCEPT);
-            }
             while (true) {
-                switch (terminal.getName()) {
+                switch (cloudTerminal.getName()) {
                     case "main" -> {
-                        switch (terminal.readLine()) {
+                        switch (cloudTerminal.readLine()) {
                             case "shutdown" -> {
-                                terminal.writeLine("Shutting down cloud...");
+                                cloudTerminal.writeLine("Shutting down cloud...");
                                 System.exit(0);
                             }
                             case "help" -> {
-                                terminal.writeLine("----------------Help----------------");
-                                terminal.writeLine("- group create");
-                                terminal.writeLine("- group delete");
-                                terminal.writeLine("- group edit <name>");
-                                terminal.writeLine("- module <name> reload");
-                                terminal.writeLine("- module install <id>@<type>");
-                                terminal.writeLine("- module remove <id>@<type>");
-                                terminal.writeLine("- plugin install <id>@<type> <group>");
-                                terminal.writeLine("- plugin install <id>@<type> <service>");
-                                terminal.writeLine("- plugin remove <id>@<type> <group>");
-                                terminal.writeLine("- plugin remove <id>@<type> <service>");
-                                terminal.writeLine("- service start <group>");
-                                terminal.writeLine("- service restart <name>");
-                                terminal.writeLine("- service stop <name>");
-                                terminal.writeLine("----------------Help----------------");
+                                cloudTerminal.writeLine("----------------Help----------------");
+                                cloudTerminal.writeLine("- group create");
+                                cloudTerminal.writeLine("- group delete");
+                                cloudTerminal.writeLine("- group edit <name>");
+                                cloudTerminal.writeLine("- module <name> reload");
+                                cloudTerminal.writeLine("- module install <id>@<type>");
+                                cloudTerminal.writeLine("- module remove <id>@<type>");
+                                cloudTerminal.writeLine("- plugin install <id>@<type> <group>");
+                                cloudTerminal.writeLine("- plugin install <id>@<type> <service>");
+                                cloudTerminal.writeLine("- plugin remove <id>@<type> <group>");
+                                cloudTerminal.writeLine("- plugin remove <id>@<type> <service>");
+                                cloudTerminal.writeLine("- service start <group>");
+                                cloudTerminal.writeLine("- service restart <name>");
+                                cloudTerminal.writeLine("- service stop <name>");
+                                cloudTerminal.writeLine("----------------Help----------------");
                             }
                         }
                     }
@@ -71,8 +84,8 @@ public class TerminalManager {
         });
     }
 
-    public void changeTerminal(Terminal terminal) {
-        this.terminal = terminal;
+    public void changeTerminal(CloudTerminal cloudTerminal) {
+        this.cloudTerminal = cloudTerminal;
     }
 
     public void shutdown() {

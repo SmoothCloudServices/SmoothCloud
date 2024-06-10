@@ -39,7 +39,7 @@ public class JavaColor {
 
                 if (colorCode != null) {
                     output.append(colorCode);
-                    i++; // Skip the color character
+                    i++;
                     continue;
                 }
             }
