@@ -2,7 +2,7 @@ package eu.smoothservices.smoothcloud.node.setup;
 
 import eu.smoothservices.smoothcloud.node.SmoothCloudNode;
 import eu.smoothservices.smoothcloud.node.config.Language;
-import eu.smoothservices.smoothcloud.node.terminal.Terminal;
+import eu.smoothservices.smoothcloud.node.terminal.CloudTerminal;
 import eu.smoothservices.smoothcloud.node.terminal.TerminalManager;
 import lombok.SneakyThrows;
 
@@ -22,7 +22,7 @@ public class CloudSetup {
 
     @SneakyThrows
     public void start() {
-        var input = terminalManager.getTerminal().readLine();
+        var input = terminalManager.getCloudTerminal().readLine();
         switch (step) {
             case 0 -> {
                 if (!step0(input)) return;
@@ -38,7 +38,7 @@ public class CloudSetup {
                 complete();
             }
             default -> {
-                terminalManager.getTerminal().writeLine(ERROR);
+                terminalManager.getCloudTerminal().writeLine(ERROR);
                 Thread.sleep(1000);
                 System.exit(0);
             }
@@ -52,33 +52,32 @@ public class CloudSetup {
     @SneakyThrows
     private void complete() {
         ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setLanguage(Language.EN);
-        terminalManager.getTerminal().writeLine(COMPLETED);
+        terminalManager.getCloudTerminal().writeLine(COMPLETED);
         Thread.sleep(1000);
-        terminalManager.getTerminal().clearScreen();
-        Terminal terminal = new Terminal("main", terminalManager.getPrefix());
-        HashMap<String, Terminal> terminals = new HashMap<>();
-        terminals.put("main", terminal);
+        CloudTerminal mainTerminal = terminalManager.createMainTerminal();
+        HashMap<String, CloudTerminal> terminals = new HashMap<>();
+        terminals.put("main", mainTerminal);
         terminalManager.setTerminals(terminals);
-        terminalManager.changeTerminal(terminal);
-        SmoothCloudNode.hasSetup = true;
+        terminalManager.changeTerminal(mainTerminal);
+        SmoothCloudNode.needSetup = false;
         ((SmoothCloudNode) SmoothCloudNode.getInstance()).startCloud();
     }
 
     private boolean step0(String input) {
         boolean eulaAccepted = getEulaAgreement(input);
         if (!eulaAccepted) {
-            terminalManager.getTerminal().writeLine(EULA_NOT_ACCEPTED);
+            terminalManager.getCloudTerminal().writeLine(EULA_NOT_ACCEPTED);
             System.exit(0);
             return false;
         }
-        terminalManager.getTerminal().writeLine(EULA_ACCEPTED);
+        terminalManager.getCloudTerminal().writeLine(EULA_ACCEPTED);
         List<String> inet4Addresses = getAllIPAddresses();
         if (inet4Addresses.isEmpty()) {
-            terminalManager.getTerminal().writeLine(NO_CHOOSE_IP);
+            terminalManager.getCloudTerminal().writeLine(NO_CHOOSE_IP);
             System.exit(0);
             return false;
         }
-        terminalManager.getTerminal().writeLine(CHOOSE_IP);
+        terminalManager.getCloudTerminal().writeLine(CHOOSE_IP);
         StringBuilder allIps = new StringBuilder();
         for (String inet4Address : Collections.unmodifiableList(inet4Addresses)) {
             if (inet4Addresses.getLast().equalsIgnoreCase(inet4Address)) {
@@ -87,43 +86,46 @@ public class CloudSetup {
             }
             allIps.append(inet4Address).append(", ");
         }
-        terminalManager.getTerminal().writeLine(CHOOSE_IP_AVAILABLE + allIps);
+        terminalManager.getCloudTerminal().writeLine(CHOOSE_IP_AVAILABLE + allIps);
+        terminalManager.getCloudTerminal().userInput();
         return true;
     }
 
     @SneakyThrows
     private boolean step1(String input) {
         if (!chooseIP(input)) {
-            terminalManager.getTerminal().writeLine(CHOOSE_IP_NOT_EXISTS);
+            terminalManager.getCloudTerminal().writeLine(CHOOSE_IP_NOT_EXISTS);
             return false;
         }
-        terminalManager.getTerminal().writeLine(CHOOSE_PORT);
+        terminalManager.getCloudTerminal().writeLine(CHOOSE_PORT);
+        terminalManager.getCloudTerminal().userInput();
         return true;
     }
 
     private boolean step2(String input) {
         boolean portAvailable = checkPortAvailability(Integer.parseInt(input.toLowerCase()));
         if (!portAvailable) {
-            terminalManager.getTerminal().writeLine(CHOOSE_PORT_NOT_EXISTS);
+            terminalManager.getCloudTerminal().writeLine(CHOOSE_PORT_NOT_EXISTS);
             return false;
         }
         try {
             ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setPort(Integer.parseInt(input));
-            terminalManager.getTerminal().writeLine(CHOOSE_MEMORY);
+            terminalManager.getCloudTerminal().writeLine(CHOOSE_MEMORY);
+            terminalManager.getCloudTerminal().userInput();
             return true;
         } catch (NumberFormatException e) {
-            terminalManager.getTerminal().writeLine(WRONG_INPUT);
+            terminalManager.getCloudTerminal().writeLine(WRONG_INPUT);
             return false;
         }
     }
 
     private boolean step3(String input) {
         if (!correctMemory(input)) {
-            terminalManager.getTerminal().writeLine(WRONG_MEMORY);
+            terminalManager.getCloudTerminal().writeLine(WRONG_MEMORY);
             return false;
         }
         ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setMemory(calculateMemory(input));
-        terminalManager.getTerminal().writeLine(SAVED);
+        terminalManager.getCloudTerminal().writeLine(SAVED);
         return true;
     }
 
@@ -213,7 +215,7 @@ public class CloudSetup {
             Integer.parseInt(input);
             return false;
         } catch (NumberFormatException e) {
-            terminalManager.getTerminal().writeLine(HALF_NUMBER);
+            terminalManager.getCloudTerminal().writeLine(HALF_NUMBER);
             return true;
         }
     }

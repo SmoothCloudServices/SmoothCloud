@@ -1,12 +1,12 @@
 package eu.smoothservices.smoothcloud.node.config;
 
-import de.eztxm.config.YamlConfig;
+import de.eztxm.config.JsonConfig;
 
 public class MainConfig {
-    private final YamlConfig config;
+    private final JsonConfig config;
 
     public MainConfig(String path, String name) {
-        this.config = new YamlConfig(path, name);
+        this.config = new JsonConfig(path, name);
     }
 
     public void setHost(String value) {
@@ -40,7 +40,7 @@ public class MainConfig {
     }
 
     public String getMemory() {
-        if (this.config.get("Port") == null) return null;
+        if (this.config.get("Memory") == null) return null;
         return this.config.get("Memory").asString();
     }
 
