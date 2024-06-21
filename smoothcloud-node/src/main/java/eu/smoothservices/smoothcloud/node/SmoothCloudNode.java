@@ -8,7 +8,7 @@ import eu.smoothservices.smoothcloud.api.player.ICloudPlayerProvider;
 import eu.smoothservices.smoothcloud.api.service.ICloudServiceProvider;
 import eu.smoothservices.smoothcloud.node.command.CommandProvider;
 import eu.smoothservices.smoothcloud.node.config.MainConfig;
-import eu.smoothservices.smoothcloud.node.group.ICloudGroupProviderImpl;
+import eu.smoothservices.smoothcloud.node.group.CloudGroupProviderImpl;
 import eu.smoothservices.smoothcloud.node.player.CloudPlayerProviderImpl;
 import eu.smoothservices.smoothcloud.node.server.NettyServer;
 import eu.smoothservices.smoothcloud.node.service.CloudServiceProviderImpl;
@@ -64,7 +64,7 @@ public final class SmoothCloudNode extends SmoothCloudAPI {
         this.terminalManager.getCloudTerminal().writeLine("CommandProvider started.");
 
         this.terminalManager.getCloudTerminal().writeLine("Starting CloudGroupProvider...");
-        this.groupProvider = new ICloudGroupProviderImpl();
+        this.groupProvider = new CloudGroupProviderImpl();
         this.terminalManager.getCloudTerminal().writeLine("CloudGroupProvider started.");
 
         this.terminalManager.getCloudTerminal().writeLine("Starting CloudServiceProvider...");
