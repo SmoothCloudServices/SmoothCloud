@@ -11,15 +11,20 @@ public final class CloudGroupImpl implements ICloudGroup {
 
     private String name;
     private String templateName;
-    private String version;
-    private String wrapperName;
-
-    private int minOnlineCount;
-    private int maxOnlineCount;
     private int minMemory;
     private int maxMemory;
-
-    private ServerType type;
-
+    private int maxPlayers;
+    private int minOnlineCount;
+    private int maxOnlineCount;
+    private String permission;
+    private boolean maintenance;
     private boolean staticService;
+    private int priority;
+    private String wrapperName;
+    private int percentOfPlayersOnGroupToStartNewService;
+    private ServerType type;
+    private String version;
+    private int javaVersion;
+
+
 }
