@@ -7,8 +7,8 @@ import java.util.UUID;
 public interface ICloudPlayer {
 
     ICloudService getCurrentService();
-    String getCurrentServiceName();
     ICloudService getCurrentProxyService();
+    String getCurrentServiceName();
     String getCurrentProxyServiceName();
 
     UUID getUniqueId();
