@@ -4,6 +4,8 @@ public enum ServiceState {
 
     PREPARING,
     LOADING,
-    ONLINE
+    ONLINE,
+    INGAME,
+    STOPPING
 
 }
