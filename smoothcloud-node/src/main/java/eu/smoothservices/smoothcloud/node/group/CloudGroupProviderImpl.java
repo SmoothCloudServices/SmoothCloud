@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public final class ICloudGroupProviderImpl implements ICloudGroupProvider {
+public final class CloudGroupProviderImpl implements ICloudGroupProvider {
     private final HashMap<String, ICloudGroup> groupPool = new HashMap<>();
 
     @Override
