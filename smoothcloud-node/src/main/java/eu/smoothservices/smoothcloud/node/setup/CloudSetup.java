@@ -6,6 +6,7 @@ import eu.smoothservices.smoothcloud.node.terminal.CloudTerminal;
 import eu.smoothservices.smoothcloud.node.terminal.TerminalManager;
 import lombok.SneakyThrows;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
@@ -53,6 +54,18 @@ public class CloudSetup {
     private void complete() {
         ((SmoothCloudNode) SmoothCloudNode.getInstance()).getConfig().setLanguage(Language.EN);
         terminalManager.getCloudTerminal().writeLine(COMPLETED);
+        new File("./groups").mkdirs();
+        new File("./modules").mkdirs();
+        new File("./static").mkdirs();
+        new File("./storage").mkdirs();
+        new File("./storage/server-jars").mkdirs();
+        new File("./storage/server-jars/spigot").mkdirs();
+        new File("./storage/server-jars/paper").mkdirs();
+        new File("./storage/server-jars/purpur").mkdirs();
+        new File("./storage/server-jars/folia").mkdirs();
+        new File("./storage/server-jars/proxy").mkdirs();
+        new File("./templates").mkdirs();
+        new File("./temporary").mkdirs();
         Thread.sleep(1000);
         CloudTerminal mainTerminal = terminalManager.createMainTerminal();
         HashMap<String, CloudTerminal> terminals = new HashMap<>();
